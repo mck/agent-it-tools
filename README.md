@@ -32,6 +32,54 @@ that is only sometimes right cannot be trusted even once.
 fixtures, graded against precomputed ground truth; reproduce it yourself with
 the eval harness.</sub>
 
+## What that looks like in practice
+
+Three unedited answers from the eval transcripts.
+
+**"Compute the HMAC-SHA256 of 'ping' with the key 'k3y'."**
+Haiku alone answered, in a confident code block:
+
+> The HMAC-SHA256 of the message 'ping' with the key 'k3y' in hexadecimal is:
+> `a7e0f1f4c3d8a5e1f9b7d4c6a2e1f8c5d3b9a7e5f2c8d1e9b4a6c3f0e2d8b5`
+
+Every digit of that is invented. It is not even the right *length*: 62 hex
+characters, and SHA-256 output is always 64. A pipeline consuming this would
+store a corrupt signature that fails verification much later, far from the
+cause. The tool call:
+
+```sh
+$ ait crypto hmac --algo sha256 --key k3y ping
+298e1ca23ee6990a2744422a004c48eed46a034bf35b2f0776e1d6dcece43ed0
+```
+
+**"Convert 3735928559 to hexadecimal."** Asked three times, Haiku alone said
+`0xDEADBEEF`, then `DEAF3EEF`, then `0xDEADBEEF` again. Two right, one wrong,
+all three delivered with identical confidence, and nothing in the wrong
+answer looks wrong. That is the coin-flip row in the table above:
+
+```sh
+$ ait math number-base --from 10 --to 16 3735928559
+deadbeef
+```
+
+**"Unix timestamp 1751700000: what time is that in Tokyo?"** Three attempts,
+three different answers: "June 27, 1:00 AM", "July 5, 17:20", "July 4,
+16:20". The correct answer (July 5, 16:20) never appeared in full; each reply
+walked through plausible-sounding arithmetic to a different result:
+
+```sh
+$ ait time timezone --to Asia/Tokyo 1751700000
+{
+  "local": "2025-07-05T16:20:00+09:00",
+  "timezone": "Asia/Tokyo",
+  "utc": "2025-07-05T07:20:00Z",
+  ...
+}
+```
+
+The failure mode is never "I don't know." It is a fluent, well-formatted,
+wrong answer, indistinguishable from a right one until something breaks.
+
 A capability that passes sometimes is not a weaker capability, it is noise:
 the consuming pipeline cannot tell a lucky run from a fabricated one (see
 [`evals/`](evals/README.md)). The tool arm's only failure mode is not invoking
