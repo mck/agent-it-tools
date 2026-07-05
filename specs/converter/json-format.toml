@@ -1,0 +1,12 @@
+path = "converter json-format"
+summary = "Prettify or minify a JSON document (also validates it)"
+when_to_use = "Reformatting or validating JSON. A parse failure returns the error contract, so this doubles as a JSON validity check."
+it_tools = ["json-viewer", "json-minify"]
+
+[output]
+kind = "text"
+description = "The reformatted JSON document"
+
+[[examples]]
+argv = ["converter", "json-format", "--minify", " { \"a\" : 1 } "]
+stdout = '{"a":1}'

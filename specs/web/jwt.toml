@@ -1,0 +1,25 @@
+path = "web jwt"
+summary = "Decode a JWT's header and payload WITHOUT verifying the signature"
+when_to_use = "Inspecting JWT claims (sub, exp, scopes). Never decode the base64url segments yourself. This does NOT validate the token."
+it_tools = ["jwt-parser"]
+
+[output]
+kind = "json"
+description = "Object with header, payload, signature (raw base64url) and expired (true/false, or null when no exp claim)"
+
+[[examples]]
+argv = ["web", "jwt", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"]
+stdout = """
+{
+  "expired": null,
+  "header": {
+    "alg": "HS256",
+    "typ": "JWT"
+  },
+  "payload": {
+    "iat": 1516239022,
+    "name": "John Doe",
+    "sub": "1234567890"
+  },
+  "signature": "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+}"""

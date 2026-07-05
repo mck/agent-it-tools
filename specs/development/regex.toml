@@ -1,0 +1,28 @@
+path = "development regex"
+summary = "Test a regular expression against text; reports all matches with positions and named groups"
+when_to_use = "Validating a regex or extracting matches deterministically. Flags: -i case-insensitive, -m multiline, -s dot-matches-newline. Rust regex syntax (no backreferences/lookaround)."
+it_tools = ["regex-tester", "regex-memo"]
+
+[output]
+kind = "json"
+description = "Object with pattern, is_match, match_count and matches (each with match, start, end byte offsets, and groups keyed by name or index)"
+
+[[examples]]
+argv = ["development", "regex", "--pattern", "(?P<word>\\w+)@(\\w+)\\.com", "mail foo@bar.com"]
+stdout = """
+{
+  "is_match": true,
+  "match_count": 1,
+  "matches": [
+    {
+      "end": 16,
+      "groups": {
+        "2": "bar",
+        "word": "foo"
+      },
+      "match": "foo@bar.com",
+      "start": 5
+    }
+  ],
+  "pattern": "(?P<word>\\\\w+)@(\\\\w+)\\\\.com"
+}"""

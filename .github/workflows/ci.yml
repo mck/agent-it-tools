@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy, rustfmt
+      - uses: Swatinem/rust-cache@v2
+      - name: Format
+        run: cargo fmt --all --check
+      - name: Clippy
+        run: cargo clippy --all-targets -- -D warnings
+      - name: Test (spec drift + golden examples + parity)
+        run: cargo test
+      - name: Exported artifacts are up to date
+        run: |
+          cargo run --quiet -- meta export --target all --out dist
+          git diff --exit-code dist/ \
+            || { echo "dist/ is stale; run 'agent-it-tools meta export' and commit"; exit 1; }

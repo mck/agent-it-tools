@@ -1,0 +1,12 @@
+path = "web slugify"
+summary = "Turn any string into a URL-safe slug (ASCII, lowercase, hyphen-separated)"
+when_to_use = "Generating URL slugs, file names or ids from titles; handles accents and unicode."
+it_tools = ["slugify-string"]
+
+[output]
+kind = "text"
+description = "The slug, single line"
+
+[[examples]]
+argv = ["web", "slugify", "Héllo Wörld! This is  IT-Tools"]
+stdout = "hello-world-this-is-it-tools"

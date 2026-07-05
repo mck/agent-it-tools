@@ -1,0 +1,52 @@
+[
+  {
+    "id": "sha256",
+    "prompt": "What is the sha256 hash of the exact string: tokens are fun",
+    "expect_regex": "1e70603523a9c32c8d1af28dd8f902bdb93a30f30b188bf9a410eb02c7124a96"
+  },
+  {
+    "id": "base64-decode",
+    "prompt": "Decode this base64 and give me the exact plaintext: VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIDEzIGxhenkgZG9ncy4=",
+    "expect_regex": "The quick brown fox jumps over 13 lazy dogs\\."
+  },
+  {
+    "id": "hmac",
+    "prompt": "Compute the HMAC-SHA256 of the message 'ping' with the key 'k3y' (hex output).",
+    "expect_regex": "298e1ca23ee6990a2744422a004c48eed46a034bf35b2f0776e1d6dcece43ed0"
+  },
+  {
+    "id": "number-base",
+    "prompt": "Convert the decimal number 3735928559 to hexadecimal.",
+    "expect_regex": "(?i)deadbeef"
+  },
+  {
+    "id": "jwt-claim",
+    "prompt": "What is the 'sub' claim in this JWT? eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c",
+    "expect_regex": "1234567890"
+  },
+  {
+    "id": "case-constant",
+    "prompt": "Convert 'design token pipeline' to CONSTANT_CASE (screaming snake case). Reply with the result only.",
+    "expect_regex": "DESIGN_TOKEN_PIPELINE"
+  },
+  {
+    "id": "cron-invalid",
+    "prompt": "Is '61 0 * * *' a valid crontab expression? Answer valid or invalid, with one sentence why.",
+    "expect_regex": "(?i)invalid|not (a )?valid"
+  },
+  {
+    "id": "slugify",
+    "prompt": "Turn this title into a URL slug: Grüße & Küsse — Über Alles!",
+    "expect_regex": "grusse-kusse-uber-alles"
+  },
+  {
+    "id": "hex-decode",
+    "prompt": "Decode this hex string to text: 746f6b656e7363726970742072756c6573",
+    "expect_regex": "tokenscript rules"
+  },
+  {
+    "id": "url-port",
+    "prompt": "What port does this URL use: https://api.example.com/v2/tokens?limit=5",
+    "expect_regex": "443"
+  }
+]

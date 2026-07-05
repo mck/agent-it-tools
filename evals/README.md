@@ -1,0 +1,37 @@
+# Agent-usability evals
+
+Measures whether `agent-it-tools` + its compiled skill actually improves agent
+accuracy - especially on small models (Haiku and below), which cannot compute
+hashes, decode base64, or reason about cron reliably on their own.
+
+## Design
+
+Two arms, identical prompts (`tasks.json`, deterministic expected answers):
+
+| arm | binary on PATH | skill installed | what it measures |
+|---|---|---|---|
+| `bare` | no | no | the model's raw ability |
+| `skill` | yes | yes (`.claude/skills/agent-it-tools`) | model + tool + skill |
+
+The delta between the arms is the performance enhancement the tool delivers.
+Each task is graded by regex against the final answer; turns, latency and cost
+are recorded from the `claude -p` JSON envelope so you can also see the token
+overhead the skill adds.
+
+## Run
+
+```sh
+cargo build --release
+./target/release/agent-it-tools meta export --target skill
+./evals/run.sh haiku both          # or: sonnet, opus, a full model id...
+```
+
+## Interpreting
+
+- `bare` should fail hash/HMAC/base64/slug tasks (models confabulate these) and
+  may pass trivia like the default-port task.
+- `skill` should pass everything; if a small model fails here, the skill file
+  or `meta describe` output is not clear enough for it - that's a docs bug in
+  the specs, fix the spec and re-export.
+- Watch `turns`: a small model needing >3 turns for a one-tool task usually
+  means it guessed flags instead of calling `meta describe`.

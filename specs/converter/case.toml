@@ -1,0 +1,20 @@
+path = "converter case"
+summary = "Convert a string between naming cases (camel, pascal, snake, constant, kebab, train, title, dot, path, lower, upper)"
+when_to_use = "Renaming identifiers, normalizing token/variable names across languages."
+it_tools = ["case-converter"]
+
+[output]
+kind = "text"
+description = "The re-cased string, single line"
+
+[[examples]]
+argv = ["converter", "case", "--to", "camel", "hello world foo"]
+stdout = "helloWorldFoo"
+
+[[examples]]
+argv = ["converter", "case", "--to", "constant", "helloWorldFoo"]
+stdout = "HELLO_WORLD_FOO"
+
+[[examples]]
+argv = ["converter", "case", "--to", "path", "HelloWorld foo"]
+stdout = "hello/world/foo"

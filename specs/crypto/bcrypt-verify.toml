@@ -1,0 +1,15 @@
+path = "crypto bcrypt-verify"
+summary = "Check a password against an existing bcrypt hash"
+when_to_use = "Verifying a password matches a stored bcrypt hash. Exit code 0 = match, 2 = mismatch."
+it_tools = ["bcrypt"]
+
+[output]
+kind = "json"
+description = "{\"valid\": true|false}; exit code 2 when false"
+
+[[examples]]
+argv = ["crypto", "bcrypt-verify", "--hash", "$2b$04$Lv00l1naniqgToppwj83aeFp69FVgi8I56L5AJKd4GuCF5TfQ2/U2", "hunter2"]
+stdout = """
+{
+  "valid": true
+}"""

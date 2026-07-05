@@ -1,0 +1,12 @@
+path = "crypto hmac"
+summary = "HMAC signature of text with a secret key (md5, sha1, sha256, sha512)"
+when_to_use = "Signing or verifying webhook payloads, API request signatures."
+it_tools = ["hmac-generator"]
+
+[output]
+kind = "text"
+description = "Lowercase hex signature, single line"
+
+[[examples]]
+argv = ["crypto", "hmac", "--algo", "sha256", "--key", "secret", "hello"]
+stdout = "88aab3ede8d3adf94d26ab90d3bafd4a2083070c3bcce9c014ee04a443847c0b"

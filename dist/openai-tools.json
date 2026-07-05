@@ -1,0 +1,651 @@
+[
+  {
+    "function": {
+      "description": "Hash text with md5, sha1, sha224, sha256, sha384 or sha512 (hex digest) Returns: Lowercase hex digest, single line",
+      "name": "crypto_hash",
+      "parameters": {
+        "properties": {
+          "algo": {
+            "description": "Algorithm: md5 | sha1 | sha224 | sha256 | sha384 | sha512 (default: sha256)",
+            "type": "string"
+          },
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "crypto hash"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "HMAC signature of text with a secret key (md5, sha1, sha256, sha512) Returns: Lowercase hex signature, single line",
+      "name": "crypto_hmac",
+      "parameters": {
+        "properties": {
+          "algo": {
+            "description": "Algorithm: md5 | sha1 | sha256 | sha512 (default: sha256)",
+            "type": "string"
+          },
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          },
+          "key": {
+            "description": "Secret key",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "crypto hmac"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Generate cryptographically random token strings (configurable charset) Returns: One random token per line",
+      "name": "crypto_token",
+      "parameters": {
+        "properties": {
+          "count": {
+            "description": "Number of tokens to generate (one per line) (default: 1)",
+            "type": "integer"
+          },
+          "length": {
+            "description": "Token length (default: 64)",
+            "type": "integer"
+          },
+          "no_lowercase": {
+            "description": "Exclude lowercase letters",
+            "type": "boolean"
+          },
+          "no_numbers": {
+            "description": "Exclude digits",
+            "type": "boolean"
+          },
+          "no_uppercase": {
+            "description": "Exclude uppercase letters",
+            "type": "boolean"
+          },
+          "symbols": {
+            "description": "Include symbols (!@#$%^&*()-_=+)",
+            "type": "boolean"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "x-argv-template": "crypto token"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Hash a password with bcrypt (salted, cost-configurable) Returns: bcrypt hash string ($2b$...), single line",
+      "name": "crypto_bcrypt_hash",
+      "parameters": {
+        "properties": {
+          "cost": {
+            "description": "Cost factor (4-31) (default: 10)",
+            "type": "integer"
+          },
+          "input": {
+            "description": "Password (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "crypto bcrypt-hash"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Check a password against an existing bcrypt hash Returns: {\"valid\": true|false}; exit code 2 when false",
+      "name": "crypto_bcrypt_verify",
+      "parameters": {
+        "properties": {
+          "hash": {
+            "description": "Existing bcrypt hash to check against",
+            "type": "string"
+          },
+          "input": {
+            "description": "Password (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "hash",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "crypto bcrypt-verify"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert structured data between JSON, YAML and TOML Returns: The converted document in the target format",
+      "name": "converter_data",
+      "parameters": {
+        "properties": {
+          "from": {
+            "description": "Source format: json | yaml | toml",
+            "type": "string"
+          },
+          "input": {
+            "description": "Input document (reads stdin if omitted)",
+            "type": "string"
+          },
+          "to": {
+            "description": "Target format: json | yaml | toml",
+            "type": "string"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter data"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Prettify or minify a JSON document (also validates it) Returns: The reformatted JSON document",
+      "name": "converter_json_format",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input JSON (reads stdin if omitted)",
+            "type": "string"
+          },
+          "minify": {
+            "description": "Emit minified JSON instead of pretty-printed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter json-format"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Encode text to Base64 (--url-safe for the URL alphabet without padding) Returns: Base64 string, single line",
+      "name": "converter_base64_encode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          },
+          "url_safe": {
+            "description": "Use URL-safe alphabet without padding",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter base64-encode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode Base64 to text (standard and URL-safe alphabets both accepted) Returns: The decoded text",
+      "name": "converter_base64_decode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input Base64 (reads stdin if omitted); standard and URL-safe alphabets accepted",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter base64-decode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Encode text to a lowercase hex string Returns: Hex string, single line",
+      "name": "converter_hex_encode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter hex-encode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode a hex string to text (0x prefix and whitespace tolerated) Returns: The decoded text",
+      "name": "converter_hex_decode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input hex (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter hex-decode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert a string between naming cases (camel, pascal, snake, constant, kebab, train, title, dot, path, lower, upper) Returns: The re-cased string, single line",
+      "name": "converter_case",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          },
+          "to": {
+            "description": "Target case: camel | pascal | snake | constant | kebab | train | title | dot | path | lower | upper",
+            "type": "string"
+          }
+        },
+        "required": [
+          "to",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter case"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert an integer between numeral bases 2-36 Returns: The number in the target base (lowercase digits), single line",
+      "name": "converter_number_base",
+      "parameters": {
+        "properties": {
+          "from": {
+            "description": "Source base (default: 10)",
+            "type": "integer"
+          },
+          "input": {
+            "description": "Input number (reads stdin if omitted)",
+            "type": "string"
+          },
+          "to": {
+            "description": "Target base",
+            "type": "string"
+          }
+        },
+        "required": [
+          "to",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter number-base"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert a date-time (now, unix s/ms, RFC 3339, RFC 2822) into all common formats Returns: Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
+      "name": "converter_datetime",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "\"now\", unix seconds, unix milliseconds, or an RFC 3339 / ISO 8601 string (defaults to now)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "converter datetime"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Percent-encode text for safe use in a URL component Returns: Percent-encoded string, single line",
+      "name": "web_url_encode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web url-encode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode a percent-encoded URL component Returns: The decoded text",
+      "name": "web_url_decode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web url-decode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Parse a URL into scheme, host, port, path, query params, fragment and credentials Returns: Object with scheme, username, password, host, port, path, query, params (decoded key/value map) and fragment",
+      "name": "web_url_parse",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "URL (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web url-parse"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode a JWT's header and payload WITHOUT verifying the signature Returns: Object with header, payload, signature (raw base64url) and expired (true/false, or null when no exp claim)",
+      "name": "web_jwt",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "JWT token (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web jwt"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Parse a user-agent string into browser, version, OS and device category Returns: Object with name, category (pc/smartphone/crawler/...), browser_type, version, os, os_version, vendor",
+      "name": "web_user_agent",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "User-agent string (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web user-agent"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Escape text for safe embedding in HTML (quotes included) Returns: HTML-escaped text",
+      "name": "web_html_escape",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web html-escape"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode HTML entities back to plain text Returns: The decoded text",
+      "name": "web_html_unescape",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web html-unescape"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Build an HTTP Basic Auth Authorization header value from username and password Returns: The header value: 'Basic <base64(user:pass)>'",
+      "name": "web_basic_auth",
+      "parameters": {
+        "properties": {
+          "password": {
+            "description": "Password",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web basic-auth"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Turn any string into a URL-safe slug (ASCII, lowercase, hyphen-separated) Returns: The slug, single line",
+      "name": "web_slugify",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "web slugify"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Validate a crontab expression and list its next run times (UTC) Returns: Object with expression, normalized (6-field form), valid, and next (array of RFC 3339 UTC timestamps)",
+      "name": "development_cron",
+      "parameters": {
+        "properties": {
+          "count": {
+            "description": "Number of upcoming occurrences to list (default: 5)",
+            "type": "integer"
+          },
+          "expression": {
+            "description": "Cron expression, 5-field classic or 6/7-field with seconds/years",
+            "type": "string"
+          }
+        },
+        "required": [
+          "expression"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "development cron"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Generate UUIDs (v4 random, v7 time-ordered, nil) Returns: One UUID per line, lowercase hyphenated",
+      "name": "development_uuid",
+      "parameters": {
+        "properties": {
+          "count": {
+            "description": "Number of UUIDs to generate (one per line) (default: 1)",
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "x-argv-template": "development uuid"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Test a regular expression against text; reports all matches with positions and named groups Returns: Object with pattern, is_match, match_count and matches (each with match, start, end byte offsets, and groups keyed by name or index)",
+      "name": "development_regex",
+      "parameters": {
+        "properties": {
+          "dot_all": {
+            "description": ". matches newlines",
+            "type": "boolean"
+          },
+          "ignore_case": {
+            "description": "Case-insensitive matching",
+            "type": "boolean"
+          },
+          "input": {
+            "description": "Text to test (reads stdin if omitted)",
+            "type": "string"
+          },
+          "multiline": {
+            "description": "^ and $ match line boundaries",
+            "type": "boolean"
+          },
+          "pattern": {
+            "description": "Regular expression pattern",
+            "type": "string"
+          }
+        },
+        "required": [
+          "pattern",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "development regex"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Unified diff between two texts, or two files with --files Returns: Unified diff (--- old / +++ new hunks); empty when inputs are equal",
+      "name": "development_diff",
+      "parameters": {
+        "properties": {
+          "context": {
+            "description": "Lines of context around changes (default: 3)",
+            "type": "integer"
+          },
+          "files": {
+            "description": "Treat the two arguments as file paths",
+            "type": "boolean"
+          },
+          "new": {
+            "description": "New text, or a file path with --files",
+            "type": "string"
+          },
+          "old": {
+            "description": "Old text, or a file path with --files",
+            "type": "string"
+          }
+        },
+        "required": [
+          "old",
+          "new"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "development diff"
+    },
+    "type": "function"
+  }
+]

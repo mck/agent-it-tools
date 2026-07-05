@@ -1,0 +1,1864 @@
+# Parity map against upstream sharevb/it-tools (src/tools/* directory names).
+# status: implemented | planned | not-applicable
+# Regenerate the id list from: gh api repos/sharevb/it-tools/contents/src/tools
+
+[[upstream]]
+id = "acceleration-converter"
+status = "planned"
+
+[[upstream]]
+id = "ad-ldap-searcher"
+status = "planned"
+
+[[upstream]]
+id = "age-crypto"
+status = "planned"
+
+[[upstream]]
+id = "ai-prompt-splitter"
+status = "planned"
+
+[[upstream]]
+id = "amortization-calculator"
+status = "planned"
+
+[[upstream]]
+id = "angle-converter"
+status = "planned"
+
+[[upstream]]
+id = "ansi-escape-tester"
+status = "planned"
+
+[[upstream]]
+id = "ansible-vault-crypt-decrypt"
+status = "planned"
+
+[[upstream]]
+id = "api-tester"
+status = "planned"
+
+[[upstream]]
+id = "area-converter"
+status = "planned"
+
+[[upstream]]
+id = "argon2-hash"
+status = "planned"
+
+[[upstream]]
+id = "arpa-decoder"
+status = "planned"
+
+[[upstream]]
+id = "ascii-text-drawer"
+status = "planned"
+
+[[upstream]]
+id = "aspect-ratio-calculator"
+status = "planned"
+
+[[upstream]]
+id = "barcode-generator"
+status = "planned"
+
+[[upstream]]
+id = "barcode-reader"
+status = "planned"
+
+[[upstream]]
+id = "base64-file-converter"
+status = "planned"
+
+[[upstream]]
+id = "base64-hex-converter"
+status = "planned"
+
+[[upstream]]
+id = "base64-string-converter"
+status = "implemented"
+tool = "converter base64-encode, converter base64-decode"
+
+[[upstream]]
+id = "bash-memo"
+status = "planned"
+
+[[upstream]]
+id = "basic-auth-generator"
+status = "implemented"
+tool = "web basic-auth"
+
+[[upstream]]
+id = "bcrypt"
+status = "implemented"
+tool = "crypto bcrypt-hash, crypto bcrypt-verify"
+
+[[upstream]]
+id = "bech32"
+status = "planned"
+
+[[upstream]]
+id = "benchmark-builder"
+status = "not-applicable"
+note = "interactive comparison UI"
+
+[[upstream]]
+id = "bimi-dns-generator"
+status = "planned"
+
+[[upstream]]
+id = "binary-calculator"
+status = "planned"
+
+[[upstream]]
+id = "bip39-generator"
+status = "planned"
+
+[[upstream]]
+id = "bmi-calculator"
+status = "planned"
+
+[[upstream]]
+id = "bounce-parser"
+status = "planned"
+
+[[upstream]]
+id = "calendar-converter"
+status = "planned"
+
+[[upstream]]
+id = "camera-recorder"
+status = "not-applicable"
+note = "requires a camera and live preview"
+
+[[upstream]]
+id = "card-picker"
+status = "planned"
+
+[[upstream]]
+id = "case-converter"
+status = "implemented"
+tool = "converter case"
+
+[[upstream]]
+id = "certificate-key-parser"
+status = "planned"
+
+[[upstream]]
+id = "charset-detector"
+status = "planned"
+
+[[upstream]]
+id = "chmod-calculator"
+status = "planned"
+
+[[upstream]]
+id = "chmod-memo"
+status = "planned"
+
+[[upstream]]
+id = "chronometer"
+status = "not-applicable"
+note = "interactive stopwatch UI"
+
+[[upstream]]
+id = "cidr-in-cidr"
+status = "planned"
+
+[[upstream]]
+id = "citation-generator"
+status = "planned"
+
+[[upstream]]
+id = "cli-command-editor"
+status = "planned"
+
+[[upstream]]
+id = "code-highlighter"
+status = "planned"
+
+[[upstream]]
+id = "coin-flipper"
+status = "planned"
+
+[[upstream]]
+id = "color-contrast-checker"
+status = "planned"
+
+[[upstream]]
+id = "color-converter"
+status = "planned"
+
+[[upstream]]
+id = "color-wheel"
+status = "planned"
+
+[[upstream]]
+id = "common-regex-memo"
+status = "planned"
+
+[[upstream]]
+id = "cookies-parser"
+status = "planned"
+
+[[upstream]]
+id = "countdown"
+status = "planned"
+
+[[upstream]]
+id = "crc-calculator"
+status = "planned"
+
+[[upstream]]
+id = "credit-card-checker"
+status = "planned"
+
+[[upstream]]
+id = "cron-alarm"
+status = "planned"
+
+[[upstream]]
+id = "crontab-generator"
+status = "implemented"
+tool = "development cron"
+note = "validation + next-run listing; no interactive builder"
+
+[[upstream]]
+id = "crop-image"
+status = "planned"
+
+[[upstream]]
+id = "csr-generator"
+status = "planned"
+
+[[upstream]]
+id = "css-gradient-generator"
+status = "planned"
+
+[[upstream]]
+id = "css-prettifier"
+status = "planned"
+
+[[upstream]]
+id = "css-selectors-memo"
+status = "planned"
+
+[[upstream]]
+id = "css-units-converter"
+status = "planned"
+
+[[upstream]]
+id = "css-xpath-converter"
+status = "planned"
+
+[[upstream]]
+id = "csv-to-data"
+status = "planned"
+
+[[upstream]]
+id = "csv-to-json"
+status = "planned"
+
+[[upstream]]
+id = "curl-converter"
+status = "planned"
+
+[[upstream]]
+id = "curl-generator"
+status = "planned"
+
+[[upstream]]
+id = "currency-converter"
+status = "planned"
+
+[[upstream]]
+id = "data-faker"
+status = "planned"
+
+[[upstream]]
+id = "data-storage-unit-converter"
+status = "planned"
+
+[[upstream]]
+id = "data-transfer-rate-converter"
+status = "planned"
+
+[[upstream]]
+id = "database-builder"
+status = "planned"
+
+[[upstream]]
+id = "database-connection-string-builder"
+status = "planned"
+
+[[upstream]]
+id = "database-table-generator"
+status = "planned"
+
+[[upstream]]
+id = "date-duration-calculator"
+status = "planned"
+
+[[upstream]]
+id = "date-time-converter"
+status = "implemented"
+tool = "converter datetime"
+
+[[upstream]]
+id = "days-calculator"
+status = "planned"
+
+[[upstream]]
+id = "dbm-mw-converter"
+status = "planned"
+
+[[upstream]]
+id = "dead-pixel"
+status = "planned"
+
+[[upstream]]
+id = "device-information"
+status = "planned"
+
+[[upstream]]
+id = "dice-roller"
+status = "planned"
+
+[[upstream]]
+id = "diceware-generator"
+status = "planned"
+
+[[upstream]]
+id = "distinct-words"
+status = "planned"
+
+[[upstream]]
+id = "django-secret-generator"
+status = "planned"
+
+[[upstream]]
+id = "dkim-dns-generator"
+status = "planned"
+
+[[upstream]]
+id = "dmarc-dns-generator"
+status = "planned"
+
+[[upstream]]
+id = "dmarc-report-analyzer"
+status = "planned"
+
+[[upstream]]
+id = "dns-propagation-tester"
+status = "planned"
+
+[[upstream]]
+id = "dns-queries"
+status = "planned"
+
+[[upstream]]
+id = "dns-tester"
+status = "planned"
+
+[[upstream]]
+id = "dnsbl-checker"
+status = "planned"
+
+[[upstream]]
+id = "docker-compose-converter"
+status = "planned"
+
+[[upstream]]
+id = "docker-compose-memo"
+status = "planned"
+
+[[upstream]]
+id = "docker-compose-to-docker-run-converter"
+status = "planned"
+
+[[upstream]]
+id = "docker-compose-to-env-file"
+status = "planned"
+
+[[upstream]]
+id = "docker-compose-to-kubernetes"
+status = "planned"
+
+[[upstream]]
+id = "docker-compose-to-quadlets"
+status = "planned"
+
+[[upstream]]
+id = "docker-compose-validator"
+status = "planned"
+
+[[upstream]]
+id = "docker-image-downloader"
+status = "planned"
+
+[[upstream]]
+id = "docker-inspect-to-docker-run"
+status = "planned"
+
+[[upstream]]
+id = "docker-memo"
+status = "planned"
+
+[[upstream]]
+id = "docker-pangolin-labels"
+status = "planned"
+
+[[upstream]]
+id = "docker-run-to-docker-compose-converter"
+status = "planned"
+
+[[upstream]]
+id = "docker-run-to-kubernetes"
+status = "planned"
+
+[[upstream]]
+id = "docker-run-to-quadlets"
+status = "planned"
+
+[[upstream]]
+id = "docker-swarm-memo"
+status = "planned"
+
+[[upstream]]
+id = "dockerfile-memo"
+status = "planned"
+
+[[upstream]]
+id = "duplicate-line-finder"
+status = "planned"
+
+[[upstream]]
+id = "duration-calculator"
+status = "planned"
+
+[[upstream]]
+id = "ecdsa-key-pair-generator"
+status = "planned"
+
+[[upstream]]
+id = "ed25519-key-pair-generator"
+status = "planned"
+
+[[upstream]]
+id = "email-normalizer"
+status = "planned"
+
+[[upstream]]
+id = "email-parser"
+status = "planned"
+
+[[upstream]]
+id = "emoji-picker"
+status = "planned"
+
+[[upstream]]
+id = "emv-tlv-decoder"
+status = "planned"
+
+[[upstream]]
+id = "encryption"
+status = "planned"
+
+[[upstream]]
+id = "energy-computer"
+status = "planned"
+
+[[upstream]]
+id = "energy-converter"
+status = "planned"
+
+[[upstream]]
+id = "env-variables-converter"
+status = "planned"
+
+[[upstream]]
+id = "epub-to-markdown"
+status = "planned"
+
+[[upstream]]
+id = "eta-calculator"
+status = "planned"
+
+[[upstream]]
+id = "eth-transaction-decoder"
+status = "planned"
+
+[[upstream]]
+id = "excel-to-data"
+status = "planned"
+
+[[upstream]]
+id = "explainshell"
+status = "planned"
+
+[[upstream]]
+id = "extract-text-from-html"
+status = "planned"
+
+[[upstream]]
+id = "favicon-generator"
+status = "planned"
+
+[[upstream]]
+id = "file-hasher"
+status = "planned"
+
+[[upstream]]
+id = "file-splitter"
+status = "planned"
+
+[[upstream]]
+id = "file-type"
+status = "planned"
+
+[[upstream]]
+id = "firewalld-generator"
+status = "planned"
+
+[[upstream]]
+id = "fitness-computer"
+status = "planned"
+
+[[upstream]]
+id = "floating-point-number-converter"
+status = "planned"
+
+[[upstream]]
+id = "folder-structure-diagram"
+status = "planned"
+
+[[upstream]]
+id = "font-compare"
+status = "planned"
+
+[[upstream]]
+id = "food-energy-converter"
+status = "planned"
+
+[[upstream]]
+id = "force-converter"
+status = "planned"
+
+[[upstream]]
+id = "fortune-wheel"
+status = "planned"
+
+[[upstream]]
+id = "frequency-converter"
+status = "planned"
+
+[[upstream]]
+id = "fstab-generator"
+status = "planned"
+
+[[upstream]]
+id = "geo-coordinates-converter"
+status = "planned"
+
+[[upstream]]
+id = "geo-distance-calculator"
+status = "planned"
+
+[[upstream]]
+id = "gif-to-mp4"
+status = "planned"
+
+[[upstream]]
+id = "git-memo"
+status = "planned"
+
+[[upstream]]
+id = "git-semantic-commit-memo"
+status = "planned"
+
+[[upstream]]
+id = "gitattributes-generator"
+status = "planned"
+
+[[upstream]]
+id = "gitignore-generator"
+status = "planned"
+
+[[upstream]]
+id = "gpt-token-encoder"
+status = "planned"
+
+[[upstream]]
+id = "gpt-token-estimator"
+status = "planned"
+
+[[upstream]]
+id = "gtin-validator"
+status = "planned"
+
+[[upstream]]
+id = "gzip-converter"
+status = "planned"
+
+[[upstream]]
+id = "har-sanitizer"
+status = "planned"
+
+[[upstream]]
+id = "hash-text"
+status = "implemented"
+tool = "crypto hash"
+
+[[upstream]]
+id = "hdd-calculator"
+status = "planned"
+
+[[upstream]]
+id = "heic-converter"
+status = "planned"
+
+[[upstream]]
+id = "hex-converter"
+status = "implemented"
+tool = "converter hex-encode, converter hex-decode"
+
+[[upstream]]
+id = "hex-file-converter"
+status = "planned"
+
+[[upstream]]
+id = "hmac-generator"
+status = "implemented"
+tool = "crypto hmac"
+
+[[upstream]]
+id = "htaccess-generator"
+status = "planned"
+
+[[upstream]]
+id = "html-cleaner"
+status = "planned"
+
+[[upstream]]
+id = "html-entities"
+status = "implemented"
+tool = "web html-escape, web html-unescape"
+
+[[upstream]]
+id = "html-minifier"
+status = "planned"
+
+[[upstream]]
+id = "html-prettifier"
+status = "planned"
+
+[[upstream]]
+id = "html-to-markdown"
+status = "planned"
+
+[[upstream]]
+id = "html-to-pdf"
+status = "not-applicable"
+note = "requires a browser rendering engine"
+
+[[upstream]]
+id = "html-to-xhtml"
+status = "planned"
+
+[[upstream]]
+id = "html-wysiwyg-editor"
+status = "not-applicable"
+note = "interactive editor UI"
+
+[[upstream]]
+id = "htpasswd-generator"
+status = "planned"
+
+[[upstream]]
+id = "http-status-codes"
+status = "planned"
+
+[[upstream]]
+id = "https-tester"
+status = "planned"
+
+[[upstream]]
+id = "i-and-l-checker"
+status = "planned"
+
+[[upstream]]
+id = "iana-whois-checker"
+status = "planned"
+
+[[upstream]]
+id = "iban-validator-and-parser"
+status = "planned"
+
+[[upstream]]
+id = "ical-generator"
+status = "planned"
+
+[[upstream]]
+id = "ical-merger"
+status = "planned"
+
+[[upstream]]
+id = "ical-parser"
+status = "planned"
+
+[[upstream]]
+id = "ico-converter"
+status = "planned"
+
+[[upstream]]
+id = "ies-lighting-guidelines"
+status = "planned"
+
+[[upstream]]
+id = "illuminance-converter"
+status = "planned"
+
+[[upstream]]
+id = "image-color-inverter"
+status = "planned"
+
+[[upstream]]
+id = "image-comparer"
+status = "planned"
+
+[[upstream]]
+id = "image-converter"
+status = "planned"
+
+[[upstream]]
+id = "image-exif-reader"
+status = "planned"
+
+[[upstream]]
+id = "image-resizer"
+status = "planned"
+
+[[upstream]]
+id = "image-to-ascii-art"
+status = "planned"
+
+[[upstream]]
+id = "image-to-css"
+status = "planned"
+
+[[upstream]]
+id = "integer-base-converter"
+status = "implemented"
+tool = "converter number-base"
+
+[[upstream]]
+id = "integers-to-ip"
+status = "planned"
+
+[[upstream]]
+id = "ip-cidr-to-range"
+status = "planned"
+
+[[upstream]]
+id = "ip-geo-location"
+status = "planned"
+
+[[upstream]]
+id = "ip-include-exclude"
+status = "planned"
+
+[[upstream]]
+id = "ip-range-to-cidr"
+status = "planned"
+
+[[upstream]]
+id = "iptables-generator"
+status = "planned"
+
+[[upstream]]
+id = "ipv4-address-converter"
+status = "planned"
+
+[[upstream]]
+id = "ipv4-range-expander"
+status = "planned"
+
+[[upstream]]
+id = "ipv4-subnet-calculator"
+status = "planned"
+
+[[upstream]]
+id = "ipv4-subnets-list"
+status = "planned"
+
+[[upstream]]
+id = "ipv6-address-converter"
+status = "planned"
+
+[[upstream]]
+id = "ipv6-subnet-calculator"
+status = "planned"
+
+[[upstream]]
+id = "ipv6-ula-generator"
+status = "planned"
+
+[[upstream]]
+id = "isbn-validator-and-parser"
+status = "planned"
+
+[[upstream]]
+id = "iso-3166-searcher"
+status = "planned"
+
+[[upstream]]
+id = "iso-639-searcher"
+status = "planned"
+
+[[upstream]]
+id = "jasypt-string-encryption"
+status = "planned"
+
+[[upstream]]
+id = "javascript-obfuscator"
+status = "planned"
+
+[[upstream]]
+id = "javascript-prettifier"
+status = "planned"
+
+[[upstream]]
+id = "javascript-to-json"
+status = "planned"
+
+[[upstream]]
+id = "jq-memo"
+status = "planned"
+
+[[upstream]]
+id = "jq-tester"
+status = "planned"
+
+[[upstream]]
+id = "js-unobfuscator"
+status = "planned"
+
+[[upstream]]
+id = "json-diff"
+status = "planned"
+
+[[upstream]]
+id = "json-editor"
+status = "not-applicable"
+note = "interactive editor UI"
+
+[[upstream]]
+id = "json-escaper"
+status = "planned"
+
+[[upstream]]
+id = "json-flatten-nestify"
+status = "planned"
+
+[[upstream]]
+id = "json-linter"
+status = "planned"
+
+[[upstream]]
+id = "json-merger"
+status = "planned"
+
+[[upstream]]
+id = "json-minify"
+status = "implemented"
+tool = "converter json-format"
+
+[[upstream]]
+id = "json-query"
+status = "planned"
+
+[[upstream]]
+id = "json-size-analyzer"
+status = "planned"
+
+[[upstream]]
+id = "json-sort-master"
+status = "planned"
+
+[[upstream]]
+id = "json-string-converter"
+status = "planned"
+
+[[upstream]]
+id = "json-to-csharp"
+status = "planned"
+
+[[upstream]]
+id = "json-to-csv"
+status = "planned"
+
+[[upstream]]
+id = "json-to-data"
+status = "planned"
+
+[[upstream]]
+id = "json-to-env"
+status = "planned"
+
+[[upstream]]
+id = "json-to-go"
+status = "planned"
+
+[[upstream]]
+id = "json-to-java"
+status = "planned"
+
+[[upstream]]
+id = "json-to-javascript"
+status = "planned"
+
+[[upstream]]
+id = "json-to-msgpack"
+status = "planned"
+
+[[upstream]]
+id = "json-to-object"
+status = "planned"
+
+[[upstream]]
+id = "json-to-php-array"
+status = "planned"
+
+[[upstream]]
+id = "json-to-php"
+status = "planned"
+
+[[upstream]]
+id = "json-to-protobuf"
+status = "planned"
+
+[[upstream]]
+id = "json-to-python"
+status = "planned"
+
+[[upstream]]
+id = "json-to-schema"
+status = "planned"
+
+[[upstream]]
+id = "json-to-sql-ddl"
+status = "planned"
+
+[[upstream]]
+id = "json-to-sql-insert"
+status = "planned"
+
+[[upstream]]
+id = "json-to-toml"
+status = "implemented"
+tool = "converter data"
+
+[[upstream]]
+id = "json-to-toon"
+status = "planned"
+
+[[upstream]]
+id = "json-to-ts"
+status = "planned"
+
+[[upstream]]
+id = "json-to-typescript"
+status = "planned"
+
+[[upstream]]
+id = "json-to-xml"
+status = "planned"
+
+[[upstream]]
+id = "json-to-yaml-converter"
+status = "implemented"
+tool = "converter data"
+
+[[upstream]]
+id = "json-viewer"
+status = "implemented"
+tool = "converter json-format"
+
+[[upstream]]
+id = "jsonpath-memo"
+status = "planned"
+
+[[upstream]]
+id = "jwt-generator"
+status = "planned"
+
+[[upstream]]
+id = "jwt-parser"
+status = "implemented"
+tool = "web jwt"
+
+[[upstream]]
+id = "k8s-memo"
+status = "planned"
+
+[[upstream]]
+id = "k8s-rbac-generator"
+status = "planned"
+
+[[upstream]]
+id = "keyboard-layout-converter"
+status = "planned"
+
+[[upstream]]
+id = "keycode-info"
+status = "planned"
+
+[[upstream]]
+id = "length-converter"
+status = "planned"
+
+[[upstream]]
+id = "levenshtein-calculator"
+status = "planned"
+
+[[upstream]]
+id = "list-comparer"
+status = "planned"
+
+[[upstream]]
+id = "list-converter"
+status = "planned"
+
+[[upstream]]
+id = "logrotate-generator"
+status = "planned"
+
+[[upstream]]
+id = "lorem-ipsum-generator"
+status = "planned"
+
+[[upstream]]
+id = "luhn-validator"
+status = "planned"
+
+[[upstream]]
+id = "mac-address-converter"
+status = "planned"
+
+[[upstream]]
+id = "mac-address-generator"
+status = "planned"
+
+[[upstream]]
+id = "mac-address-lookup"
+status = "planned"
+
+[[upstream]]
+id = "mailto-generator"
+status = "planned"
+
+[[upstream]]
+id = "many-units-converter"
+status = "planned"
+
+[[upstream]]
+id = "markdown-cheatsheet"
+status = "planned"
+
+[[upstream]]
+id = "markdown-editor"
+status = "planned"
+
+[[upstream]]
+id = "markdown-lorem-ipsum"
+status = "planned"
+
+[[upstream]]
+id = "markdown-table-prettifier"
+status = "planned"
+
+[[upstream]]
+id = "markdown-to-docx"
+status = "planned"
+
+[[upstream]]
+id = "markdown-to-html"
+status = "planned"
+
+[[upstream]]
+id = "markdown-to-text"
+status = "planned"
+
+[[upstream]]
+id = "markdown-toc-generator"
+status = "planned"
+
+[[upstream]]
+id = "mass-converter"
+status = "planned"
+
+[[upstream]]
+id = "math-evaluator"
+status = "planned"
+
+[[upstream]]
+id = "math-formats-converter"
+status = "planned"
+
+[[upstream]]
+id = "math-ocr"
+status = "planned"
+
+[[upstream]]
+id = "mermaid-exporter"
+status = "planned"
+
+[[upstream]]
+id = "meta-tag-generator"
+status = "planned"
+
+[[upstream]]
+id = "mic-tester"
+status = "planned"
+
+[[upstream]]
+id = "middle-endian-converter"
+status = "planned"
+
+[[upstream]]
+id = "mime-converter"
+status = "planned"
+
+[[upstream]]
+id = "mime-types"
+status = "planned"
+
+[[upstream]]
+id = "mongo-objectid-converter"
+status = "planned"
+
+[[upstream]]
+id = "morse-converter"
+status = "planned"
+
+[[upstream]]
+id = "msgpack-to-json"
+status = "planned"
+
+[[upstream]]
+id = "mttdl-calculator"
+status = "planned"
+
+[[upstream]]
+id = "multi-link-downloader"
+status = "planned"
+
+[[upstream]]
+id = "my-ip"
+status = "planned"
+
+[[upstream]]
+id = "nano-memo"
+status = "planned"
+
+[[upstream]]
+id = "nanoid-generator"
+status = "planned"
+
+[[upstream]]
+id = "network-utils"
+status = "planned"
+
+[[upstream]]
+id = "nginx-formatter"
+status = "planned"
+
+[[upstream]]
+id = "nginx-memo"
+status = "planned"
+
+[[upstream]]
+id = "niceware-bytes-to-passphrase"
+status = "planned"
+
+[[upstream]]
+id = "numeronym-generator"
+status = "planned"
+
+[[upstream]]
+id = "objgen-html"
+status = "planned"
+
+[[upstream]]
+id = "objgen-json"
+status = "planned"
+
+[[upstream]]
+id = "ocr-image"
+status = "planned"
+
+[[upstream]]
+id = "online-wiktionary"
+status = "planned"
+
+[[upstream]]
+id = "option43-generator"
+status = "planned"
+
+[[upstream]]
+id = "otp-code-generator-and-validator"
+status = "planned"
+
+[[upstream]]
+id = "outlook-parser"
+status = "planned"
+
+[[upstream]]
+id = "pack-files-for-ai"
+status = "planned"
+
+[[upstream]]
+id = "parquets-reader"
+status = "planned"
+
+[[upstream]]
+id = "paseto-encryption"
+status = "planned"
+
+[[upstream]]
+id = "paseto-signing"
+status = "planned"
+
+[[upstream]]
+id = "passphrase-generator"
+status = "planned"
+
+[[upstream]]
+id = "password-strength-analyser"
+status = "planned"
+
+[[upstream]]
+id = "paste-as-markdown"
+status = "planned"
+
+[[upstream]]
+id = "pdf-compressor"
+status = "planned"
+
+[[upstream]]
+id = "pdf-concat"
+status = "planned"
+
+[[upstream]]
+id = "pdf-encrypt"
+status = "planned"
+
+[[upstream]]
+id = "pdf-extract"
+status = "planned"
+
+[[upstream]]
+id = "pdf-linearize"
+status = "planned"
+
+[[upstream]]
+id = "pdf-signature-checker"
+status = "planned"
+
+[[upstream]]
+id = "pdf-text-extractor"
+status = "planned"
+
+[[upstream]]
+id = "pdf-unlock"
+status = "planned"
+
+[[upstream]]
+id = "percentage-calculator"
+status = "planned"
+
+[[upstream]]
+id = "pgp-encryption"
+status = "planned"
+
+[[upstream]]
+id = "pgp-file-encryption"
+status = "planned"
+
+[[upstream]]
+id = "pgp-keygen"
+status = "planned"
+
+[[upstream]]
+id = "phone-parser-and-formatter"
+status = "planned"
+
+[[upstream]]
+id = "php-array-to-json"
+status = "planned"
+
+[[upstream]]
+id = "pin-code-generator"
+status = "planned"
+
+[[upstream]]
+id = "pomodoro-timer"
+status = "planned"
+
+[[upstream]]
+id = "port-numbers"
+status = "planned"
+
+[[upstream]]
+id = "potrace"
+status = "planned"
+
+[[upstream]]
+id = "power-converter"
+status = "planned"
+
+[[upstream]]
+id = "powershell-memo"
+status = "planned"
+
+[[upstream]]
+id = "pressure-converter"
+status = "planned"
+
+[[upstream]]
+id = "properties-converter"
+status = "planned"
+
+[[upstream]]
+id = "ptr-dns-generator"
+status = "planned"
+
+[[upstream]]
+id = "punycode-converter"
+status = "planned"
+
+[[upstream]]
+id = "qr-code-decoder"
+status = "planned"
+
+[[upstream]]
+id = "qr-code-generator"
+status = "planned"
+
+[[upstream]]
+id = "qr-contact-info-generator"
+status = "planned"
+
+[[upstream]]
+id = "quote-converter"
+status = "planned"
+
+[[upstream]]
+id = "raid-calculator"
+status = "planned"
+
+[[upstream]]
+id = "random-line-picker"
+status = "planned"
+
+[[upstream]]
+id = "random-numbers-generator"
+status = "planned"
+
+[[upstream]]
+id = "random-port-generator"
+status = "planned"
+
+[[upstream]]
+id = "regex-memo"
+status = "implemented"
+tool = "development regex"
+note = "covered by live regex testing rather than a cheatsheet"
+
+[[upstream]]
+id = "regex-tester"
+status = "implemented"
+tool = "development regex"
+
+[[upstream]]
+id = "rem-px-converter"
+status = "planned"
+
+[[upstream]]
+id = "remove-background"
+status = "planned"
+
+[[upstream]]
+id = "remove-exif"
+status = "planned"
+
+[[upstream]]
+id = "resistor-calculator"
+status = "planned"
+
+[[upstream]]
+id = "rj45-memo"
+status = "planned"
+
+[[upstream]]
+id = "rmb-numbers"
+status = "planned"
+
+[[upstream]]
+id = "roman-numeral-converter"
+status = "planned"
+
+[[upstream]]
+id = "rsa-ecdsa-signing"
+status = "planned"
+
+[[upstream]]
+id = "rsa-encryption"
+status = "planned"
+
+[[upstream]]
+id = "rsa-key-pair-generator"
+status = "planned"
+
+[[upstream]]
+id = "rsvp-reader"
+status = "planned"
+
+[[upstream]]
+id = "rsync-generator"
+status = "planned"
+
+[[upstream]]
+id = "rune-converter"
+status = "planned"
+
+[[upstream]]
+id = "running-pace-calculator"
+status = "planned"
+
+[[upstream]]
+id = "safelink-decoder"
+status = "planned"
+
+[[upstream]]
+id = "saml-parser"
+status = "planned"
+
+[[upstream]]
+id = "screen-memo"
+status = "planned"
+
+[[upstream]]
+id = "sed-command-generator"
+status = "planned"
+
+[[upstream]]
+id = "sed-memo"
+status = "planned"
+
+[[upstream]]
+id = "sensitive-data-masker"
+status = "planned"
+
+[[upstream]]
+id = "serial-console"
+status = "planned"
+
+[[upstream]]
+id = "shamirs-secret-sharing"
+status = "planned"
+
+[[upstream]]
+id = "sharepoint-decoder"
+status = "planned"
+
+[[upstream]]
+id = "shell-formatter"
+status = "planned"
+
+[[upstream]]
+id = "shell-linearizer"
+status = "planned"
+
+[[upstream]]
+id = "short-urls-expander"
+status = "planned"
+
+[[upstream]]
+id = "shutdown-command-generator"
+status = "planned"
+
+[[upstream]]
+id = "si-prefixes-converter"
+status = "planned"
+
+[[upstream]]
+id = "sip-auth"
+status = "planned"
+
+[[upstream]]
+id = "sla-calculator"
+status = "planned"
+
+[[upstream]]
+id = "slugify-string"
+status = "implemented"
+tool = "web slugify"
+
+[[upstream]]
+id = "smart-raw-converter"
+status = "planned"
+
+[[upstream]]
+id = "smart-text-replacer"
+status = "planned"
+
+[[upstream]]
+id = "snowflake-id-extractor"
+status = "planned"
+
+[[upstream]]
+id = "social-link-sharer"
+status = "planned"
+
+[[upstream]]
+id = "software-licence-compatibility"
+status = "planned"
+
+[[upstream]]
+id = "speed-converter"
+status = "planned"
+
+[[upstream]]
+id = "spf-dns-generator"
+status = "planned"
+
+[[upstream]]
+id = "sql-minifier"
+status = "planned"
+
+[[upstream]]
+id = "sql-parameters"
+status = "planned"
+
+[[upstream]]
+id = "sql-prettify"
+status = "planned"
+
+[[upstream]]
+id = "ssl-cert-converter"
+status = "planned"
+
+[[upstream]]
+id = "stacktrace-prettier"
+status = "planned"
+
+[[upstream]]
+id = "string-escaper"
+status = "planned"
+
+[[upstream]]
+id = "string-obfuscator"
+status = "planned"
+
+[[upstream]]
+id = "svg-placeholder-generator"
+status = "planned"
+
+[[upstream]]
+id = "svg-previewer"
+status = "planned"
+
+[[upstream]]
+id = "swagger-ui-tester"
+status = "planned"
+
+[[upstream]]
+id = "tab-to-spaces"
+status = "planned"
+
+[[upstream]]
+id = "tcp-udp-port-tester"
+status = "planned"
+
+[[upstream]]
+id = "tcpdump-generator"
+status = "planned"
+
+[[upstream]]
+id = "temperature-converter"
+status = "planned"
+
+[[upstream]]
+id = "text-diff"
+status = "implemented"
+tool = "development diff"
+
+[[upstream]]
+id = "text-statistics"
+status = "planned"
+
+[[upstream]]
+id = "text-to-binary"
+status = "planned"
+
+[[upstream]]
+id = "text-to-nato-alphabet"
+status = "planned"
+
+[[upstream]]
+id = "text-to-unicode-names"
+status = "planned"
+
+[[upstream]]
+id = "text-to-unicode"
+status = "planned"
+
+[[upstream]]
+id = "time-alarm"
+status = "planned"
+
+[[upstream]]
+id = "timezone-converter"
+status = "planned"
+
+[[upstream]]
+id = "tip-calculator"
+status = "planned"
+
+[[upstream]]
+id = "tmux-memo"
+status = "planned"
+
+[[upstream]]
+id = "token-generator"
+status = "implemented"
+tool = "crypto token"
+
+[[upstream]]
+id = "toml-linter"
+status = "planned"
+
+[[upstream]]
+id = "toml-to-json"
+status = "implemented"
+tool = "converter data"
+
+[[upstream]]
+id = "toml-to-yaml"
+status = "implemented"
+tool = "converter data"
+
+[[upstream]]
+id = "toon-to-json"
+status = "planned"
+
+[[upstream]]
+id = "torrent-to-magnet"
+status = "planned"
+
+[[upstream]]
+id = "traefik-compose-maker"
+status = "planned"
+
+[[upstream]]
+id = "translator"
+status = "planned"
+
+[[upstream]]
+id = "trigo-viewer"
+status = "planned"
+
+[[upstream]]
+id = "ttl-calculator"
+status = "planned"
+
+[[upstream]]
+id = "ufw-generator"
+status = "planned"
+
+[[upstream]]
+id = "ulid-generator"
+status = "planned"
+
+[[upstream]]
+id = "unicode-characters-to-java-entities-converter"
+status = "planned"
+
+[[upstream]]
+id = "unicode-formatter"
+status = "planned"
+
+[[upstream]]
+id = "unicode-search"
+status = "planned"
+
+[[upstream]]
+id = "unicode-to-gsm7"
+status = "planned"
+
+[[upstream]]
+id = "url-builder"
+status = "planned"
+
+[[upstream]]
+id = "url-cleaner"
+status = "planned"
+
+[[upstream]]
+id = "url-encoder"
+status = "implemented"
+tool = "web url-encode, web url-decode"
+
+[[upstream]]
+id = "url-fanger"
+status = "planned"
+
+[[upstream]]
+id = "url-parser"
+status = "implemented"
+tool = "web url-parse"
+
+[[upstream]]
+id = "url-text-fragment-maker"
+status = "planned"
+
+[[upstream]]
+id = "user-agent-parser"
+status = "implemented"
+tool = "web user-agent"
+
+[[upstream]]
+id = "utm-url-generator"
+status = "planned"
+
+[[upstream]]
+id = "uuid-converter"
+status = "planned"
+
+[[upstream]]
+id = "uuid-generator"
+status = "implemented"
+tool = "development uuid"
+
+[[upstream]]
+id = "vat-validator"
+status = "planned"
+
+[[upstream]]
+id = "vim-memo"
+status = "planned"
+
+[[upstream]]
+id = "visual-subnet-calculator"
+status = "planned"
+
+[[upstream]]
+id = "volume-converter"
+status = "planned"
+
+[[upstream]]
+id = "volume-flow-rate-converter"
+status = "planned"
+
+[[upstream]]
+id = "watermarker"
+status = "planned"
+
+[[upstream]]
+id = "websocket-tester"
+status = "planned"
+
+[[upstream]]
+id = "week-number-converter"
+status = "planned"
+
+[[upstream]]
+id = "which-day"
+status = "planned"
+
+[[upstream]]
+id = "wifi-qr-code-generator"
+status = "planned"
+
+[[upstream]]
+id = "wireguard-config-generator"
+status = "planned"
+
+[[upstream]]
+id = "wpa-psk-generator"
+status = "planned"
+
+[[upstream]]
+id = "x-vr-spamcause-decoder"
+status = "planned"
+
+[[upstream]]
+id = "x509-certificate-generator"
+status = "planned"
+
+[[upstream]]
+id = "xml-formatter"
+status = "planned"
+
+[[upstream]]
+id = "xml-linter"
+status = "planned"
+
+[[upstream]]
+id = "xml-to-json"
+status = "planned"
+
+[[upstream]]
+id = "xpath-memo"
+status = "planned"
+
+[[upstream]]
+id = "xpath-tester"
+status = "planned"
+
+[[upstream]]
+id = "xslt-tester"
+status = "planned"
+
+[[upstream]]
+id = "yaml-flatten-nestify"
+status = "planned"
+
+[[upstream]]
+id = "yaml-merger"
+status = "planned"
+
+[[upstream]]
+id = "yaml-to-json-converter"
+status = "implemented"
+tool = "converter data"
+
+[[upstream]]
+id = "yaml-to-toml"
+status = "implemented"
+tool = "converter data"
+
+[[upstream]]
+id = "yaml-viewer"
+status = "planned"
+
+[[upstream]]
+id = "zalgo"
+status = "planned"
+
+[[upstream]]
+id = "zellij-memo"
+status = "planned"
+
+[[upstream]]
+id = "zpool-calculator"
+status = "planned"
+
+[[upstream]]
+id = "zpool-memo"
+status = "planned"
+
+[[upstream]]
+id = "zxcvbn-password-strength"
+status = "planned"

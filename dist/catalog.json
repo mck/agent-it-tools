@@ -1,0 +1,1243 @@
+{
+  "io_contract": {
+    "failure": "{\"error\": \"reason\"} on stderr, non-zero exit code",
+    "input": "tools with stdin_fallback=true accept the main input as the trailing positional argument or piped via stdin",
+    "success": "result on stdout (plain text or pretty JSON, see each tool's output.kind)"
+  },
+  "name": "agent-it-tools",
+  "parity": {
+    "counts": {
+      "implemented": 29,
+      "not-applicable": 6,
+      "planned": 421
+    },
+    "upstream": "https://github.com/sharevb/it-tools",
+    "upstream_total": 456
+  },
+  "tools": [
+    {
+      "args": [
+        {
+          "default": "sha256",
+          "help": "Algorithm: md5 | sha1 | sha224 | sha256 | sha384 | sha512",
+          "kind": "option",
+          "long": "algo",
+          "name": "algo",
+          "required": false,
+          "short": "a",
+          "value_type": "string"
+        },
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "crypto",
+            "hash",
+            "--algo",
+            "sha256",
+            "hello"
+          ],
+          "stdout": "2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824"
+        },
+        {
+          "argv": [
+            "crypto",
+            "hash",
+            "--algo",
+            "md5"
+          ],
+          "note": "Input piped via stdin instead of an argument",
+          "stdin": "hello",
+          "stdout": "5d41402abc4b2a76b9719d911017c592"
+        }
+      ],
+      "it_tools": [
+        "hash-text"
+      ],
+      "output": {
+        "description": "Lowercase hex digest, single line",
+        "kind": "text"
+      },
+      "path": "crypto hash",
+      "stdin_fallback": true,
+      "summary": "Hash text with md5, sha1, sha224, sha256, sha384 or sha512 (hex digest)",
+      "when_to_use": "Checksums, content addressing, comparing payloads. Never compute digests mentally. Not for passwords - use 'crypto bcrypt-hash'."
+    },
+    {
+      "args": [
+        {
+          "default": "sha256",
+          "help": "Algorithm: md5 | sha1 | sha256 | sha512",
+          "kind": "option",
+          "long": "algo",
+          "name": "algo",
+          "required": false,
+          "short": "a",
+          "value_type": "string"
+        },
+        {
+          "help": "Secret key",
+          "kind": "option",
+          "long": "key",
+          "name": "key",
+          "required": true,
+          "short": "k",
+          "value_type": "string"
+        },
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "crypto",
+            "hmac",
+            "--algo",
+            "sha256",
+            "--key",
+            "secret",
+            "hello"
+          ],
+          "stdout": "88aab3ede8d3adf94d26ab90d3bafd4a2083070c3bcce9c014ee04a443847c0b"
+        }
+      ],
+      "it_tools": [
+        "hmac-generator"
+      ],
+      "output": {
+        "description": "Lowercase hex signature, single line",
+        "kind": "text"
+      },
+      "path": "crypto hmac",
+      "stdin_fallback": true,
+      "summary": "HMAC signature of text with a secret key (md5, sha1, sha256, sha512)",
+      "when_to_use": "Signing or verifying webhook payloads, API request signatures."
+    },
+    {
+      "args": [
+        {
+          "default": "64",
+          "help": "Token length",
+          "kind": "option",
+          "long": "length",
+          "name": "length",
+          "required": false,
+          "short": "l",
+          "value_type": "integer"
+        },
+        {
+          "help": "Include symbols (!@#$%^&*()-_=+)",
+          "kind": "flag",
+          "long": "symbols",
+          "name": "symbols",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "help": "Exclude digits",
+          "kind": "flag",
+          "long": "no-numbers",
+          "name": "no_numbers",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "help": "Exclude uppercase letters",
+          "kind": "flag",
+          "long": "no-uppercase",
+          "name": "no_uppercase",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "help": "Exclude lowercase letters",
+          "kind": "flag",
+          "long": "no-lowercase",
+          "name": "no_lowercase",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "default": "1",
+          "help": "Number of tokens to generate (one per line)",
+          "kind": "option",
+          "long": "count",
+          "name": "count",
+          "required": false,
+          "short": "c",
+          "value_type": "integer"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "crypto",
+            "token",
+            "--length",
+            "24"
+          ],
+          "stdout_regex": "^[A-Za-z0-9]{24}$"
+        },
+        {
+          "argv": [
+            "crypto",
+            "token",
+            "--length",
+            "12",
+            "--no-uppercase",
+            "--no-numbers",
+            "--count",
+            "2"
+          ],
+          "stdout_regex": "^[a-z]{12}\\n[a-z]{12}$"
+        }
+      ],
+      "it_tools": [
+        "token-generator"
+      ],
+      "output": {
+        "description": "One random token per line",
+        "kind": "text"
+      },
+      "path": "crypto token",
+      "stdin_fallback": false,
+      "summary": "Generate cryptographically random token strings (configurable charset)",
+      "when_to_use": "API keys, secrets, nonces. Never invent 'random' strings yourself."
+    },
+    {
+      "args": [
+        {
+          "default": "10",
+          "help": "Cost factor (4-31)",
+          "kind": "option",
+          "long": "cost",
+          "name": "cost",
+          "required": false,
+          "short": "c",
+          "value_type": "integer"
+        },
+        {
+          "help": "Password (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "crypto",
+            "bcrypt-hash",
+            "--cost",
+            "4",
+            "hunter2"
+          ],
+          "stdout_regex": "^\\$2[aby]\\$04\\$[./A-Za-z0-9]{53}$"
+        }
+      ],
+      "it_tools": [
+        "bcrypt"
+      ],
+      "output": {
+        "description": "bcrypt hash string ($2b$...), single line",
+        "kind": "text"
+      },
+      "path": "crypto bcrypt-hash",
+      "stdin_fallback": true,
+      "summary": "Hash a password with bcrypt (salted, cost-configurable)",
+      "when_to_use": "Storing passwords. Output differs every run (random salt) - that is correct; verify with 'crypto bcrypt-verify'."
+    },
+    {
+      "args": [
+        {
+          "help": "Existing bcrypt hash to check against",
+          "kind": "option",
+          "long": "hash",
+          "name": "hash",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Password (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "crypto",
+            "bcrypt-verify",
+            "--hash",
+            "$2b$04$Lv00l1naniqgToppwj83aeFp69FVgi8I56L5AJKd4GuCF5TfQ2/U2",
+            "hunter2"
+          ],
+          "stdout": "{\n  \"valid\": true\n}"
+        }
+      ],
+      "it_tools": [
+        "bcrypt"
+      ],
+      "output": {
+        "description": "{\"valid\": true|false}; exit code 2 when false",
+        "kind": "json"
+      },
+      "path": "crypto bcrypt-verify",
+      "stdin_fallback": true,
+      "summary": "Check a password against an existing bcrypt hash",
+      "when_to_use": "Verifying a password matches a stored bcrypt hash. Exit code 0 = match, 2 = mismatch."
+    },
+    {
+      "args": [
+        {
+          "help": "Source format: json | yaml | toml",
+          "kind": "option",
+          "long": "from",
+          "name": "from",
+          "required": true,
+          "short": "f",
+          "value_type": "string"
+        },
+        {
+          "help": "Target format: json | yaml | toml",
+          "kind": "option",
+          "long": "to",
+          "name": "to",
+          "required": true,
+          "short": "t",
+          "value_type": "string"
+        },
+        {
+          "help": "Input document (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "data",
+            "--from",
+            "json",
+            "--to",
+            "yaml"
+          ],
+          "stdin": "{\"a\":1,\"b\":{\"c\":[1,2,3]}}",
+          "stdout": "a: 1\nb:\n  c:\n  - 1\n  - 2\n  - 3"
+        },
+        {
+          "argv": [
+            "converter",
+            "data",
+            "--from",
+            "yaml",
+            "--to",
+            "toml",
+            "name: test\nnums: [1, 2]"
+          ],
+          "stdout": "name = \"test\"\nnums = [\n    1,\n    2,\n]"
+        }
+      ],
+      "it_tools": [
+        "json-to-yaml-converter",
+        "json-to-toml",
+        "yaml-to-json-converter",
+        "yaml-to-toml",
+        "toml-to-json",
+        "toml-to-yaml"
+      ],
+      "output": {
+        "description": "The converted document in the target format",
+        "kind": "text"
+      },
+      "path": "converter data",
+      "stdin_fallback": true,
+      "summary": "Convert structured data between JSON, YAML and TOML",
+      "when_to_use": "Any JSON<->YAML<->TOML translation. TOML cannot represent null values or non-table roots - that returns an error."
+    },
+    {
+      "args": [
+        {
+          "help": "Emit minified JSON instead of pretty-printed",
+          "kind": "flag",
+          "long": "minify",
+          "name": "minify",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "help": "Input JSON (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "json-format",
+            "--minify",
+            " { \"a\" : 1 } "
+          ],
+          "stdout": "{\"a\":1}"
+        }
+      ],
+      "it_tools": [
+        "json-viewer",
+        "json-minify"
+      ],
+      "output": {
+        "description": "The reformatted JSON document",
+        "kind": "text"
+      },
+      "path": "converter json-format",
+      "stdin_fallback": true,
+      "summary": "Prettify or minify a JSON document (also validates it)",
+      "when_to_use": "Reformatting or validating JSON. A parse failure returns the error contract, so this doubles as a JSON validity check."
+    },
+    {
+      "args": [
+        {
+          "help": "Use URL-safe alphabet without padding",
+          "kind": "flag",
+          "long": "url-safe",
+          "name": "url_safe",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "base64-encode",
+            "hello world"
+          ],
+          "stdout": "aGVsbG8gd29ybGQ="
+        },
+        {
+          "argv": [
+            "converter",
+            "base64-encode",
+            "--url-safe",
+            "hello world"
+          ],
+          "stdout": "aGVsbG8gd29ybGQ"
+        }
+      ],
+      "it_tools": [
+        "base64-string-converter"
+      ],
+      "output": {
+        "description": "Base64 string, single line",
+        "kind": "text"
+      },
+      "path": "converter base64-encode",
+      "stdin_fallback": true,
+      "summary": "Encode text to Base64 (--url-safe for the URL alphabet without padding)",
+      "when_to_use": "Any Base64 encoding. Never encode Base64 mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "Input Base64 (reads stdin if omitted); standard and URL-safe alphabets accepted",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "base64-decode",
+            "aGVsbG8gd29ybGQ="
+          ],
+          "stdout": "hello world"
+        }
+      ],
+      "it_tools": [
+        "base64-string-converter"
+      ],
+      "output": {
+        "description": "The decoded text",
+        "kind": "text"
+      },
+      "path": "converter base64-decode",
+      "stdin_fallback": true,
+      "summary": "Decode Base64 to text (standard and URL-safe alphabets both accepted)",
+      "when_to_use": "Any Base64 decoding. Never decode Base64 mentally - models get this wrong. Errors if the payload is not valid UTF-8 text."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "hex-encode",
+            "hi"
+          ],
+          "stdout": "6869"
+        }
+      ],
+      "it_tools": [
+        "hex-converter"
+      ],
+      "output": {
+        "description": "Hex string, single line",
+        "kind": "text"
+      },
+      "path": "converter hex-encode",
+      "stdin_fallback": true,
+      "summary": "Encode text to a lowercase hex string",
+      "when_to_use": "Text-to-hex conversion, byte inspection."
+    },
+    {
+      "args": [
+        {
+          "help": "Input hex (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "hex-decode",
+            "68 65 6c 6c 6f"
+          ],
+          "stdout": "hello"
+        }
+      ],
+      "it_tools": [
+        "hex-converter"
+      ],
+      "output": {
+        "description": "The decoded text",
+        "kind": "text"
+      },
+      "path": "converter hex-decode",
+      "stdin_fallback": true,
+      "summary": "Decode a hex string to text (0x prefix and whitespace tolerated)",
+      "when_to_use": "Hex-to-text conversion. Errors if the bytes are not valid UTF-8 text."
+    },
+    {
+      "args": [
+        {
+          "help": "Target case: camel | pascal | snake | constant | kebab | train | title | dot | path | lower | upper",
+          "kind": "option",
+          "long": "to",
+          "name": "to",
+          "required": true,
+          "short": "t",
+          "value_type": "string"
+        },
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "case",
+            "--to",
+            "camel",
+            "hello world foo"
+          ],
+          "stdout": "helloWorldFoo"
+        },
+        {
+          "argv": [
+            "converter",
+            "case",
+            "--to",
+            "constant",
+            "helloWorldFoo"
+          ],
+          "stdout": "HELLO_WORLD_FOO"
+        },
+        {
+          "argv": [
+            "converter",
+            "case",
+            "--to",
+            "path",
+            "HelloWorld foo"
+          ],
+          "stdout": "hello/world/foo"
+        }
+      ],
+      "it_tools": [
+        "case-converter"
+      ],
+      "output": {
+        "description": "The re-cased string, single line",
+        "kind": "text"
+      },
+      "path": "converter case",
+      "stdin_fallback": true,
+      "summary": "Convert a string between naming cases (camel, pascal, snake, constant, kebab, train, title, dot, path, lower, upper)",
+      "when_to_use": "Renaming identifiers, normalizing token/variable names across languages."
+    },
+    {
+      "args": [
+        {
+          "default": "10",
+          "help": "Source base",
+          "kind": "option",
+          "long": "from",
+          "name": "from",
+          "required": false,
+          "short": "f",
+          "value_type": "integer"
+        },
+        {
+          "help": "Target base",
+          "kind": "option",
+          "long": "to",
+          "name": "to",
+          "required": true,
+          "short": "t",
+          "value_type": "string"
+        },
+        {
+          "help": "Input number (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "number-base",
+            "--from",
+            "10",
+            "--to",
+            "16",
+            "3735928559"
+          ],
+          "stdout": "deadbeef"
+        },
+        {
+          "argv": [
+            "converter",
+            "number-base",
+            "--from",
+            "2",
+            "--to",
+            "10",
+            "1010"
+          ],
+          "stdout": "10"
+        }
+      ],
+      "it_tools": [
+        "integer-base-converter"
+      ],
+      "output": {
+        "description": "The number in the target base (lowercase digits), single line",
+        "kind": "text"
+      },
+      "path": "converter number-base",
+      "stdin_fallback": true,
+      "summary": "Convert an integer between numeral bases 2-36",
+      "when_to_use": "Binary/octal/decimal/hex conversions. Never convert bases mentally for anything longer than a couple digits."
+    },
+    {
+      "args": [
+        {
+          "help": "\"now\", unix seconds, unix milliseconds, or an RFC 3339 / ISO 8601 string (defaults to now)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "datetime",
+            "1751700000"
+          ],
+          "note": "The 'local' field depends on the machine timezone, so only the UTC field is asserted",
+          "stdout_regex": "\"iso8601\": \"2025-07-05T07:20:00Z\""
+        }
+      ],
+      "it_tools": [
+        "date-time-converter"
+      ],
+      "output": {
+        "description": "Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
+        "kind": "json"
+      },
+      "path": "converter datetime",
+      "stdin_fallback": true,
+      "summary": "Convert a date-time (now, unix s/ms, RFC 3339, RFC 2822) into all common formats",
+      "when_to_use": "Timestamp conversion in either direction; omit the input for the current time. Never convert unix timestamps mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "url-encode",
+            "hello world&x=1"
+          ],
+          "stdout": "hello%20world%26x%3D1"
+        }
+      ],
+      "it_tools": [
+        "url-encoder"
+      ],
+      "output": {
+        "description": "Percent-encoded string, single line",
+        "kind": "text"
+      },
+      "path": "web url-encode",
+      "stdin_fallback": true,
+      "summary": "Percent-encode text for safe use in a URL component",
+      "when_to_use": "Building query strings or path segments from arbitrary text."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "url-decode",
+            "hello%20world%26x%3D1"
+          ],
+          "stdout": "hello world&x=1"
+        }
+      ],
+      "it_tools": [
+        "url-encoder"
+      ],
+      "output": {
+        "description": "The decoded text",
+        "kind": "text"
+      },
+      "path": "web url-decode",
+      "stdin_fallback": true,
+      "summary": "Decode a percent-encoded URL component",
+      "when_to_use": "Reading values out of query strings or encoded paths."
+    },
+    {
+      "args": [
+        {
+          "help": "URL (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "url-parse",
+            "https://user:pw@example.com:8443/a/b?x=1&y=two#frag"
+          ],
+          "stdout": "{\n  \"fragment\": \"frag\",\n  \"host\": \"example.com\",\n  \"params\": {\n    \"x\": \"1\",\n    \"y\": \"two\"\n  },\n  \"password\": \"pw\",\n  \"path\": \"/a/b\",\n  \"port\": 8443,\n  \"query\": \"x=1&y=two\",\n  \"scheme\": \"https\",\n  \"username\": \"user\"\n}"
+        }
+      ],
+      "it_tools": [
+        "url-parser"
+      ],
+      "output": {
+        "description": "Object with scheme, username, password, host, port, path, query, params (decoded key/value map) and fragment",
+        "kind": "json"
+      },
+      "path": "web url-parse",
+      "stdin_fallback": true,
+      "summary": "Parse a URL into scheme, host, port, path, query params, fragment and credentials",
+      "when_to_use": "Extracting parts of a URL. More reliable than string-splitting a URL yourself."
+    },
+    {
+      "args": [
+        {
+          "help": "JWT token (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "jwt",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          ],
+          "stdout": "{\n  \"expired\": null,\n  \"header\": {\n    \"alg\": \"HS256\",\n    \"typ\": \"JWT\"\n  },\n  \"payload\": {\n    \"iat\": 1516239022,\n    \"name\": \"John Doe\",\n    \"sub\": \"1234567890\"\n  },\n  \"signature\": \"SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c\"\n}"
+        }
+      ],
+      "it_tools": [
+        "jwt-parser"
+      ],
+      "output": {
+        "description": "Object with header, payload, signature (raw base64url) and expired (true/false, or null when no exp claim)",
+        "kind": "json"
+      },
+      "path": "web jwt",
+      "stdin_fallback": true,
+      "summary": "Decode a JWT's header and payload WITHOUT verifying the signature",
+      "when_to_use": "Inspecting JWT claims (sub, exp, scopes). Never decode the base64url segments yourself. This does NOT validate the token."
+    },
+    {
+      "args": [
+        {
+          "help": "User-agent string (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "user-agent",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+          ],
+          "stdout": "{\n  \"browser_type\": \"browser\",\n  \"category\": \"pc\",\n  \"name\": \"Chrome\",\n  \"os\": \"Mac OSX\",\n  \"os_version\": \"10.15.7\",\n  \"vendor\": \"Google\",\n  \"version\": \"120.0.0.0\"\n}"
+        }
+      ],
+      "it_tools": [
+        "user-agent-parser"
+      ],
+      "output": {
+        "description": "Object with name, category (pc/smartphone/crawler/...), browser_type, version, os, os_version, vendor",
+        "kind": "json"
+      },
+      "path": "web user-agent",
+      "stdin_fallback": true,
+      "summary": "Parse a user-agent string into browser, version, OS and device category",
+      "when_to_use": "Classifying user-agent strings from logs or requests."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "html-escape",
+            "<a href=\"x\">&</a>"
+          ],
+          "stdout": "&lt;a href=&quot;x&quot;&gt;&amp;&lt;/a&gt;"
+        }
+      ],
+      "it_tools": [
+        "html-entities"
+      ],
+      "output": {
+        "description": "HTML-escaped text",
+        "kind": "text"
+      },
+      "path": "web html-escape",
+      "stdin_fallback": true,
+      "summary": "Escape text for safe embedding in HTML (quotes included)",
+      "when_to_use": "Putting arbitrary text into HTML content or attribute values."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "html-unescape",
+            "&lt;b&gt;&amp;&quot;"
+          ],
+          "stdout": "<b>&\""
+        }
+      ],
+      "it_tools": [
+        "html-entities"
+      ],
+      "output": {
+        "description": "The decoded text",
+        "kind": "text"
+      },
+      "path": "web html-unescape",
+      "stdin_fallback": true,
+      "summary": "Decode HTML entities back to plain text",
+      "when_to_use": "Reading text that contains &amp;, &lt;, &#39; and other HTML entities."
+    },
+    {
+      "args": [
+        {
+          "help": "Username",
+          "kind": "positional",
+          "name": "username",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Password",
+          "kind": "positional",
+          "name": "password",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "basic-auth",
+            "admin",
+            "s3cret"
+          ],
+          "stdout": "Basic YWRtaW46czNjcmV0"
+        }
+      ],
+      "it_tools": [
+        "basic-auth-generator"
+      ],
+      "output": {
+        "description": "The header value: 'Basic <base64(user:pass)>'",
+        "kind": "text"
+      },
+      "path": "web basic-auth",
+      "stdin_fallback": false,
+      "summary": "Build an HTTP Basic Auth Authorization header value from username and password",
+      "when_to_use": "Constructing 'Authorization: Basic ...' headers for curl or API calls."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "slugify",
+            "Héllo Wörld! This is  IT-Tools"
+          ],
+          "stdout": "hello-world-this-is-it-tools"
+        }
+      ],
+      "it_tools": [
+        "slugify-string"
+      ],
+      "output": {
+        "description": "The slug, single line",
+        "kind": "text"
+      },
+      "path": "web slugify",
+      "stdin_fallback": true,
+      "summary": "Turn any string into a URL-safe slug (ASCII, lowercase, hyphen-separated)",
+      "when_to_use": "Generating URL slugs, file names or ids from titles; handles accents and unicode."
+    },
+    {
+      "args": [
+        {
+          "help": "Cron expression, 5-field classic or 6/7-field with seconds/years",
+          "kind": "positional",
+          "name": "expression",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "default": "5",
+          "help": "Number of upcoming occurrences to list",
+          "kind": "option",
+          "long": "count",
+          "name": "count",
+          "required": false,
+          "short": "c",
+          "value_type": "integer"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "cron",
+            "*/15 9-17 * * 1-5",
+            "--count",
+            "3"
+          ],
+          "note": "Next occurrences depend on the current time, so only validity is asserted",
+          "stdout_regex": "\"valid\": true"
+        }
+      ],
+      "it_tools": [
+        "crontab-generator"
+      ],
+      "output": {
+        "description": "Object with expression, normalized (6-field form), valid, and next (array of RFC 3339 UTC timestamps)",
+        "kind": "json"
+      },
+      "path": "development cron",
+      "stdin_fallback": false,
+      "summary": "Validate a crontab expression and list its next run times (UTC)",
+      "when_to_use": "Checking whether a cron expression is valid and when it fires. Accepts classic 5-field crontabs and 6/7-field (seconds/years) forms. Never reason about cron schedules mentally."
+    },
+    {
+      "args": [
+        {
+          "default": "1",
+          "help": "Number of UUIDs to generate (one per line)",
+          "kind": "option",
+          "long": "count",
+          "name": "count",
+          "required": false,
+          "short": "c",
+          "value_type": "integer"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "uuid",
+            "--version",
+            "v4"
+          ],
+          "stdout_regex": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        {
+          "argv": [
+            "development",
+            "uuid",
+            "--version",
+            "nil"
+          ],
+          "stdout": "00000000-0000-0000-0000-000000000000"
+        }
+      ],
+      "it_tools": [
+        "uuid-generator"
+      ],
+      "output": {
+        "description": "One UUID per line, lowercase hyphenated",
+        "kind": "text"
+      },
+      "path": "development uuid",
+      "stdin_fallback": false,
+      "summary": "Generate UUIDs (v4 random, v7 time-ordered, nil)",
+      "when_to_use": "Any UUID need. Never invent UUIDs yourself - made-up UUIDs are not random and often malformed."
+    },
+    {
+      "args": [
+        {
+          "help": "Regular expression pattern",
+          "kind": "option",
+          "long": "pattern",
+          "name": "pattern",
+          "required": true,
+          "short": "p",
+          "value_type": "string"
+        },
+        {
+          "help": "Case-insensitive matching",
+          "kind": "flag",
+          "long": "ignore-case",
+          "name": "ignore_case",
+          "required": false,
+          "short": "i",
+          "value_type": "boolean"
+        },
+        {
+          "help": "^ and $ match line boundaries",
+          "kind": "flag",
+          "long": "multiline",
+          "name": "multiline",
+          "required": false,
+          "short": "m",
+          "value_type": "boolean"
+        },
+        {
+          "help": ". matches newlines",
+          "kind": "flag",
+          "long": "dot-all",
+          "name": "dot_all",
+          "required": false,
+          "short": "s",
+          "value_type": "boolean"
+        },
+        {
+          "help": "Text to test (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "regex",
+            "--pattern",
+            "(?P<word>\\w+)@(\\w+)\\.com",
+            "mail foo@bar.com"
+          ],
+          "stdout": "{\n  \"is_match\": true,\n  \"match_count\": 1,\n  \"matches\": [\n    {\n      \"end\": 16,\n      \"groups\": {\n        \"2\": \"bar\",\n        \"word\": \"foo\"\n      },\n      \"match\": \"foo@bar.com\",\n      \"start\": 5\n    }\n  ],\n  \"pattern\": \"(?P<word>\\\\w+)@(\\\\w+)\\\\.com\"\n}"
+        }
+      ],
+      "it_tools": [
+        "regex-tester",
+        "regex-memo"
+      ],
+      "output": {
+        "description": "Object with pattern, is_match, match_count and matches (each with match, start, end byte offsets, and groups keyed by name or index)",
+        "kind": "json"
+      },
+      "path": "development regex",
+      "stdin_fallback": true,
+      "summary": "Test a regular expression against text; reports all matches with positions and named groups",
+      "when_to_use": "Validating a regex or extracting matches deterministically. Flags: -i case-insensitive, -m multiline, -s dot-matches-newline. Rust regex syntax (no backreferences/lookaround)."
+    },
+    {
+      "args": [
+        {
+          "help": "Old text, or a file path with --files",
+          "kind": "positional",
+          "name": "old",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "New text, or a file path with --files",
+          "kind": "positional",
+          "name": "new",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Treat the two arguments as file paths",
+          "kind": "flag",
+          "long": "files",
+          "name": "files",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "default": "3",
+          "help": "Lines of context around changes",
+          "kind": "option",
+          "long": "context",
+          "name": "context",
+          "required": false,
+          "short": "c",
+          "value_type": "integer"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "diff",
+            "line1\nline2\nline3\n",
+            "line1\nlineTWO\nline3\n"
+          ],
+          "stdout": "--- old\n+++ new\n@@ -1,3 +1,3 @@\n line1\n-line2\n+lineTWO\n line3"
+        }
+      ],
+      "it_tools": [
+        "text-diff"
+      ],
+      "output": {
+        "description": "Unified diff (--- old / +++ new hunks); empty when inputs are equal",
+        "kind": "text"
+      },
+      "path": "development diff",
+      "stdin_fallback": false,
+      "summary": "Unified diff between two texts, or two files with --files",
+      "when_to_use": "Comparing two strings, configs or files precisely. Empty output means the inputs are identical."
+    }
+  ],
+  "version": "0.1.0"
+}

@@ -1,0 +1,12 @@
+path = "crypto bcrypt-hash"
+summary = "Hash a password with bcrypt (salted, cost-configurable)"
+when_to_use = "Storing passwords. Output differs every run (random salt) - that is correct; verify with 'crypto bcrypt-verify'."
+it_tools = ["bcrypt"]
+
+[output]
+kind = "text"
+description = "bcrypt hash string ($2b$...), single line"
+
+[[examples]]
+argv = ["crypto", "bcrypt-hash", "--cost", "4", "hunter2"]
+stdout_regex = "^\\$2[aby]\\$04\\$[./A-Za-z0-9]{53}$"

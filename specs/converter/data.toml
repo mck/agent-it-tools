@@ -1,0 +1,28 @@
+path = "converter data"
+summary = "Convert structured data between JSON, YAML and TOML"
+when_to_use = "Any JSON<->YAML<->TOML translation. TOML cannot represent null values or non-table roots - that returns an error."
+it_tools = ["json-to-yaml-converter", "json-to-toml", "yaml-to-json-converter", "yaml-to-toml", "toml-to-json", "toml-to-yaml"]
+
+[output]
+kind = "text"
+description = "The converted document in the target format"
+
+[[examples]]
+argv = ["converter", "data", "--from", "json", "--to", "yaml"]
+stdin = '{"a":1,"b":{"c":[1,2,3]}}'
+stdout = """
+a: 1
+b:
+  c:
+  - 1
+  - 2
+  - 3"""
+
+[[examples]]
+argv = ["converter", "data", "--from", "yaml", "--to", "toml", "name: test\nnums: [1, 2]"]
+stdout = """
+name = "test"
+nums = [
+    1,
+    2,
+]"""
