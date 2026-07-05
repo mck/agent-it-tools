@@ -16,21 +16,23 @@ JWT/URL/user-agent parsing, cron, regex, diffs. Every answer is computed, the
 same way, every time.
 
 Measured on the smallest current Claude model (Haiku), same ten tasks,
-identical prompts:
+identical prompts, three runs each, and a task only passes if ALL runs pass:
 
 | | bare model | model + agent-it-tools |
 |---|---|---|
-| score | 8/10, unstable across runs | **10/10, stable** |
-| sha256 / HMAC | confidently fabricated hex | computed |
-| cost per task | comparable | ~$0.02 |
+| reliability score | 6/10 | **10/10** (30/30 runs) |
+| sha256 / HMAC | 1/3 and 0/3, fabricated hex | 3/3, computed |
+| base64 decode | 1/3, a coin-flip | 3/3 |
+| cost per task | comparable | ~$0.014 |
 
-<sub>Single run of `./evals/run.sh haiku both` on 2026-07-05, graded against
-precomputed ground truth; reproduce it yourself with the eval harness.</sub>
+<sub>`./evals/run.sh haiku both 3` on 2026-07-05, random non-memorizable
+fixtures, graded against precomputed ground truth; reproduce it yourself with
+the eval harness.</sub>
 
-The bare 8/10 flatters the model: outside a few memorized facts those passes
-are coin-flips that change from run to run (see [`evals/`](evals/README.md)).
-The tool arm's only failure mode is not invoking the tool, and the shipped
-skill file exists to drive exactly that to zero.
+A capability that passes sometimes is not a weaker capability, it is noise:
+the consuming pipeline cannot tell a lucky run from a fabricated one (see
+[`evals/`](evals/README.md)). The tool arm's only failure mode is not invoking
+the tool, and the shipped skill file exists to drive exactly that to zero.
 
 ## Agent-first I/O contract
 
