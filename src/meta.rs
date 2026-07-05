@@ -19,7 +19,15 @@ static SPEC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/specs");
 
 /// Categories that carry user-facing tools. `meta` itself is infrastructure
 /// and intentionally excluded from the catalog.
-const TOOL_CATEGORIES: [&str; 5] = ["crypto", "converter", "web", "development", "datetime"];
+const TOOL_CATEGORIES: [&str; 7] = [
+    "crypto",
+    "converter",
+    "web",
+    "development",
+    "datetime",
+    "network",
+    "text",
+];
 
 #[derive(Subcommand)]
 pub enum MetaCmd {
@@ -325,7 +333,7 @@ fn skill_markdown(tools: &[CatalogTool]) -> String {
 
     let mut md = String::new();
     md.push_str("---\nname: agent-it-tools\n");
-    md.push_str("description: MUST BE USED for any request involving hashes (md5/sha), HMAC, bcrypt, random tokens, UUIDs, base64, hex, URL/HTML encoding or decoding, JSON/YAML/TOML conversion, JSON formatting, case conversion, number bases, unix timestamps, JWT decoding, URL or user-agent parsing, slugs, cron expressions, regex testing, or text diffs. Never answer these from memory, even when the answer seems obvious. Language models get encodings, digests and slugs subtly wrong; this local CLI computes them exactly.\n---\n\n");
+    md.push_str("description: MUST BE USED for any request involving hashes (md5/sha, files too), HMAC, TOTP codes, bcrypt, random tokens, UUIDs/ULIDs/nanoids, base64, hex, gzip, URL/HTML encoding, punycode, JSON/YAML/TOML/XML/CSV conversion, jq queries, JSON diff/merge/flatten/lint, math evaluation, bitwise ops, number bases, chmod, case conversion, string escaping, unix timestamps, timezones, date arithmetic, JWT decoding, URL parsing or building, user-agent parsing, slugs, Markdown/HTML conversion, MIME types, CSS colors and WCAG contrast, cron expressions, regex testing, text diffs, text statistics, string similarity, subnets/CIDR math, IP conversion, or masking sensitive data. Never answer these from memory, even when the answer seems obvious. Language models get computation and encodings subtly wrong; this local CLI computes them exactly.\n---\n\n");
     md.push_str("# agent-it-tools\n\n");
     md.push_str("Run: `agent-it-tools <category> <tool> [flags] [input]`\n\n");
     md.push_str("Rules:\n");

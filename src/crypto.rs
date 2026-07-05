@@ -9,11 +9,14 @@ use std::path::PathBuf;
 
 #[derive(Subcommand)]
 pub enum CryptoCmd {
-    /// Compute a hash digest (hex) of the input text
+    /// Compute a hash digest (hex) of the input text or a file
     Hash {
         /// Algorithm: md5 | sha1 | sha224 | sha256 | sha384 | sha512
         #[arg(short, long, default_value = "sha256")]
         algo: String,
+        /// Hash the raw bytes of this file instead of text input
+        #[arg(short, long, conflicts_with = "input")]
+        file: Option<PathBuf>,
         /// Input text (reads stdin if omitted)
         input: Option<String>,
     },
@@ -72,6 +75,18 @@ pub enum CryptoCmd {
         /// Password (reads stdin if omitted)
         input: Option<String>,
     },
+    /// Generate or verify a TOTP code (RFC 6238: SHA1, 6 digits, 30s period)
+    Otp {
+        /// Base32 secret as a literal (real secrets should use --secret-env)
+        #[arg(short, long, conflicts_with = "secret_env")]
+        secret: Option<String>,
+        /// Read the Base32 secret from this environment variable
+        #[arg(long)]
+        secret_env: Option<String>,
+        /// Verify this code instead of generating one (exit 2 on mismatch)
+        #[arg(long)]
+        check: Option<String>,
+    },
 }
 
 fn hex_digest<D: Digest>(data: &[u8]) -> String {
@@ -89,9 +104,13 @@ macro_rules! hmac_hex {
 
 pub fn run(cmd: CryptoCmd) -> Result<()> {
     match cmd {
-        CryptoCmd::Hash { algo, input } => {
-            let data = read_input(input)?;
-            let data = data.as_bytes();
+        CryptoCmd::Hash { algo, file, input } => {
+            let data = match file {
+                Some(path) => std::fs::read(&path)
+                    .with_context(|| format!("cannot read file '{}'", path.display()))?,
+                None => read_input(input)?.into_bytes(),
+            };
+            let data = data.as_slice();
             let digest = match algo.to_lowercase().as_str() {
                 "md5" => hex_digest::<Md5>(data),
                 "sha1" => hex_digest::<Sha1>(data),
@@ -187,6 +206,44 @@ pub fn run(cmd: CryptoCmd) -> Result<()> {
             print_json(&serde_json::json!({ "valid": valid }))?;
             if !valid {
                 std::process::exit(2);
+            }
+        }
+        CryptoCmd::Otp {
+            secret,
+            secret_env,
+            check,
+        } => {
+            let secret = match (secret, secret_env) {
+                (Some(s), None) => s,
+                (None, Some(var)) => std::env::var(&var)
+                    .with_context(|| format!("environment variable '{var}' is not set"))?,
+                _ => bail!("provide exactly one of --secret or --secret-env"),
+            };
+            let bytes = totp_rs::Secret::Encoded(secret.trim().to_string())
+                .to_bytes()
+                .map_err(|e| anyhow::anyhow!("invalid Base32 secret: {e:?}"))?;
+            let totp = totp_rs::TOTP::new_unchecked(totp_rs::Algorithm::SHA1, 6, 1, 30, bytes);
+            match check {
+                Some(code) => {
+                    let valid = totp
+                        .check_current(code.trim())
+                        .context("system clock error")?;
+                    print_json(&serde_json::json!({ "valid": valid }))?;
+                    if !valid {
+                        std::process::exit(2);
+                    }
+                }
+                None => {
+                    let code = totp.generate_current().context("system clock error")?;
+                    let now = std::time::SystemTime::now()
+                        .duration_since(std::time::UNIX_EPOCH)
+                        .context("system clock error")?
+                        .as_secs();
+                    print_json(&serde_json::json!({
+                        "code": code,
+                        "seconds_remaining": 30 - (now % 30),
+                    }))?;
+                }
             }
         }
     }

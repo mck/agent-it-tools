@@ -43,6 +43,49 @@ pub enum DevCmd {
         /// Text to test (reads stdin if omitted)
         input: Option<String>,
     },
+    /// Evaluate a mathematical expression exactly
+    Calc {
+        /// Expression, e.g. "sin(0.5)^2 + 17 * (3 - 1.5)" (reads stdin if omitted)
+        input: Option<String>,
+    },
+    /// Bitwise operation on integers (0x/0b/0o prefixes accepted)
+    Bitwise {
+        /// Operation: and | or | xor | not | shl | shr
+        #[arg(short, long)]
+        op: String,
+        /// First operand
+        a: String,
+        /// Second operand (shift amount for shl/shr; omitted for not)
+        b: Option<String>,
+    },
+    /// Convert chmod permissions between octal and symbolic notation
+    Chmod {
+        /// Octal (e.g. 755) or symbolic (e.g. rwxr-xr-x)
+        input: Option<String>,
+    },
+    /// Generate ULIDs (time-ordered, lexicographically sortable)
+    Ulid {
+        /// Number of ULIDs to generate (one per line)
+        #[arg(short, long, default_value_t = 1)]
+        count: usize,
+    },
+    /// Generate Nano IDs (URL-safe random identifiers)
+    Nanoid {
+        /// ID length
+        #[arg(short, long, default_value_t = 21)]
+        length: usize,
+        /// Number of IDs to generate (one per line)
+        #[arg(short, long, default_value_t = 1)]
+        count: usize,
+    },
+    /// Escape text as a JSON/code string literal (reverse with --unescape)
+    StringEscape {
+        /// Unescape a quoted string literal instead
+        #[arg(short, long)]
+        unescape: bool,
+        /// Input text (reads stdin if omitted)
+        input: Option<String>,
+    },
     /// Compute a unified diff between two texts or files
     Diff {
         /// Old text, or a file path with --files
@@ -140,6 +183,152 @@ pub fn run(cmd: DevCmd) -> Result<()> {
                 "match_count": matches.len(),
                 "matches": matches,
             }))?;
+        }
+        DevCmd::Calc { input } => {
+            let input = read_input(input)?;
+            let result = exmex::eval_str::<f64>(&input)
+                .map_err(|e| anyhow::anyhow!("invalid expression: {e}"))?;
+            if result.fract() == 0.0 && result.abs() < 1e15 {
+                println!("{}", result as i64);
+            } else {
+                println!("{result}");
+            }
+        }
+        DevCmd::Bitwise { op, a, b } => {
+            fn parse_int(raw: &str) -> Result<u64> {
+                let raw = raw.trim().replace('_', "");
+                let (digits, radix) = match raw.get(..2) {
+                    Some("0x") | Some("0X") => (&raw[2..], 16),
+                    Some("0b") | Some("0B") => (&raw[2..], 2),
+                    Some("0o") | Some("0O") => (&raw[2..], 8),
+                    _ => (raw.as_str(), 10),
+                };
+                u64::from_str_radix(digits, radix)
+                    .with_context(|| format!("'{raw}' is not a valid integer"))
+            }
+            let a = parse_int(&a)?;
+            let op = op.to_lowercase();
+            let b = match (op.as_str(), b) {
+                ("not", None) => 0,
+                ("not", Some(_)) => bail!("'not' takes a single operand"),
+                (_, Some(b)) => parse_int(&b)?,
+                (_, None) => bail!("operation '{op}' needs a second operand"),
+            };
+            let result = match op.as_str() {
+                "and" => a & b,
+                "or" => a | b,
+                "xor" => a ^ b,
+                "not" => !a,
+                "shl" => a.checked_shl(b as u32).context("shift amount too large")?,
+                "shr" => a.checked_shr(b as u32).context("shift amount too large")?,
+                other => {
+                    bail!("unsupported operation: {other} (expected and, or, xor, not, shl or shr)")
+                }
+            };
+            print_json(&serde_json::json!({
+                "decimal": result,
+                "hex": format!("0x{result:x}"),
+                "binary": format!("0b{result:b}"),
+                "octal": format!("0o{result:o}"),
+            }))?;
+        }
+        DevCmd::Chmod { input } => {
+            let input = read_input(input)?;
+            let raw = input.trim();
+            let octal: u32 = if raw.chars().all(|c| c.is_ascii_digit()) {
+                let digits = raw.trim_start_matches('0');
+                let digits = if digits.is_empty() { "0" } else { digits };
+                if digits.len() > 4 {
+                    bail!("'{raw}' is not a valid chmod value");
+                }
+                u32::from_str_radix(digits, 8)
+                    .with_context(|| format!("'{raw}' is not a valid octal chmod value"))?
+            } else if raw.len() == 9 {
+                let mut value = 0u32;
+                for (i, (c, expected)) in raw.chars().zip("rwxrwxrwx".chars()).enumerate() {
+                    let bit = 1 << (8 - i);
+                    match c {
+                        '-' => {}
+                        c if c == expected => value |= bit,
+                        // setuid/setgid/sticky in the execute slots
+                        's' | 'S' if i % 3 == 2 && i < 6 => {
+                            value |= if i == 2 { 0o4000 } else { 0o2000 };
+                            if c == 's' {
+                                value |= bit;
+                            }
+                        }
+                        't' | 'T' if i == 8 => {
+                            value |= 0o1000;
+                            if c == 't' {
+                                value |= bit;
+                            }
+                        }
+                        other => bail!(
+                            "unexpected character '{other}' at position {i} (expected rwx pattern)"
+                        ),
+                    }
+                }
+                value
+            } else {
+                bail!("'{raw}' is neither octal (755) nor 9-character symbolic (rwxr-xr-x)");
+            };
+            if octal > 0o7777 {
+                bail!("'{raw}' is out of range for chmod");
+            }
+            let mut symbolic = String::new();
+            for i in 0..9 {
+                let bit = 1 << (8 - i);
+                let expected = ['r', 'w', 'x'][i % 3];
+                let special = match i {
+                    2 if octal & 0o4000 != 0 => Some(('s', 'S')),
+                    5 if octal & 0o2000 != 0 => Some(('s', 'S')),
+                    8 if octal & 0o1000 != 0 => Some(('t', 'T')),
+                    _ => None,
+                };
+                let set = octal & bit != 0;
+                symbolic.push(match (special, set) {
+                    (Some((lower, _)), true) => lower,
+                    (Some((_, upper)), false) => upper,
+                    (None, true) => expected,
+                    (None, false) => '-',
+                });
+            }
+            print_json(&serde_json::json!({
+                "octal": format!("{octal:o}"),
+                "symbolic": symbolic,
+                "command": format!("chmod {octal:o} <file>"),
+            }))?;
+        }
+        DevCmd::Ulid { count } => {
+            for _ in 0..count {
+                println!("{}", ulid::Ulid::new());
+            }
+        }
+        DevCmd::Nanoid { length, count } => {
+            if length == 0 {
+                bail!("length must be greater than zero");
+            }
+            for _ in 0..count {
+                println!(
+                    "{}",
+                    nanoid::format(nanoid::rngs::default, &nanoid::alphabet::SAFE, length)
+                );
+            }
+        }
+        DevCmd::StringEscape { unescape, input } => {
+            let input = read_input(input)?;
+            if unescape {
+                let quoted = if input.starts_with('"') && input.ends_with('"') && input.len() >= 2 {
+                    input.clone()
+                } else {
+                    format!("\"{input}\"")
+                };
+                let unescaped: String = serde_json::from_str(&quoted)
+                    .context("input is not a valid escaped string literal")?;
+                println!("{unescaped}");
+            } else {
+                println!("{}", serde_json::to_string(&input)?);
+            }
         }
         DevCmd::Diff {
             old,

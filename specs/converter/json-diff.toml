@@ -1,0 +1,24 @@
+path = "converter json-diff"
+summary = "Structural diff of two JSON documents as an RFC 6902 patch"
+when_to_use = "Comparing JSON precisely; an empty array [] means the documents are semantically equal. Use --files to pass file paths."
+it_tools = ["json-diff"]
+
+[output]
+kind = "json"
+description = "RFC 6902 patch array (op/path/value entries)"
+
+[[examples]]
+argv = ["converter", "json-diff", "{\"a\":1,\"b\":2}", "{\"a\":1,\"b\":3,\"c\":4}"]
+stdout = """
+[
+  {
+    "op": "replace",
+    "path": "/b",
+    "value": 3
+  },
+  {
+    "op": "add",
+    "path": "/c",
+    "value": 4
+  }
+]"""

@@ -119,9 +119,9 @@ PATH + skill installed) - and grades deterministic expected answers. See
 ## Command taxonomy
 
 `agent-it-tools <category> <tool> [args/flags]` - mirrors the it-tools layout.
-28 tools across `crypto`, `converter`, `web`, `development`, `datetime` (run
-`agent-it-tools meta catalog` for the authoritative list), covering 29 upstream
-it-tools so far; `specs/parity.toml` tracks the remaining ~420.
+62 tools across `crypto`, `converter`, `web`, `development`, `datetime`,
+`network`, `text` (run `agent-it-tools meta catalog` for the authoritative
+list), covering 73 upstream it-tools; `specs/parity.toml` tracks the rest.
 
 ## Build
 

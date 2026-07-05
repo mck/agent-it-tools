@@ -108,7 +108,8 @@ status = "planned"
 
 [[upstream]]
 id = "binary-calculator"
-status = "planned"
+status = "implemented"
+tool = "development bitwise"
 
 [[upstream]]
 id = "bip39-generator"
@@ -150,7 +151,8 @@ status = "planned"
 
 [[upstream]]
 id = "chmod-calculator"
-status = "planned"
+status = "implemented"
+tool = "development chmod"
 
 [[upstream]]
 id = "chmod-memo"
@@ -163,7 +165,8 @@ note = "interactive stopwatch UI"
 
 [[upstream]]
 id = "cidr-in-cidr"
-status = "planned"
+status = "implemented"
+tool = "network cidr-contains"
 
 [[upstream]]
 id = "citation-generator"
@@ -183,11 +186,13 @@ status = "planned"
 
 [[upstream]]
 id = "color-contrast-checker"
-status = "planned"
+status = "implemented"
+tool = "web contrast"
 
 [[upstream]]
 id = "color-converter"
-status = "planned"
+status = "implemented"
+tool = "web color"
 
 [[upstream]]
 id = "color-wheel"
@@ -257,7 +262,8 @@ status = "planned"
 
 [[upstream]]
 id = "csv-to-json"
-status = "planned"
+status = "implemented"
+tool = "converter csv-to-json"
 
 [[upstream]]
 id = "curl-converter"
@@ -297,7 +303,8 @@ status = "planned"
 
 [[upstream]]
 id = "date-duration-calculator"
-status = "planned"
+status = "implemented"
+tool = "datetime duration"
 
 [[upstream]]
 id = "date-time-converter"
@@ -434,7 +441,8 @@ status = "planned"
 
 [[upstream]]
 id = "duration-calculator"
-status = "planned"
+status = "implemented"
+tool = "datetime duration"
 
 [[upstream]]
 id = "ecdsa-key-pair-generator"
@@ -506,7 +514,8 @@ status = "planned"
 
 [[upstream]]
 id = "file-hasher"
-status = "planned"
+status = "implemented"
+tool = "crypto hash"
 
 [[upstream]]
 id = "file-splitter"
@@ -598,7 +607,8 @@ status = "planned"
 
 [[upstream]]
 id = "gzip-converter"
-status = "planned"
+status = "implemented"
+tool = "converter gzip-encode, converter gzip-decode"
 
 [[upstream]]
 id = "har-sanitizer"
@@ -654,7 +664,8 @@ status = "planned"
 
 [[upstream]]
 id = "html-to-markdown"
-status = "planned"
+status = "implemented"
+tool = "web html-to-markdown"
 
 [[upstream]]
 id = "html-to-pdf"
@@ -753,11 +764,13 @@ tool = "converter number-base"
 
 [[upstream]]
 id = "integers-to-ip"
-status = "planned"
+status = "implemented"
+tool = "network ip-convert"
 
 [[upstream]]
 id = "ip-cidr-to-range"
-status = "planned"
+status = "implemented"
+tool = "network cidr-to-range"
 
 [[upstream]]
 id = "ip-geo-location"
@@ -769,7 +782,8 @@ status = "planned"
 
 [[upstream]]
 id = "ip-range-to-cidr"
-status = "planned"
+status = "implemented"
+tool = "network range-to-cidr"
 
 [[upstream]]
 id = "iptables-generator"
@@ -777,7 +791,8 @@ status = "planned"
 
 [[upstream]]
 id = "ipv4-address-converter"
-status = "planned"
+status = "implemented"
+tool = "network ip-convert"
 
 [[upstream]]
 id = "ipv4-range-expander"
@@ -785,7 +800,8 @@ status = "planned"
 
 [[upstream]]
 id = "ipv4-subnet-calculator"
-status = "planned"
+status = "implemented"
+tool = "network subnet"
 
 [[upstream]]
 id = "ipv4-subnets-list"
@@ -793,11 +809,13 @@ status = "planned"
 
 [[upstream]]
 id = "ipv6-address-converter"
-status = "planned"
+status = "implemented"
+tool = "network ip-convert"
 
 [[upstream]]
 id = "ipv6-subnet-calculator"
-status = "planned"
+status = "implemented"
+tool = "network subnet"
 
 [[upstream]]
 id = "ipv6-ula-generator"
@@ -837,7 +855,8 @@ status = "planned"
 
 [[upstream]]
 id = "jq-tester"
-status = "planned"
+status = "implemented"
+tool = "converter json-query"
 
 [[upstream]]
 id = "js-unobfuscator"
@@ -845,7 +864,8 @@ status = "planned"
 
 [[upstream]]
 id = "json-diff"
-status = "planned"
+status = "implemented"
+tool = "converter json-diff"
 
 [[upstream]]
 id = "json-editor"
@@ -854,19 +874,23 @@ note = "interactive editor UI"
 
 [[upstream]]
 id = "json-escaper"
-status = "planned"
+status = "implemented"
+tool = "development string-escape"
 
 [[upstream]]
 id = "json-flatten-nestify"
-status = "planned"
+status = "implemented"
+tool = "converter json-flatten"
 
 [[upstream]]
 id = "json-linter"
-status = "planned"
+status = "implemented"
+tool = "converter lint"
 
 [[upstream]]
 id = "json-merger"
-status = "planned"
+status = "implemented"
+tool = "converter json-merge"
 
 [[upstream]]
 id = "json-minify"
@@ -875,7 +899,8 @@ tool = "converter json-format"
 
 [[upstream]]
 id = "json-query"
-status = "planned"
+status = "implemented"
+tool = "converter json-query"
 
 [[upstream]]
 id = "json-size-analyzer"
@@ -895,7 +920,8 @@ status = "planned"
 
 [[upstream]]
 id = "json-to-csv"
-status = "planned"
+status = "implemented"
+tool = "converter json-to-csv"
 
 [[upstream]]
 id = "json-to-data"
@@ -972,7 +998,8 @@ status = "planned"
 
 [[upstream]]
 id = "json-to-xml"
-status = "planned"
+status = "implemented"
+tool = "converter data"
 
 [[upstream]]
 id = "json-to-yaml-converter"
@@ -1019,7 +1046,8 @@ status = "planned"
 
 [[upstream]]
 id = "levenshtein-calculator"
-status = "planned"
+status = "implemented"
+tool = "text distance"
 
 [[upstream]]
 id = "list-comparer"
@@ -1083,7 +1111,8 @@ status = "planned"
 
 [[upstream]]
 id = "markdown-to-html"
-status = "planned"
+status = "implemented"
+tool = "web markdown-to-html"
 
 [[upstream]]
 id = "markdown-to-text"
@@ -1099,7 +1128,8 @@ status = "planned"
 
 [[upstream]]
 id = "math-evaluator"
-status = "planned"
+status = "implemented"
+tool = "development calc"
 
 [[upstream]]
 id = "math-formats-converter"
@@ -1131,7 +1161,8 @@ status = "planned"
 
 [[upstream]]
 id = "mime-types"
-status = "planned"
+status = "implemented"
+tool = "web mime"
 
 [[upstream]]
 id = "mongo-objectid-converter"
@@ -1163,7 +1194,8 @@ status = "planned"
 
 [[upstream]]
 id = "nanoid-generator"
-status = "planned"
+status = "implemented"
+tool = "development nanoid"
 
 [[upstream]]
 id = "network-utils"
@@ -1207,7 +1239,8 @@ status = "planned"
 
 [[upstream]]
 id = "otp-code-generator-and-validator"
-status = "planned"
+status = "implemented"
+tool = "crypto otp"
 
 [[upstream]]
 id = "outlook-parser"
@@ -1335,7 +1368,8 @@ status = "planned"
 
 [[upstream]]
 id = "punycode-converter"
-status = "planned"
+status = "implemented"
+tool = "web punycode-encode, web punycode-decode"
 
 [[upstream]]
 id = "qr-code-decoder"
@@ -1458,7 +1492,8 @@ status = "planned"
 
 [[upstream]]
 id = "sensitive-data-masker"
-status = "planned"
+status = "implemented"
+tool = "text mask"
 
 [[upstream]]
 id = "serial-console"
@@ -1555,7 +1590,8 @@ status = "planned"
 
 [[upstream]]
 id = "string-escaper"
-status = "planned"
+status = "implemented"
+tool = "development string-escape"
 
 [[upstream]]
 id = "string-obfuscator"
@@ -1596,7 +1632,8 @@ tool = "development diff"
 
 [[upstream]]
 id = "text-statistics"
-status = "planned"
+status = "implemented"
+tool = "text stats"
 
 [[upstream]]
 id = "text-to-binary"
@@ -1620,7 +1657,8 @@ status = "planned"
 
 [[upstream]]
 id = "timezone-converter"
-status = "planned"
+status = "implemented"
+tool = "datetime timezone"
 
 [[upstream]]
 id = "tip-calculator"
@@ -1637,7 +1675,8 @@ tool = "crypto token"
 
 [[upstream]]
 id = "toml-linter"
-status = "planned"
+status = "implemented"
+tool = "converter lint"
 
 [[upstream]]
 id = "toml-to-json"
@@ -1679,7 +1718,8 @@ status = "planned"
 
 [[upstream]]
 id = "ulid-generator"
-status = "planned"
+status = "implemented"
+tool = "development ulid"
 
 [[upstream]]
 id = "unicode-characters-to-java-entities-converter"
@@ -1699,7 +1739,8 @@ status = "planned"
 
 [[upstream]]
 id = "url-builder"
-status = "planned"
+status = "implemented"
+tool = "web url-build"
 
 [[upstream]]
 id = "url-cleaner"
@@ -1803,11 +1844,13 @@ status = "planned"
 
 [[upstream]]
 id = "xml-linter"
-status = "planned"
+status = "implemented"
+tool = "converter lint"
 
 [[upstream]]
 id = "xml-to-json"
-status = "planned"
+status = "implemented"
+tool = "converter data"
 
 [[upstream]]
 id = "xpath-memo"
@@ -1823,7 +1866,8 @@ status = "planned"
 
 [[upstream]]
 id = "yaml-flatten-nestify"
-status = "planned"
+status = "implemented"
+tool = "converter json-flatten"
 
 [[upstream]]
 id = "yaml-merger"

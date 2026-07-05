@@ -3,6 +3,8 @@ pub mod crypto;
 pub mod datetime;
 pub mod development;
 pub mod meta;
+pub mod network;
+pub mod text;
 pub mod util;
 pub mod web;
 
@@ -36,6 +38,12 @@ pub enum Category {
     /// Current time and timestamp/date conversion
     #[command(subcommand)]
     Datetime(datetime::DatetimeCmd),
+    /// Subnets, CIDR math and IP representation
+    #[command(subcommand)]
+    Network(network::NetworkCmd),
+    /// Text statistics, similarity and sensitive-data masking
+    #[command(subcommand)]
+    Text(text::TextCmd),
     /// Self-description: tool catalog, per-tool schemas, artifact export, upstream parity
     #[command(subcommand)]
     Meta(meta::MetaCmd),
@@ -48,6 +56,8 @@ pub fn run(cli: Cli) -> anyhow::Result<()> {
         Category::Web(cmd) => web::run(cmd),
         Category::Development(cmd) => development::run(cmd),
         Category::Datetime(cmd) => datetime::run(cmd),
+        Category::Network(cmd) => network::run(cmd),
+        Category::Text(cmd) => text::run(cmd),
         Category::Meta(cmd) => meta::run(cmd),
     }
 }

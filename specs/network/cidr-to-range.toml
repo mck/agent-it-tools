@@ -1,0 +1,18 @@
+path = "network cidr-to-range"
+summary = "First and last address (and count) of a CIDR block"
+when_to_use = "Turning CIDR notation into an explicit IP range."
+it_tools = ["ip-cidr-to-range"]
+
+[output]
+kind = "json"
+description = "{cidr, first, last, addresses}"
+
+[[examples]]
+argv = ["network", "cidr-to-range", "10.0.0.0/22"]
+stdout = """
+{
+  "addresses": "1024",
+  "cidr": "10.0.0.0/22",
+  "first": "10.0.0.0",
+  "last": "10.0.3.255"
+}"""

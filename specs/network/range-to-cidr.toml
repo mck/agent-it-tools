@@ -1,0 +1,17 @@
+path = "network range-to-cidr"
+summary = "Smallest set of CIDR blocks exactly covering an IP range"
+when_to_use = "Converting firewall/allowlist ranges into CIDR notation."
+it_tools = ["ip-range-to-cidr"]
+
+[output]
+kind = "json"
+description = "{cidrs: [...]}"
+
+[[examples]]
+argv = ["network", "range-to-cidr", "10.0.0.0", "10.0.0.255"]
+stdout = """
+{
+  "cidrs": [
+    "10.0.0.0/24"
+  ]
+}"""

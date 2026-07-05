@@ -1,0 +1,18 @@
+path = "text distance"
+summary = "Similarity metrics between two strings: Levenshtein, normalized Levenshtein, Jaro-Winkler"
+when_to_use = "Fuzzy matching, dedupe decisions, typo detection. Never estimate edit distance mentally."
+it_tools = ["levenshtein-calculator"]
+
+[output]
+kind = "json"
+description = "{levenshtein, normalized_levenshtein, jaro_winkler, equal}"
+
+[[examples]]
+argv = ["text", "distance", "kitten", "sitting"]
+stdout = """
+{
+  "equal": false,
+  "jaro_winkler": 0.746,
+  "levenshtein": 3,
+  "normalized_levenshtein": 0.571
+}"""

@@ -1,0 +1,18 @@
+path = "converter json-merge"
+summary = "Deep-merge a JSON merge patch into a base document (RFC 7396)"
+when_to_use = "Combining config fragments; null values in the patch delete keys. Use --files to pass file paths."
+it_tools = ["json-merger"]
+
+[output]
+kind = "json"
+description = "The merged document"
+
+[[examples]]
+argv = ["converter", "json-merge", "{\"a\":{\"x\":1},\"b\":2}", "{\"a\":{\"y\":9},\"b\":null}"]
+stdout = """
+{
+  "a": {
+    "x": 1,
+    "y": 9
+  }
+}"""

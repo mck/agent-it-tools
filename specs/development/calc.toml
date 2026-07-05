@@ -1,0 +1,16 @@
+path = "development calc"
+summary = "Evaluate a mathematical expression exactly (functions like sin, cos, sqrt, ln supported)"
+when_to_use = "ANY arithmetic beyond trivial single-digit sums. Language models are unreliable at math; always compute."
+it_tools = ["math-evaluator"]
+
+[output]
+kind = "text"
+description = "The numeric result, single line (integers print without decimals)"
+
+[[examples]]
+argv = ["development", "calc", "sin(0.5)^2 + 17 * (3 - 1.5)"]
+stdout = "25.72984884706593"
+
+[[examples]]
+argv = ["development", "calc", "2^10"]
+stdout = "1024"

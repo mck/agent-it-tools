@@ -1,0 +1,19 @@
+path = "text mask"
+summary = "Mask sensitive data in text: emails, IPv4s, JWTs, bearer tokens, AWS keys, card numbers, long hex secrets"
+when_to_use = "Sanitizing logs or payloads before sharing or storing them. Heuristic pattern matching; review the counts in 'found'."
+it_tools = ["sensitive-data-masker"]
+
+[output]
+kind = "json"
+description = "{masked: the sanitized text, found: counts per pattern type}"
+
+[[examples]]
+argv = ["text", "mask", "mail hey@example.com from 10.0.0.1"]
+stdout = """
+{
+  "found": {
+    "email": 1,
+    "ipv4": 1
+  },
+  "masked": "mail [MASKED] from [MASKED]"
+}"""

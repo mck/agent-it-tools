@@ -1,0 +1,12 @@
+path = "converter gzip-decode"
+summary = "Decompress Base64-encoded gzip data back to text"
+when_to_use = "Reading gzip payloads from logs, HTTP bodies or headers."
+it_tools = ["gzip-converter"]
+
+[output]
+kind = "text"
+description = "The decompressed text"
+
+[[examples]]
+argv = ["converter", "gzip-decode", "H4sIAAAAAAAA/8tIzcnJV0ivyixQKM8vykkBAGt96LcQAAAA"]
+stdout = "hello gzip world"

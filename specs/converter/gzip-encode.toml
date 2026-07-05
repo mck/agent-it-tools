@@ -1,0 +1,12 @@
+path = "converter gzip-encode"
+summary = "Gzip-compress text and emit it as Base64"
+when_to_use = "Producing gzip payloads for APIs or inspecting what compression does to a payload."
+it_tools = ["gzip-converter"]
+
+[output]
+kind = "text"
+description = "Base64 of the gzip-compressed bytes, single line"
+
+[[examples]]
+argv = ["converter", "gzip-encode", "hello gzip world"]
+stdout = "H4sIAAAAAAAA/8tIzcnJV0ivyixQKM8vykkBAGt96LcQAAAA"

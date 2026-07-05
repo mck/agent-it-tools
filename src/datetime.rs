@@ -12,6 +12,25 @@ pub enum DatetimeCmd {
         /// Timestamp or date string (reads stdin if omitted)
         input: Option<String>,
     },
+    /// Add or subtract a duration from a timestamp
+    Duration {
+        /// Duration, e.g. "2h 30m", "1w 2d", "45s"
+        duration: String,
+        /// Subtract instead of add
+        #[arg(short, long)]
+        subtract: bool,
+        /// Base timestamp: unix s/ms, RFC 3339 or RFC 2822 (defaults to now)
+        #[arg(long)]
+        from: Option<String>,
+    },
+    /// Convert a timestamp into a target IANA timezone
+    Timezone {
+        /// Target timezone, e.g. Europe/Vienna
+        #[arg(short, long)]
+        to: String,
+        /// Timestamp: unix s/ms, RFC 3339 or RFC 2822 (defaults to now)
+        input: Option<String>,
+    },
 }
 
 fn report(dt: DateTime<Utc>) -> serde_json::Value {
@@ -52,6 +71,45 @@ pub fn run(cmd: DatetimeCmd) -> Result<()> {
         DatetimeCmd::Convert { input } => {
             let input = read_input(input)?;
             print_json(&report(parse(input.trim())?))
+        }
+        DatetimeCmd::Duration {
+            duration,
+            subtract,
+            from,
+        } => {
+            let base = match from {
+                Some(raw) => parse(raw.trim())?,
+                None => Utc::now(),
+            };
+            let std_duration = humantime::parse_duration(duration.trim())
+                .map_err(|e| anyhow::anyhow!("invalid duration '{duration}': {e}"))?;
+            let delta = chrono::Duration::from_std(std_duration)
+                .map_err(|_| anyhow::anyhow!("duration '{duration}' is out of range"))?;
+            let result = if subtract { base - delta } else { base + delta };
+            print_json(&serde_json::json!({
+                "base": base.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+                "operation": if subtract { "subtract" } else { "add" },
+                "duration_seconds": std_duration.as_secs(),
+                "result": report(result),
+            }))
+        }
+        DatetimeCmd::Timezone { to, input } => {
+            let dt = match input {
+                Some(raw) => parse(raw.trim())?,
+                None => Utc::now(),
+            };
+            let tz: chrono_tz::Tz = to
+                .trim()
+                .parse()
+                .map_err(|_| anyhow::anyhow!("unknown IANA timezone '{to}'"))?;
+            let local = dt.with_timezone(&tz);
+            print_json(&serde_json::json!({
+                "utc": dt.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
+                "timezone": tz.name(),
+                "local": local.to_rfc3339_opts(chrono::SecondsFormat::Secs, false),
+                "offset": local.format("%:z").to_string(),
+                "abbreviation": local.format("%Z").to_string(),
+            }))
         }
     }
 }

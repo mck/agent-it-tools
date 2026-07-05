@@ -1,0 +1,13 @@
+path = "crypto otp"
+summary = "Generate or verify a TOTP code (RFC 6238: SHA1, 6 digits, 30s period)"
+when_to_use = "Producing or checking authenticator codes. Real secrets should come via --secret-env NAME, not a literal. --check CODE exits 2 on mismatch."
+it_tools = ["otp-code-generator-and-validator"]
+
+[output]
+kind = "json"
+description = "{code, seconds_remaining} when generating; {valid} when checking"
+
+[[examples]]
+argv = ["crypto", "otp", "--secret", "JBSWY3DPEHPK3PXP"]
+stdout_regex = "\"code\": \"\\d{6}\""
+note = "Codes rotate every 30 seconds, so only the shape is asserted"

@@ -1,0 +1,17 @@
+path = "network cidr-contains"
+summary = "Check whether an IP address or CIDR is contained in a CIDR block"
+when_to_use = "Allowlist/denylist membership checks. Exit code 2 when not contained."
+it_tools = ["cidr-in-cidr"]
+
+[output]
+kind = "json"
+description = "{outer, inner, contains}; exit 2 when contains is false"
+
+[[examples]]
+argv = ["network", "cidr-contains", "10.0.0.0/8", "10.1.2.3"]
+stdout = """
+{
+  "contains": true,
+  "inner": "10.1.2.3/32",
+  "outer": "10.0.0.0/8"
+}"""

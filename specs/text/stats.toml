@@ -1,0 +1,20 @@
+path = "text stats"
+summary = "Count bytes, characters (graphemes), words and lines of a text"
+when_to_use = "ANY counting or length question about text. Never count characters or words yourself; models miscount."
+it_tools = ["text-statistics"]
+
+[output]
+kind = "json"
+description = "{bytes, characters, characters_without_whitespace, words, lines, longest_line_characters}"
+
+[[examples]]
+argv = ["text", "stats", "hello wörld\nsecond line"]
+stdout = """
+{
+  "bytes": 24,
+  "characters": 23,
+  "characters_without_whitespace": 20,
+  "lines": 2,
+  "longest_line_characters": 11,
+  "words": 4
+}"""

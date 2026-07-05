@@ -1,0 +1,19 @@
+path = "network ip-convert"
+summary = "Convert an IP address between dotted, integer, hex and binary representations"
+when_to_use = "IP representation math (log parsing, packed integers). Accepts IPv4, IPv6 or a 32-bit integer."
+it_tools = ["ipv4-address-converter", "ipv6-address-converter", "integers-to-ip"]
+
+[output]
+kind = "json"
+description = "IPv4: {dotted, decimal, hex, binary, ipv6_mapped}; IPv6: {compressed, expanded, decimal, hex}"
+
+[[examples]]
+argv = ["network", "ip-convert", "192.168.1.1"]
+stdout = """
+{
+  "binary": "11000000101010000000000100000001",
+  "decimal": 3232235777,
+  "dotted": "192.168.1.1",
+  "hex": "0xc0a80101",
+  "ipv6_mapped": "::ffff:192.168.1.1"
+}"""

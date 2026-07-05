@@ -7,9 +7,9 @@
   "name": "agent-it-tools",
   "parity": {
     "counts": {
-      "implemented": 29,
+      "implemented": 73,
       "not-applicable": 6,
-      "planned": 421
+      "planned": 377
     },
     "upstream": "https://github.com/sharevb/it-tools",
     "upstream_total": 456
@@ -25,6 +25,15 @@
           "name": "algo",
           "required": false,
           "short": "a",
+          "value_type": "string"
+        },
+        {
+          "help": "Hash the raw bytes of this file instead of text input",
+          "kind": "option",
+          "long": "file",
+          "name": "file",
+          "required": false,
+          "short": "f",
           "value_type": "string"
         },
         {
@@ -59,7 +68,8 @@
         }
       ],
       "it_tools": [
-        "hash-text"
+        "hash-text",
+        "file-hasher"
       ],
       "output": {
         "description": "Lowercase hex digest, single line",
@@ -67,8 +77,8 @@
       },
       "path": "crypto hash",
       "stdin_fallback": true,
-      "summary": "Hash text with md5, sha1, sha224, sha256, sha384 or sha512 (hex digest)",
-      "when_to_use": "Checksums, content addressing, comparing payloads. Never compute digests mentally. Not for passwords - use 'crypto bcrypt-hash'."
+      "summary": "Hash text or a file (--file PATH) with md5, sha1, sha224, sha256, sha384 or sha512 (hex digest)",
+      "when_to_use": "Checksums, content addressing, verifying downloads (--file hashes raw bytes). Never compute digests mentally. Not for passwords - use 'crypto bcrypt-hash'."
     },
     {
       "args": [
@@ -321,7 +331,59 @@
     {
       "args": [
         {
-          "help": "Source format: json | yaml | toml",
+          "help": "Base32 secret as a literal (real secrets should use --secret-env)",
+          "kind": "option",
+          "long": "secret",
+          "name": "secret",
+          "required": false,
+          "short": "s",
+          "value_type": "string"
+        },
+        {
+          "help": "Read the Base32 secret from this environment variable",
+          "kind": "option",
+          "long": "secret-env",
+          "name": "secret_env",
+          "required": false,
+          "value_type": "string"
+        },
+        {
+          "help": "Verify this code instead of generating one (exit 2 on mismatch)",
+          "kind": "option",
+          "long": "check",
+          "name": "check",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "crypto",
+            "otp",
+            "--secret",
+            "JBSWY3DPEHPK3PXP"
+          ],
+          "note": "Codes rotate every 30 seconds, so only the shape is asserted",
+          "stdout_regex": "\"code\": \"\\d{6}\""
+        }
+      ],
+      "it_tools": [
+        "otp-code-generator-and-validator"
+      ],
+      "output": {
+        "description": "{code, seconds_remaining} when generating; {valid} when checking",
+        "kind": "json"
+      },
+      "path": "crypto otp",
+      "stdin_fallback": false,
+      "summary": "Generate or verify a TOTP code (RFC 6238: SHA1, 6 digits, 30s period)",
+      "when_to_use": "Producing or checking authenticator codes. Real secrets should come via --secret-env NAME, not a literal. --check CODE exits 2 on mismatch."
+    },
+    {
+      "args": [
+        {
+          "help": "Source format: json | yaml | toml | xml",
           "kind": "option",
           "long": "from",
           "name": "from",
@@ -330,7 +392,7 @@
           "value_type": "string"
         },
         {
-          "help": "Target format: json | yaml | toml",
+          "help": "Target format: json | yaml | toml | xml",
           "kind": "option",
           "long": "to",
           "name": "to",
@@ -370,6 +432,18 @@
             "name: test\nnums: [1, 2]"
           ],
           "stdout": "name = \"test\"\nnums = [\n    1,\n    2,\n]"
+        },
+        {
+          "argv": [
+            "converter",
+            "data",
+            "--from",
+            "xml",
+            "--to",
+            "json",
+            "<user id=\"7\"><name>Ada</name></user>"
+          ],
+          "stdout": "{\n  \"user\": {\n    \"@id\": \"7\",\n    \"name\": \"Ada\"\n  }\n}"
         }
       ],
       "it_tools": [
@@ -378,7 +452,9 @@
         "yaml-to-json-converter",
         "yaml-to-toml",
         "toml-to-json",
-        "toml-to-yaml"
+        "toml-to-yaml",
+        "xml-to-json",
+        "json-to-xml"
       ],
       "output": {
         "description": "The converted document in the target format",
@@ -386,8 +462,8 @@
       },
       "path": "converter data",
       "stdin_fallback": true,
-      "summary": "Convert structured data between JSON, YAML and TOML",
-      "when_to_use": "Any JSON<->YAML<->TOML translation. TOML cannot represent null values or non-table roots - that returns an error."
+      "summary": "Convert structured data between JSON, YAML, TOML and XML",
+      "when_to_use": "Any JSON<->YAML<->TOML<->XML translation. TOML cannot represent null values or non-table roots - that returns an error. XML maps attributes to '@name' keys and text to '#text'."
     },
     {
       "args": [
@@ -709,6 +785,409 @@
     {
       "args": [
         {
+          "default": ",",
+          "help": "Field delimiter",
+          "kind": "option",
+          "long": "delimiter",
+          "name": "delimiter",
+          "required": false,
+          "short": "d",
+          "value_type": "string"
+        },
+        {
+          "help": "CSV input (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "csv-to-json"
+          ],
+          "stdin": "name,age\nAda,36\nBob,41",
+          "stdout": "[\n  {\n    \"age\": 36,\n    \"name\": \"Ada\"\n  },\n  {\n    \"age\": 41,\n    \"name\": \"Bob\"\n  }\n]"
+        }
+      ],
+      "it_tools": [
+        "csv-to-json"
+      ],
+      "output": {
+        "description": "JSON array of objects, one per CSV row",
+        "kind": "json"
+      },
+      "path": "converter csv-to-json",
+      "stdin_fallback": true,
+      "summary": "Convert CSV (header row required) to a JSON array of objects; numbers and booleans are typed",
+      "when_to_use": "Any CSV parsing. Use --delimiter ';' or 'tab' for non-comma files."
+    },
+    {
+      "args": [
+        {
+          "default": ",",
+          "help": "Field delimiter",
+          "kind": "option",
+          "long": "delimiter",
+          "name": "delimiter",
+          "required": false,
+          "short": "d",
+          "value_type": "string"
+        },
+        {
+          "help": "JSON input (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "json-to-csv",
+            "[{\"name\":\"Ada\",\"age\":36},{\"name\":\"Bob\",\"age\":41}]"
+          ],
+          "stdout": "age,name\n36,Ada\n41,Bob"
+        }
+      ],
+      "it_tools": [
+        "json-to-csv"
+      ],
+      "output": {
+        "description": "CSV document with header row",
+        "kind": "text"
+      },
+      "path": "converter json-to-csv",
+      "stdin_fallback": true,
+      "summary": "Convert a JSON array of objects to CSV (header = union of keys, alphabetical)",
+      "when_to_use": "Exporting JSON records as CSV. Nested values are serialized inline."
+    },
+    {
+      "args": [
+        {
+          "help": "Format: json | yaml | toml | xml",
+          "kind": "option",
+          "long": "format",
+          "name": "format",
+          "required": true,
+          "short": "f",
+          "value_type": "string"
+        },
+        {
+          "help": "Input document (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "lint",
+            "--format",
+            "toml",
+            "a = 1"
+          ],
+          "stdout": "{\n  \"format\": \"toml\",\n  \"valid\": true\n}"
+        }
+      ],
+      "it_tools": [
+        "json-linter",
+        "toml-linter",
+        "xml-linter"
+      ],
+      "output": {
+        "description": "{\"valid\": true, \"format\": ...} on success; parse error on stderr otherwise",
+        "kind": "json"
+      },
+      "path": "converter lint",
+      "stdin_fallback": true,
+      "summary": "Validate JSON, YAML, TOML or XML syntax",
+      "when_to_use": "Checking whether a document parses before using it. Invalid input returns the error contract with the parser message, so this doubles as a diagnostic."
+    },
+    {
+      "args": [
+        {
+          "help": "jq filter, e.g. '.items[].name'",
+          "kind": "option",
+          "long": "filter",
+          "name": "filter",
+          "required": true,
+          "short": "f",
+          "value_type": "string"
+        },
+        {
+          "help": "JSON input (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "json-query",
+            "--filter",
+            ".items[].name"
+          ],
+          "stdin": "{\"items\":[{\"name\":\"a\",\"n\":1},{\"name\":\"b\",\"n\":2}]}",
+          "stdout": "\"a\"\n\"b\""
+        },
+        {
+          "argv": [
+            "converter",
+            "json-query",
+            "--filter",
+            "[.items[] | . * 2] | add"
+          ],
+          "stdin": "{\"items\":[1,2,3]}",
+          "stdout": "12"
+        }
+      ],
+      "it_tools": [
+        "json-query",
+        "jq-tester"
+      ],
+      "output": {
+        "description": "The filter's output value(s)",
+        "kind": "json"
+      },
+      "path": "converter json-query",
+      "stdin_fallback": true,
+      "summary": "Run a jq filter on JSON input (full jq language via the jaq engine)",
+      "when_to_use": "Extracting values from large JSON instead of reading the whole document. One result prints pretty; multiple results print one compact JSON per line."
+    },
+    {
+      "args": [
+        {
+          "help": "Old JSON document, or a file path with --files",
+          "kind": "positional",
+          "name": "old",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "New JSON document, or a file path with --files",
+          "kind": "positional",
+          "name": "new",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Treat the two arguments as file paths",
+          "kind": "flag",
+          "long": "files",
+          "name": "files",
+          "required": false,
+          "value_type": "boolean"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "json-diff",
+            "{\"a\":1,\"b\":2}",
+            "{\"a\":1,\"b\":3,\"c\":4}"
+          ],
+          "stdout": "[\n  {\n    \"op\": \"replace\",\n    \"path\": \"/b\",\n    \"value\": 3\n  },\n  {\n    \"op\": \"add\",\n    \"path\": \"/c\",\n    \"value\": 4\n  }\n]"
+        }
+      ],
+      "it_tools": [
+        "json-diff"
+      ],
+      "output": {
+        "description": "RFC 6902 patch array (op/path/value entries)",
+        "kind": "json"
+      },
+      "path": "converter json-diff",
+      "stdin_fallback": false,
+      "summary": "Structural diff of two JSON documents as an RFC 6902 patch",
+      "when_to_use": "Comparing JSON precisely; an empty array [] means the documents are semantically equal. Use --files to pass file paths."
+    },
+    {
+      "args": [
+        {
+          "help": "Base JSON document, or a file path with --files",
+          "kind": "positional",
+          "name": "base",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Merge patch JSON, or a file path with --files",
+          "kind": "positional",
+          "name": "patch",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Treat the two arguments as file paths",
+          "kind": "flag",
+          "long": "files",
+          "name": "files",
+          "required": false,
+          "value_type": "boolean"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "json-merge",
+            "{\"a\":{\"x\":1},\"b\":2}",
+            "{\"a\":{\"y\":9},\"b\":null}"
+          ],
+          "stdout": "{\n  \"a\": {\n    \"x\": 1,\n    \"y\": 9\n  }\n}"
+        }
+      ],
+      "it_tools": [
+        "json-merger"
+      ],
+      "output": {
+        "description": "The merged document",
+        "kind": "json"
+      },
+      "path": "converter json-merge",
+      "stdin_fallback": false,
+      "summary": "Deep-merge a JSON merge patch into a base document (RFC 7396)",
+      "when_to_use": "Combining config fragments; null values in the patch delete keys. Use --files to pass file paths."
+    },
+    {
+      "args": [
+        {
+          "help": "Rebuild nested JSON from flattened keys",
+          "kind": "flag",
+          "long": "nestify",
+          "name": "nestify",
+          "required": false,
+          "value_type": "boolean"
+        },
+        {
+          "default": ".",
+          "help": "Key separator",
+          "kind": "option",
+          "long": "separator",
+          "name": "separator",
+          "required": false,
+          "short": "s",
+          "value_type": "string"
+        },
+        {
+          "help": "JSON input (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "json-flatten",
+            "{\"a\":{\"b\":[1,2]},\"c\":true}"
+          ],
+          "stdout": "{\n  \"a.b.0\": 1,\n  \"a.b.1\": 2,\n  \"c\": true\n}"
+        },
+        {
+          "argv": [
+            "converter",
+            "json-flatten",
+            "--nestify",
+            "{\"a.b.0\":1,\"a.b.1\":2,\"c\":true}"
+          ],
+          "stdout": "{\n  \"a\": {\n    \"b\": [\n      1,\n      2\n    ]\n  },\n  \"c\": true\n}"
+        }
+      ],
+      "it_tools": [
+        "json-flatten-nestify",
+        "yaml-flatten-nestify"
+      ],
+      "output": {
+        "description": "Flat object with dot-notation keys (or nested JSON with --nestify)",
+        "kind": "json"
+      },
+      "path": "converter json-flatten",
+      "stdin_fallback": true,
+      "summary": "Flatten nested JSON to dot-notation keys, or rebuild nesting with --nestify",
+      "when_to_use": "Comparing deeply nested configs, generating env-style keys, or reversing a flattened structure. Consecutive integer keys fold back into arrays on --nestify."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "gzip-encode",
+            "hello gzip world"
+          ],
+          "stdout": "H4sIAAAAAAAA/8tIzcnJV0ivyixQKM8vykkBAGt96LcQAAAA"
+        }
+      ],
+      "it_tools": [
+        "gzip-converter"
+      ],
+      "output": {
+        "description": "Base64 of the gzip-compressed bytes, single line",
+        "kind": "text"
+      },
+      "path": "converter gzip-encode",
+      "stdin_fallback": true,
+      "summary": "Gzip-compress text and emit it as Base64",
+      "when_to_use": "Producing gzip payloads for APIs or inspecting what compression does to a payload."
+    },
+    {
+      "args": [
+        {
+          "help": "Input Base64 (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "converter",
+            "gzip-decode",
+            "H4sIAAAAAAAA/8tIzcnJV0ivyixQKM8vykkBAGt96LcQAAAA"
+          ],
+          "stdout": "hello gzip world"
+        }
+      ],
+      "it_tools": [
+        "gzip-converter"
+      ],
+      "output": {
+        "description": "The decompressed text",
+        "kind": "text"
+      },
+      "path": "converter gzip-decode",
+      "stdin_fallback": true,
+      "summary": "Decompress Base64-encoded gzip data back to text",
+      "when_to_use": "Reading gzip payloads from logs, HTTP bodies or headers."
+    },
+    {
+      "args": [
+        {
           "help": "Input text (reads stdin if omitted)",
           "kind": "positional",
           "name": "input",
@@ -1005,6 +1484,314 @@
     {
       "args": [
         {
+          "help": "Markdown input (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "markdown-to-html"
+          ],
+          "stdin": "# Hi\n\n- a\n- b",
+          "stdout": "<h1>Hi</h1>\n<ul>\n<li>a</li>\n<li>b</li>\n</ul>"
+        }
+      ],
+      "it_tools": [
+        "markdown-to-html"
+      ],
+      "output": {
+        "description": "The rendered HTML fragment",
+        "kind": "text"
+      },
+      "path": "web markdown-to-html",
+      "stdin_fallback": true,
+      "summary": "Render Markdown (GitHub-flavored: tables, strikethrough, task lists, autolinks) to HTML",
+      "when_to_use": "Any Markdown-to-HTML rendering; exact and spec-compliant instead of approximated."
+    },
+    {
+      "args": [
+        {
+          "help": "HTML input (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "html-to-markdown",
+            "<h1>Hi</h1><ul><li>a</li></ul>"
+          ],
+          "stdout": "# Hi\n\n*   a"
+        }
+      ],
+      "it_tools": [
+        "html-to-markdown"
+      ],
+      "output": {
+        "description": "The Markdown document",
+        "kind": "text"
+      },
+      "path": "web html-to-markdown",
+      "stdin_fallback": true,
+      "summary": "Convert HTML to Markdown",
+      "when_to_use": "Turning web content or rich-text HTML into editable Markdown."
+    },
+    {
+      "args": [
+        {
+          "help": "A file name/extension (e.g. photo.avif) or a MIME type (e.g. image/png)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "mime",
+            "photo.avif"
+          ],
+          "stdout": "{\n  \"input\": \"photo.avif\",\n  \"mime\": \"image/avif\"\n}"
+        }
+      ],
+      "it_tools": [
+        "mime-types"
+      ],
+      "output": {
+        "description": "{input, mime} or {mime, extensions}",
+        "kind": "json"
+      },
+      "path": "web mime",
+      "stdin_fallback": true,
+      "summary": "Look up the MIME type for a file name/extension, or extensions for a MIME type",
+      "when_to_use": "Setting Content-Type headers or mapping uploads. Input with a '/' is treated as a MIME type."
+    },
+    {
+      "args": [
+        {
+          "help": "Base URL, e.g. https://api.example.com",
+          "kind": "option",
+          "long": "base",
+          "name": "base",
+          "required": true,
+          "short": "b",
+          "value_type": "string"
+        },
+        {
+          "help": "Path to set, e.g. /v2/tokens",
+          "kind": "option",
+          "long": "path",
+          "name": "path",
+          "required": false,
+          "value_type": "string"
+        },
+        {
+          "help": "Query parameter key=value (repeatable, values get percent-encoded)",
+          "kind": "option",
+          "long": "param",
+          "name": "param",
+          "required": false,
+          "short": "p",
+          "value_type": "string"
+        },
+        {
+          "help": "Fragment (without '#')",
+          "kind": "option",
+          "long": "fragment",
+          "name": "fragment",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "url-build",
+            "--base",
+            "https://api.example.com",
+            "--path",
+            "/v2/tokens",
+            "--param",
+            "q=design tokens",
+            "--param",
+            "limit=5",
+            "--fragment",
+            "top"
+          ],
+          "stdout": "https://api.example.com/v2/tokens?q=design+tokens&limit=5#top"
+        }
+      ],
+      "it_tools": [
+        "url-builder"
+      ],
+      "output": {
+        "description": "The assembled URL, single line",
+        "kind": "text"
+      },
+      "path": "web url-build",
+      "stdin_fallback": false,
+      "summary": "Build a URL from a base, path, query parameters and fragment with correct encoding",
+      "when_to_use": "Constructing URLs with arbitrary parameter values; never hand-concatenate query strings."
+    },
+    {
+      "args": [
+        {
+          "help": "Domain (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "punycode-encode",
+            "münchen.de"
+          ],
+          "stdout": "xn--mnchen-3ya.de"
+        }
+      ],
+      "it_tools": [
+        "punycode-converter"
+      ],
+      "output": {
+        "description": "The xn-- encoded domain",
+        "kind": "text"
+      },
+      "path": "web punycode-encode",
+      "stdin_fallback": true,
+      "summary": "Convert an internationalized domain name to ASCII punycode (IDNA)",
+      "when_to_use": "Preparing unicode domains for DNS, certificates or URLs."
+    },
+    {
+      "args": [
+        {
+          "help": "Domain (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "punycode-decode",
+            "xn--mnchen-3ya.de"
+          ],
+          "stdout": "münchen.de"
+        }
+      ],
+      "it_tools": [
+        "punycode-converter"
+      ],
+      "output": {
+        "description": "The unicode domain",
+        "kind": "text"
+      },
+      "path": "web punycode-decode",
+      "stdin_fallback": true,
+      "summary": "Convert an ASCII punycode domain back to unicode",
+      "when_to_use": "Reading xn-- domains from certificates, DNS or logs."
+    },
+    {
+      "args": [
+        {
+          "help": "Any CSS color: hex, rgb(), hsl(), named... (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "color",
+            "#336699"
+          ],
+          "stdout": "{\n  \"hex\": \"#336699\",\n  \"hsl\": \"hsl(210 50% 40%)\",\n  \"luminance\": 0.1251,\n  \"rgb\": \"rgb(51 102 153)\"\n}"
+        },
+        {
+          "argv": [
+            "web",
+            "color",
+            "rebeccapurple"
+          ],
+          "stdout": "{\n  \"hex\": \"#663399\",\n  \"hsl\": \"hsl(270 50% 40%)\",\n  \"luminance\": 0.0749,\n  \"rgb\": \"rgb(102 51 153)\"\n}"
+        }
+      ],
+      "it_tools": [
+        "color-converter"
+      ],
+      "output": {
+        "description": "{hex, rgb, hsl, luminance (WCAG relative luminance 0-1)}",
+        "kind": "json"
+      },
+      "path": "web color",
+      "stdin_fallback": true,
+      "summary": "Parse any CSS color (hex, rgb(), hsl(), named) and show hex, rgb, hsl and WCAG luminance",
+      "when_to_use": "Color format conversion and luminance checks; never convert color spaces mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "Foreground color",
+          "kind": "positional",
+          "name": "foreground",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Background color",
+          "kind": "positional",
+          "name": "background",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "web",
+            "contrast",
+            "#000",
+            "#fff"
+          ],
+          "stdout": "{\n  \"aa_large_text\": true,\n  \"aa_normal_text\": true,\n  \"aaa_large_text\": true,\n  \"aaa_normal_text\": true,\n  \"ratio\": 21.0\n}"
+        }
+      ],
+      "it_tools": [
+        "color-contrast-checker"
+      ],
+      "output": {
+        "description": "{ratio, aa_normal_text, aa_large_text, aaa_normal_text, aaa_large_text}",
+        "kind": "json"
+      },
+      "path": "web contrast",
+      "stdin_fallback": false,
+      "summary": "WCAG 2.x contrast ratio between two CSS colors, with AA/AAA verdicts",
+      "when_to_use": "Accessibility checks for text/background pairs. Thresholds: AA 4.5 (3.0 large), AAA 7.0 (4.5 large)."
+    },
+    {
+      "args": [
+        {
           "help": "Cron expression, 5-field classic or 6/7-field with seconds/years",
           "kind": "positional",
           "name": "expression",
@@ -1166,6 +1953,268 @@
     {
       "args": [
         {
+          "help": "Expression, e.g. \"sin(0.5)^2 + 17 * (3 - 1.5)\" (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "calc",
+            "sin(0.5)^2 + 17 * (3 - 1.5)"
+          ],
+          "stdout": "25.72984884706593"
+        },
+        {
+          "argv": [
+            "development",
+            "calc",
+            "2^10"
+          ],
+          "stdout": "1024"
+        }
+      ],
+      "it_tools": [
+        "math-evaluator"
+      ],
+      "output": {
+        "description": "The numeric result, single line (integers print without decimals)",
+        "kind": "text"
+      },
+      "path": "development calc",
+      "stdin_fallback": true,
+      "summary": "Evaluate a mathematical expression exactly (functions like sin, cos, sqrt, ln supported)",
+      "when_to_use": "ANY arithmetic beyond trivial single-digit sums. Language models are unreliable at math; always compute."
+    },
+    {
+      "args": [
+        {
+          "help": "Operation: and | or | xor | not | shl | shr",
+          "kind": "option",
+          "long": "op",
+          "name": "op",
+          "required": true,
+          "short": "o",
+          "value_type": "string"
+        },
+        {
+          "help": "First operand",
+          "kind": "positional",
+          "name": "a",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Second operand (shift amount for shl/shr; omitted for not)",
+          "kind": "positional",
+          "name": "b",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "bitwise",
+            "--op",
+            "xor",
+            "0xff",
+            "0b1010"
+          ],
+          "stdout": "{\n  \"binary\": \"0b11110101\",\n  \"decimal\": 245,\n  \"hex\": \"0xf5\",\n  \"octal\": \"0o365\"\n}"
+        }
+      ],
+      "it_tools": [
+        "binary-calculator"
+      ],
+      "output": {
+        "description": "Result as {decimal, hex, binary, octal}",
+        "kind": "json"
+      },
+      "path": "development bitwise",
+      "stdin_fallback": false,
+      "summary": "Bitwise operations (and, or, xor, not, shl, shr) on integers with 0x/0b/0o prefixes",
+      "when_to_use": "Bit math for flags, masks and registers. Never compute bitwise operations mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "Octal (e.g. 755) or symbolic (e.g. rwxr-xr-x)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "chmod",
+            "4755"
+          ],
+          "stdout": "{\n  \"command\": \"chmod 4755 <file>\",\n  \"octal\": \"4755\",\n  \"symbolic\": \"rwsr-xr-x\"\n}"
+        },
+        {
+          "argv": [
+            "development",
+            "chmod",
+            "rwxr-xr-x"
+          ],
+          "stdout": "{\n  \"command\": \"chmod 755 <file>\",\n  \"octal\": \"755\",\n  \"symbolic\": \"rwxr-xr-x\"\n}"
+        }
+      ],
+      "it_tools": [
+        "chmod-calculator"
+      ],
+      "output": {
+        "description": "{octal, symbolic, command}",
+        "kind": "json"
+      },
+      "path": "development chmod",
+      "stdin_fallback": true,
+      "summary": "Convert chmod permissions between octal (755, 4755) and symbolic (rwxr-xr-x) notation",
+      "when_to_use": "Reading or constructing unix permissions, including setuid/setgid/sticky bits."
+    },
+    {
+      "args": [
+        {
+          "default": "1",
+          "help": "Number of ULIDs to generate (one per line)",
+          "kind": "option",
+          "long": "count",
+          "name": "count",
+          "required": false,
+          "short": "c",
+          "value_type": "integer"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "ulid"
+          ],
+          "stdout_regex": "^[0-9A-HJKMNP-TV-Z]{26}$"
+        }
+      ],
+      "it_tools": [
+        "ulid-generator"
+      ],
+      "output": {
+        "description": "One 26-character Crockford-Base32 ULID per line",
+        "kind": "text"
+      },
+      "path": "development ulid",
+      "stdin_fallback": false,
+      "summary": "Generate ULIDs (time-ordered, lexicographically sortable identifiers)",
+      "when_to_use": "IDs that need to sort by creation time. Never invent ULIDs yourself."
+    },
+    {
+      "args": [
+        {
+          "default": "21",
+          "help": "ID length",
+          "kind": "option",
+          "long": "length",
+          "name": "length",
+          "required": false,
+          "short": "l",
+          "value_type": "integer"
+        },
+        {
+          "default": "1",
+          "help": "Number of IDs to generate (one per line)",
+          "kind": "option",
+          "long": "count",
+          "name": "count",
+          "required": false,
+          "short": "c",
+          "value_type": "integer"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "nanoid",
+            "--length",
+            "12"
+          ],
+          "stdout_regex": "^[A-Za-z0-9_-]{12}$"
+        }
+      ],
+      "it_tools": [
+        "nanoid-generator"
+      ],
+      "output": {
+        "description": "One Nano ID per line (A-Za-z0-9_-)",
+        "kind": "text"
+      },
+      "path": "development nanoid",
+      "stdin_fallback": false,
+      "summary": "Generate Nano IDs (URL-safe random identifiers, default length 21)",
+      "when_to_use": "Compact random IDs for URLs and keys. Never invent random IDs yourself."
+    },
+    {
+      "args": [
+        {
+          "help": "Unescape a quoted string literal instead",
+          "kind": "flag",
+          "long": "unescape",
+          "name": "unescape",
+          "required": false,
+          "short": "u",
+          "value_type": "boolean"
+        },
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "development",
+            "string-escape",
+            "say \"hi\" twice"
+          ],
+          "stdout": "\"say \\\"hi\\\" twice\""
+        },
+        {
+          "argv": [
+            "development",
+            "string-escape",
+            "--unescape",
+            "\"tab\\there\""
+          ],
+          "stdout": "tab\there"
+        }
+      ],
+      "it_tools": [
+        "string-escaper",
+        "json-escaper"
+      ],
+      "output": {
+        "description": "The escaped literal (quoted) or the unescaped text",
+        "kind": "text"
+      },
+      "path": "development string-escape",
+      "stdin_fallback": true,
+      "summary": "Escape text as a JSON/code string literal, or unescape with --unescape",
+      "when_to_use": "Embedding arbitrary text in JSON/code, or decoding escaped literals. Escaped output includes the surrounding quotes."
+    },
+    {
+      "args": [
+        {
           "help": "Old text, or a file path with --files",
           "kind": "positional",
           "name": "old",
@@ -1276,6 +2325,395 @@
       "stdin_fallback": true,
       "summary": "Convert a timestamp (unix s/ms, RFC 3339, RFC 2822) into all common formats",
       "when_to_use": "Timestamp conversion in any direction. Never convert unix timestamps mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "Duration, e.g. \"2h 30m\", \"1w 2d\", \"45s\"",
+          "kind": "positional",
+          "name": "duration",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Subtract instead of add",
+          "kind": "flag",
+          "long": "subtract",
+          "name": "subtract",
+          "required": false,
+          "short": "s",
+          "value_type": "boolean"
+        },
+        {
+          "help": "Base timestamp: unix s/ms, RFC 3339 or RFC 2822 (defaults to now)",
+          "kind": "option",
+          "long": "from",
+          "name": "from",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "datetime",
+            "duration",
+            "2h 30m",
+            "--from",
+            "1751700000"
+          ],
+          "note": "The result's 'local' field depends on the machine timezone, so only the UTC field is asserted",
+          "stdout_regex": "\"iso8601\": \"2025-07-05T09:50:00Z\""
+        }
+      ],
+      "it_tools": [
+        "date-duration-calculator",
+        "duration-calculator"
+      ],
+      "output": {
+        "description": "{base, operation, duration_seconds, result: {unix, iso8601, ...}}",
+        "kind": "json"
+      },
+      "path": "datetime duration",
+      "stdin_fallback": false,
+      "summary": "Add or subtract a duration (e.g. '2h 30m', '1w 2d') from a timestamp",
+      "when_to_use": "Date arithmetic. Never add durations to timestamps mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "Target timezone, e.g. Europe/Vienna",
+          "kind": "option",
+          "long": "to",
+          "name": "to",
+          "required": true,
+          "short": "t",
+          "value_type": "string"
+        },
+        {
+          "help": "Timestamp: unix s/ms, RFC 3339 or RFC 2822 (defaults to now)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "datetime",
+            "timezone",
+            "--to",
+            "Europe/Vienna",
+            "1751700000"
+          ],
+          "stdout": "{\n  \"abbreviation\": \"CEST\",\n  \"local\": \"2025-07-05T09:20:00+02:00\",\n  \"offset\": \"+02:00\",\n  \"timezone\": \"Europe/Vienna\",\n  \"utc\": \"2025-07-05T07:20:00Z\"\n}"
+        }
+      ],
+      "it_tools": [
+        "timezone-converter"
+      ],
+      "output": {
+        "description": "{utc, timezone, local, offset, abbreviation}",
+        "kind": "json"
+      },
+      "path": "datetime timezone",
+      "stdin_fallback": true,
+      "summary": "Convert a timestamp into a target IANA timezone (DST-aware)",
+      "when_to_use": "Timezone conversion. Never reason about DST offsets mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "CIDR, e.g. 192.168.1.0/24 or 2001:db8::/48",
+          "kind": "positional",
+          "name": "cidr",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "network",
+            "subnet",
+            "192.168.1.0/24"
+          ],
+          "stdout": "{\n  \"addresses\": 256,\n  \"broadcast\": \"192.168.1.255\",\n  \"cidr\": \"192.168.1.0/24\",\n  \"first_usable\": \"192.168.1.1\",\n  \"last_usable\": \"192.168.1.254\",\n  \"netmask\": \"255.255.255.0\",\n  \"network\": \"192.168.1.0\",\n  \"prefix\": 24,\n  \"usable_hosts\": 254,\n  \"wildcard\": \"0.0.0.255\"\n}"
+        }
+      ],
+      "it_tools": [
+        "ipv4-subnet-calculator",
+        "ipv6-subnet-calculator"
+      ],
+      "output": {
+        "description": "IPv4: {cidr, network, broadcast, netmask, wildcard, prefix, addresses, usable_hosts, first_usable, last_usable}; IPv6: {cidr, network, last, prefix, addresses}",
+        "kind": "json"
+      },
+      "path": "network subnet",
+      "stdin_fallback": false,
+      "summary": "Analyze an IPv4/IPv6 CIDR block: network, broadcast, netmask, usable host range",
+      "when_to_use": "Any subnet question. Never compute CIDR math mentally."
+    },
+    {
+      "args": [
+        {
+          "help": "CIDR, e.g. 10.0.0.0/22",
+          "kind": "positional",
+          "name": "cidr",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "network",
+            "cidr-to-range",
+            "10.0.0.0/22"
+          ],
+          "stdout": "{\n  \"addresses\": \"1024\",\n  \"cidr\": \"10.0.0.0/22\",\n  \"first\": \"10.0.0.0\",\n  \"last\": \"10.0.3.255\"\n}"
+        }
+      ],
+      "it_tools": [
+        "ip-cidr-to-range"
+      ],
+      "output": {
+        "description": "{cidr, first, last, addresses}",
+        "kind": "json"
+      },
+      "path": "network cidr-to-range",
+      "stdin_fallback": false,
+      "summary": "First and last address (and count) of a CIDR block",
+      "when_to_use": "Turning CIDR notation into an explicit IP range."
+    },
+    {
+      "args": [
+        {
+          "help": "First IP of the range",
+          "kind": "positional",
+          "name": "start",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Last IP of the range",
+          "kind": "positional",
+          "name": "end",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "network",
+            "range-to-cidr",
+            "10.0.0.0",
+            "10.0.0.255"
+          ],
+          "stdout": "{\n  \"cidrs\": [\n    \"10.0.0.0/24\"\n  ]\n}"
+        }
+      ],
+      "it_tools": [
+        "ip-range-to-cidr"
+      ],
+      "output": {
+        "description": "{cidrs: [...]}",
+        "kind": "json"
+      },
+      "path": "network range-to-cidr",
+      "stdin_fallback": false,
+      "summary": "Smallest set of CIDR blocks exactly covering an IP range",
+      "when_to_use": "Converting firewall/allowlist ranges into CIDR notation."
+    },
+    {
+      "args": [
+        {
+          "help": "Outer CIDR, e.g. 10.0.0.0/8",
+          "kind": "positional",
+          "name": "outer",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "IP address or CIDR to test",
+          "kind": "positional",
+          "name": "inner",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "network",
+            "cidr-contains",
+            "10.0.0.0/8",
+            "10.1.2.3"
+          ],
+          "stdout": "{\n  \"contains\": true,\n  \"inner\": \"10.1.2.3/32\",\n  \"outer\": \"10.0.0.0/8\"\n}"
+        }
+      ],
+      "it_tools": [
+        "cidr-in-cidr"
+      ],
+      "output": {
+        "description": "{outer, inner, contains}; exit 2 when contains is false",
+        "kind": "json"
+      },
+      "path": "network cidr-contains",
+      "stdin_fallback": false,
+      "summary": "Check whether an IP address or CIDR is contained in a CIDR block",
+      "when_to_use": "Allowlist/denylist membership checks. Exit code 2 when not contained."
+    },
+    {
+      "args": [
+        {
+          "help": "IPv4/IPv6 address, or an integer (interpreted as IPv4)",
+          "kind": "positional",
+          "name": "input",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "network",
+            "ip-convert",
+            "192.168.1.1"
+          ],
+          "stdout": "{\n  \"binary\": \"11000000101010000000000100000001\",\n  \"decimal\": 3232235777,\n  \"dotted\": \"192.168.1.1\",\n  \"hex\": \"0xc0a80101\",\n  \"ipv6_mapped\": \"::ffff:192.168.1.1\"\n}"
+        }
+      ],
+      "it_tools": [
+        "ipv4-address-converter",
+        "ipv6-address-converter",
+        "integers-to-ip"
+      ],
+      "output": {
+        "description": "IPv4: {dotted, decimal, hex, binary, ipv6_mapped}; IPv6: {compressed, expanded, decimal, hex}",
+        "kind": "json"
+      },
+      "path": "network ip-convert",
+      "stdin_fallback": false,
+      "summary": "Convert an IP address between dotted, integer, hex and binary representations",
+      "when_to_use": "IP representation math (log parsing, packed integers). Accepts IPv4, IPv6 or a 32-bit integer."
+    },
+    {
+      "args": [
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "text",
+            "stats",
+            "hello wörld\nsecond line"
+          ],
+          "stdout": "{\n  \"bytes\": 24,\n  \"characters\": 23,\n  \"characters_without_whitespace\": 20,\n  \"lines\": 2,\n  \"longest_line_characters\": 11,\n  \"words\": 4\n}"
+        }
+      ],
+      "it_tools": [
+        "text-statistics"
+      ],
+      "output": {
+        "description": "{bytes, characters, characters_without_whitespace, words, lines, longest_line_characters}",
+        "kind": "json"
+      },
+      "path": "text stats",
+      "stdin_fallback": true,
+      "summary": "Count bytes, characters (graphemes), words and lines of a text",
+      "when_to_use": "ANY counting or length question about text. Never count characters or words yourself; models miscount."
+    },
+    {
+      "args": [
+        {
+          "help": "First string",
+          "kind": "positional",
+          "name": "a",
+          "required": true,
+          "value_type": "string"
+        },
+        {
+          "help": "Second string",
+          "kind": "positional",
+          "name": "b",
+          "required": true,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "text",
+            "distance",
+            "kitten",
+            "sitting"
+          ],
+          "stdout": "{\n  \"equal\": false,\n  \"jaro_winkler\": 0.746,\n  \"levenshtein\": 3,\n  \"normalized_levenshtein\": 0.571\n}"
+        }
+      ],
+      "it_tools": [
+        "levenshtein-calculator"
+      ],
+      "output": {
+        "description": "{levenshtein, normalized_levenshtein, jaro_winkler, equal}",
+        "kind": "json"
+      },
+      "path": "text distance",
+      "stdin_fallback": false,
+      "summary": "Similarity metrics between two strings: Levenshtein, normalized Levenshtein, Jaro-Winkler",
+      "when_to_use": "Fuzzy matching, dedupe decisions, typo detection. Never estimate edit distance mentally."
+    },
+    {
+      "args": [
+        {
+          "default": "[MASKED]",
+          "help": "Replacement label style, e.g. [MASKED]",
+          "kind": "option",
+          "long": "replacement",
+          "name": "replacement",
+          "required": false,
+          "short": "r",
+          "value_type": "string"
+        },
+        {
+          "help": "Input text (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "text",
+            "mask",
+            "mail hey@example.com from 10.0.0.1"
+          ],
+          "stdout": "{\n  \"found\": {\n    \"email\": 1,\n    \"ipv4\": 1\n  },\n  \"masked\": \"mail [MASKED] from [MASKED]\"\n}"
+        }
+      ],
+      "it_tools": [
+        "sensitive-data-masker"
+      ],
+      "output": {
+        "description": "{masked: the sanitized text, found: counts per pattern type}",
+        "kind": "json"
+      },
+      "path": "text mask",
+      "stdin_fallback": true,
+      "summary": "Mask sensitive data in text: emails, IPv4s, JWTs, bearer tokens, AWS keys, card numbers, long hex secrets",
+      "when_to_use": "Sanitizing logs or payloads before sharing or storing them. Heuristic pattern matching; review the counts in 'found'."
     }
   ],
   "version": "0.1.0"

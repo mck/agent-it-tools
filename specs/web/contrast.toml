@@ -1,0 +1,19 @@
+path = "web contrast"
+summary = "WCAG 2.x contrast ratio between two CSS colors, with AA/AAA verdicts"
+when_to_use = "Accessibility checks for text/background pairs. Thresholds: AA 4.5 (3.0 large), AAA 7.0 (4.5 large)."
+it_tools = ["color-contrast-checker"]
+
+[output]
+kind = "json"
+description = "{ratio, aa_normal_text, aa_large_text, aaa_normal_text, aaa_large_text}"
+
+[[examples]]
+argv = ["web", "contrast", "#000", "#fff"]
+stdout = """
+{
+  "aa_large_text": true,
+  "aa_normal_text": true,
+  "aaa_large_text": true,
+  "aaa_normal_text": true,
+  "ratio": 21.0
+}"""

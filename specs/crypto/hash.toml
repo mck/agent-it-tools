@@ -1,7 +1,7 @@
 path = "crypto hash"
-summary = "Hash text with md5, sha1, sha224, sha256, sha384 or sha512 (hex digest)"
-when_to_use = "Checksums, content addressing, comparing payloads. Never compute digests mentally. Not for passwords - use 'crypto bcrypt-hash'."
-it_tools = ["hash-text"]
+summary = "Hash text or a file (--file PATH) with md5, sha1, sha224, sha256, sha384 or sha512 (hex digest)"
+when_to_use = "Checksums, content addressing, verifying downloads (--file hashes raw bytes). Never compute digests mentally. Not for passwords - use 'crypto bcrypt-hash'."
+it_tools = ["hash-text", "file-hasher"]
 
 [output]
 kind = "text"

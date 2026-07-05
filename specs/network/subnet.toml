@@ -1,0 +1,24 @@
+path = "network subnet"
+summary = "Analyze an IPv4/IPv6 CIDR block: network, broadcast, netmask, usable host range"
+when_to_use = "Any subnet question. Never compute CIDR math mentally."
+it_tools = ["ipv4-subnet-calculator", "ipv6-subnet-calculator"]
+
+[output]
+kind = "json"
+description = "IPv4: {cidr, network, broadcast, netmask, wildcard, prefix, addresses, usable_hosts, first_usable, last_usable}; IPv6: {cidr, network, last, prefix, addresses}"
+
+[[examples]]
+argv = ["network", "subnet", "192.168.1.0/24"]
+stdout = """
+{
+  "addresses": 256,
+  "broadcast": "192.168.1.255",
+  "cidr": "192.168.1.0/24",
+  "first_usable": "192.168.1.1",
+  "last_usable": "192.168.1.254",
+  "netmask": "255.255.255.0",
+  "network": "192.168.1.0",
+  "prefix": 24,
+  "usable_hosts": 254,
+  "wildcard": "0.0.0.255"
+}"""

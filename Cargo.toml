@@ -42,6 +42,28 @@ regex = "1.10"
 similar = "2.4"
 # Self-description (embedded tool specs)
 include_dir = "0.7"
+# Wave 1 (see docs/wave1-crates.md for the license research)
+quick-xml = "0.41"
+csv = "1.4"
+jaq-core = "3"
+jaq-std = "3"
+jaq-json = { version = "2", features = ["serde"] }
+json-patch = "4"
+flate2 = "1.1"
+totp-rs = "5"
+comrak = "0.53"
+htmd = "0.5"
+mime_guess = "2"
+idna = "1"
+csscolorparser = "0.8"
+exmex = "0.21"
+ulid = "1"
+nanoid = "0.5"
+chrono-tz = "0.10"
+ipnet = "2"
+unicode-segmentation = "1"
+strsim = "0.11"
+humantime = "2"
 
 [dev-dependencies]
 regex = "1.10"
