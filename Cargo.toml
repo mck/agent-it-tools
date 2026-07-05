@@ -14,17 +14,17 @@ anyhow = "1.0"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 serde_yaml = "0.9"
-toml = "0.8"
+toml = "1.1"
 # Encoders
 base64 = "0.22"
 urlencoding = "2.1"
 hex = "0.4"
 html-escape = "0.2"
 # Crypto / hashes
-sha1 = "0.10"
-sha2 = "0.10"
-md-5 = "0.10"
-hmac = "0.12"
+sha1 = "0.11"
+sha2 = "0.11"
+md-5 = "0.11"
+hmac = "0.13"
 bcrypt = "0.15"
 # String utils
 slug = "0.1"
@@ -32,7 +32,7 @@ uuid = { version = "1.6", features = ["v4", "v5", "v7"] }
 rand = "0.8"
 heck = "0.5"
 # Time & logic
-cron = "0.12"
+cron = "0.17"
 chrono = "0.4"
 # Web
 url = "2.5"

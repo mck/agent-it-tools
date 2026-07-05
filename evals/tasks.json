@@ -48,5 +48,30 @@
     "id": "url-port",
     "prompt": "What port does this URL use: https://api.example.com/v2/tokens?limit=5",
     "expect_regex": "443"
+  },
+  {
+    "id": "calc",
+    "prompt": "What is 17.5% of 2348? Give the exact number.",
+    "expect_regex": "410\\.9"
+  },
+  {
+    "id": "subnet-hosts",
+    "prompt": "How many usable hosts are in the subnet 10.44.0.0/21?",
+    "expect_regex": "2046"
+  },
+  {
+    "id": "timezone",
+    "prompt": "Unix timestamp 1751700000: what is the local time in Tokyo (Asia/Tokyo)? Give date and time.",
+    "expect_regex": "16:20"
+  },
+  {
+    "id": "char-count",
+    "prompt": "Exactly how many characters (not bytes) is the string: Grüße aus Wien!",
+    "expect_regex": "\\b15\\b"
+  },
+  {
+    "id": "jq-sum",
+    "prompt": "Given this JSON, what is the sum of all order totals? {\"orders\":[{\"total\":19.5},{\"total\":3.2},{\"total\":41.3}]}",
+    "expect_regex": "\\b64(\\.0)?\\b"
   }
 ]

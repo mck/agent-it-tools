@@ -95,7 +95,7 @@ fn hex_digest<D: Digest>(data: &[u8]) -> String {
 
 macro_rules! hmac_hex {
     ($alg:ty, $key:expr, $data:expr) => {{
-        use hmac::{Hmac, Mac};
+        use hmac::{Hmac, KeyInit, Mac};
         let mut mac = Hmac::<$alg>::new_from_slice($key)?;
         mac.update($data);
         hex::encode(mac.finalize().into_bytes())
