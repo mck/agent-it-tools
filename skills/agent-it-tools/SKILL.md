@@ -7,6 +7,8 @@ description: MUST BE USED for any request involving hashes (md5/sha, files too),
 
 Run: `agent-it-tools <category> <tool> [flags] [input]`
 
+Setup (once): if `agent-it-tools` is not on PATH, install it with `bash "$CLAUDE_PLUGIN_ROOT/scripts/install.sh"` (downloads the release binary for this platform), or `cargo install --git https://github.com/mck/agent-it-tools`.
+
 Rules:
 - Pass the main input as the FINAL argument, in quotes: `agent-it-tools crypto hmac --algo sha256 --key K "message"`. Only pipe via stdin for multiline data; the command must always start with `agent-it-tools`.
 - Success: result on stdout. Failure: `{"error":"..."}` on stderr with non-zero exit: read stderr, fix the call.

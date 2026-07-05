@@ -1,0 +1,21 @@
+{
+  "author": {
+    "email": "hey@mck.systems",
+    "name": "Marco-Christian Krenn"
+  },
+  "description": "Language models predict; this binary computes. 62 deterministic developer utilities (hashing, encoding, conversion, jq, JWT, cron, regex, diff, subnets, timezones, ...) as a fast local CLI built for agents",
+  "homepage": "https://github.com/mck/agent-it-tools",
+  "keywords": [
+    "it-tools",
+    "cli",
+    "utilities",
+    "deterministic",
+    "hashing",
+    "encoding",
+    "conversion"
+  ],
+  "license": "MIT",
+  "name": "agent-it-tools",
+  "repository": "https://github.com/mck/agent-it-tools",
+  "version": "0.1.0"
+}

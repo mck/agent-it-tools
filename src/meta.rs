@@ -336,6 +336,7 @@ fn skill_markdown(tools: &[CatalogTool]) -> String {
     md.push_str("description: MUST BE USED for any request involving hashes (md5/sha, files too), HMAC, TOTP codes, bcrypt, random tokens, UUIDs/ULIDs/nanoids, base64, hex, gzip, URL/HTML encoding, punycode, JSON/YAML/TOML/XML/CSV conversion, jq queries, JSON diff/merge/flatten/lint, math evaluation, bitwise ops, number bases, chmod, case conversion, string escaping, unix timestamps, timezones, date arithmetic, JWT decoding, URL parsing or building, user-agent parsing, slugs, Markdown/HTML conversion, MIME types, CSS colors and WCAG contrast, cron expressions, regex testing, text diffs, text statistics, string similarity, subnets/CIDR math, IP conversion, or masking sensitive data. Never answer these from memory, even when the answer seems obvious. Language models get computation and encodings subtly wrong; this local CLI computes them exactly.\n---\n\n");
     md.push_str("# agent-it-tools\n\n");
     md.push_str("Run: `agent-it-tools <category> <tool> [flags] [input]`\n\n");
+    md.push_str("Setup (once): if `agent-it-tools` is not on PATH, install it with `bash \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\"` (downloads the release binary for this platform), or `cargo install --git https://github.com/mck/agent-it-tools`.\n\n");
     md.push_str("Rules:\n");
     md.push_str("- Pass the main input as the FINAL argument, in quotes: `agent-it-tools crypto hmac --algo sha256 --key K \"message\"`. Only pipe via stdin for multiline data; the command must always start with `agent-it-tools`.\n");
     md.push_str("- Success: result on stdout. Failure: `{\"error\":\"...\"}` on stderr with non-zero exit: read stderr, fix the call.\n");
@@ -416,10 +417,12 @@ fn plugin_manifest() -> serde_json::Value {
     serde_json::json!({
         "name": "agent-it-tools",
         "version": env!("CARGO_PKG_VERSION"),
-        "description": "Language models predict; this binary computes. Deterministic developer utilities (hashing, encoding, conversion, JWT, cron, regex, diff) as a fast local CLI built for agents",
+        "description": "Language models predict; this binary computes. 62 deterministic developer utilities (hashing, encoding, conversion, jq, JWT, cron, regex, diff, subnets, timezones, ...) as a fast local CLI built for agents",
         "author": { "name": "Marco-Christian Krenn", "email": "hey@mck.systems" },
         "homepage": "https://github.com/mck/agent-it-tools",
-        "keywords": ["it-tools", "cli", "utilities", "hashing", "encoding"]
+        "repository": "https://github.com/mck/agent-it-tools",
+        "license": "MIT",
+        "keywords": ["it-tools", "cli", "utilities", "deterministic", "hashing", "encoding", "conversion"]
     })
 }
 
@@ -465,15 +468,17 @@ pub fn run(cmd: MetaCmd) -> Result<()> {
                     &skill_markdown(&tools),
                 )?;
             }
-            if want("plugin") {
+            // The plugin target lays out a Claude Code plugin at --out
+            // (use --out . to make the repo root itself the plugin);
+            // it is intentionally NOT part of --target all.
+            if target == "plugin" {
                 matched = true;
-                let base = out.join("claude-plugin");
                 write_artifact(
-                    &base.join(".claude-plugin/plugin.json"),
+                    &out.join(".claude-plugin/plugin.json"),
                     &serde_json::to_string_pretty(&plugin_manifest())?,
                 )?;
                 write_artifact(
-                    &base.join("skills/agent-it-tools/SKILL.md"),
+                    &out.join("skills/agent-it-tools/SKILL.md"),
                     &skill_markdown(&tools),
                 )?;
             }

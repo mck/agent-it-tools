@@ -26,5 +26,6 @@ jobs:
       - name: Exported artifacts are up to date
         run: |
           cargo run --quiet -- meta export --target all --out dist
-          git diff --exit-code dist/ \
-            || { echo "dist/ is stale; run 'agent-it-tools meta export' and commit"; exit 1; }
+          cargo run --quiet -- meta export --target plugin --out .
+          git diff --exit-code dist/ .claude-plugin/plugin.json skills/ \
+            || { echo "exported artifacts are stale; run 'agent-it-tools meta export --target all --out dist && agent-it-tools meta export --target plugin --out .' and commit"; exit 1; }

@@ -1,0 +1,15 @@
+{
+  "name": "agent-it-tools",
+  "owner": {
+    "name": "Marco-Christian Krenn",
+    "email": "hey@mck.systems"
+  },
+  "description": "Deterministic developer utilities for agents: the agent-it-tools CLI plugin (it-tools ported to a single fast binary with machine-verified docs).",
+  "plugins": [
+    {
+      "name": "agent-it-tools",
+      "source": "./",
+      "description": "Language models predict; this binary computes. 62 deterministic developer utilities (hashing, encoding, conversion, jq, JWT, cron, regex, diff, subnets, timezones, ...) as a fast local CLI built for agents."
+    }
+  ]
+}

@@ -34,6 +34,21 @@ the consuming pipeline cannot tell a lucky run from a fabricated one (see
 [`evals/`](evals/README.md)). The tool arm's only failure mode is not invoking
 the tool, and the shipped skill file exists to drive exactly that to zero.
 
+## Install as a Claude Code plugin
+
+The repository is itself a Claude Code plugin and marketplace:
+
+```
+/plugin marketplace add mck/agent-it-tools
+/plugin install agent-it-tools@agent-it-tools
+```
+
+The bundled skill teaches the invocation contract and installs the release
+binary on first use (`scripts/install.sh` picks the right platform build; or
+`cargo install --git https://github.com/mck/agent-it-tools`). For other
+runtimes: `dist/skill/` is a standalone skill, `dist/openai-tools.json` is an
+OpenAI function-calling manifest, `dist/catalog.json` feeds anything else.
+
 ## Agent-first I/O contract
 
 - **Success** → result written directly to `stdout` (plain text, or pretty
