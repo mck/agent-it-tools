@@ -2,7 +2,11 @@
 name = "agent-it-tools"
 version = "0.2.0"
 edition = "2021"
-description = "Agent-first CLI port of the it-tools utility suite"
+description = "Agent-first CLI port of the it-tools utility suite (the ait binary)"
+repository = "https://github.com/mck/agent-it-tools"
+homepage = "https://github.com/mck/agent-it-tools"
+keywords = ["cli", "agents", "utilities", "it-tools", "deterministic"]
+categories = ["command-line-utilities"]
 license = "MIT"
 
 [[bin]]

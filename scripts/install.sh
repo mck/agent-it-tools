@@ -30,23 +30,37 @@ case "$(uname -m)" in
 esac
 target="${arch}-${os}"
 asset="ait-${target}.tar.gz"
+checksum="ait-${target}.sha256"
 
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
 
 if command -v gh >/dev/null 2>&1 && gh auth status >/dev/null 2>&1; then
     if [ "$VERSION" = "latest" ]; then
-        gh release download --repo "$REPO" --pattern "$asset" --dir "$tmp"
+        gh release download --repo "$REPO" --pattern "$asset" --pattern "$checksum" --dir "$tmp"
     else
-        gh release download "$VERSION" --repo "$REPO" --pattern "$asset" --dir "$tmp"
+        gh release download "$VERSION" --repo "$REPO" --pattern "$asset" --pattern "$checksum" --dir "$tmp"
     fi
 else
     if [ "$VERSION" = "latest" ]; then
-        url="https://github.com/$REPO/releases/latest/download/$asset"
+        base="https://github.com/$REPO/releases/latest/download"
     else
-        url="https://github.com/$REPO/releases/download/$VERSION/$asset"
+        base="https://github.com/$REPO/releases/download/$VERSION"
     fi
-    curl -fsSL "$url" -o "$tmp/$asset"
+    curl -fsSL "$base/$asset" -o "$tmp/$asset"
+    curl -fsSL "$base/$checksum" -o "$tmp/$checksum"
+fi
+
+# Verify the release checksum before unpacking.
+expected="$(awk '{print $1}' "$tmp/$checksum")"
+if command -v sha256sum >/dev/null 2>&1; then
+    actual="$(sha256sum "$tmp/$asset" | awk '{print $1}')"
+else
+    actual="$(shasum -a 256 "$tmp/$asset" | awk '{print $1}')"
+fi
+if [ "$expected" != "$actual" ]; then
+    echo "{\"error\":\"checksum mismatch for $asset (expected $expected, got $actual)\"}" >&2
+    exit 1
 fi
 
 tar -xzf "$tmp/$asset" -C "$tmp"

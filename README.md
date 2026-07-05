@@ -15,15 +15,15 @@ developer utility suite: hashing, HMAC, encodings, data-format conversion,
 JWT/URL/user-agent parsing, cron, regex, diffs. Every answer is computed, the
 same way, every time.
 
-Measured on the smallest current Claude model (Haiku), same ten tasks,
+Measured on the smallest current Claude model (Haiku), same fifteen tasks,
 identical prompts, three runs each, and a task only passes if ALL runs pass:
 
-| | bare model | model + agent-it-tools |
+| | bare model | model + ait |
 |---|---|---|
-| reliability score | 6/10 | **10/10** (30/30 runs) |
-| sha256 / HMAC | 1/3 and 0/3, fabricated hex | 3/3, computed |
-| base64 decode | 1/3, a coin-flip | 3/3 |
-| cost per task | comparable | ~$0.014 |
+| reliability score | 9/15 | **15/15** (45/45 runs) |
+| sha256 / HMAC | 0/3 each, fabricated hex | 3/3, computed |
+| base64, slug, timezone, number base | coin-flips (1/3 to 2/3) | 3/3 |
+| cost per task | spiky | ~$0.016, flat |
 
 <sub>`./evals/run.sh haiku both 3` on 2026-07-05, random non-memorizable
 fixtures, graded against precomputed ground truth; reproduce it yourself with
