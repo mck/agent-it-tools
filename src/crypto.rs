@@ -1,10 +1,11 @@
 use crate::util::{print_json, read_input};
-use anyhow::{bail, Result};
+use anyhow::{bail, Context, Result};
 use clap::Subcommand;
 use md5::Md5;
 use rand::Rng;
 use sha1::Sha1;
 use sha2::{Digest, Sha224, Sha256, Sha384, Sha512};
+use std::path::PathBuf;
 
 #[derive(Subcommand)]
 pub enum CryptoCmd {
@@ -21,9 +22,16 @@ pub enum CryptoCmd {
         /// Algorithm: md5 | sha1 | sha256 | sha512
         #[arg(short, long, default_value = "sha256")]
         algo: String,
-        /// Secret key
-        #[arg(short, long)]
-        key: String,
+        /// Secret key as a literal argument (fine for test values; real secrets
+        /// should use --key-env or --key-file so they never appear in argv)
+        #[arg(short, long, conflicts_with_all = ["key_env", "key_file"])]
+        key: Option<String>,
+        /// Read the key from this environment variable
+        #[arg(long, conflicts_with = "key_file")]
+        key_env: Option<String>,
+        /// Read the key from a file (one trailing newline stripped)
+        #[arg(long)]
+        key_file: Option<PathBuf>,
         /// Input text (reads stdin if omitted)
         input: Option<String>,
     },
@@ -95,8 +103,31 @@ pub fn run(cmd: CryptoCmd) -> Result<()> {
             };
             println!("{digest}");
         }
-        CryptoCmd::Hmac { algo, key, input } => {
+        CryptoCmd::Hmac {
+            algo,
+            key,
+            key_env,
+            key_file,
+            input,
+        } => {
             let data = read_input(input)?;
+            let key = match (key, key_env, key_file) {
+                (Some(k), None, None) => k,
+                (None, Some(var), None) => std::env::var(&var)
+                    .with_context(|| format!("environment variable '{var}' is not set"))?,
+                (None, None, Some(path)) => {
+                    let mut k = std::fs::read_to_string(&path)
+                        .with_context(|| format!("cannot read key file '{}'", path.display()))?;
+                    if k.ends_with('\n') {
+                        k.pop();
+                        if k.ends_with('\r') {
+                            k.pop();
+                        }
+                    }
+                    k
+                }
+                _ => bail!("provide exactly one of --key, --key-env or --key-file"),
+            };
             let key = key.as_bytes();
             let data = data.as_bytes();
             let sig = match algo.to_lowercase().as_str() {

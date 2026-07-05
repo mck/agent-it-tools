@@ -1,5 +1,6 @@
 pub mod converter;
 pub mod crypto;
+pub mod datetime;
 pub mod development;
 pub mod meta;
 pub mod util;
@@ -32,6 +33,9 @@ pub enum Category {
     /// Crontab, UUIDs, regex testing, text diff
     #[command(subcommand)]
     Development(development::DevCmd),
+    /// Current time and timestamp/date conversion
+    #[command(subcommand)]
+    Datetime(datetime::DatetimeCmd),
     /// Self-description: tool catalog, per-tool schemas, artifact export, upstream parity
     #[command(subcommand)]
     Meta(meta::MetaCmd),
@@ -43,6 +47,7 @@ pub fn run(cli: Cli) -> anyhow::Result<()> {
         Category::Converter(cmd) => converter::run(cmd),
         Category::Web(cmd) => web::run(cmd),
         Category::Development(cmd) => development::run(cmd),
+        Category::Datetime(cmd) => datetime::run(cmd),
         Category::Meta(cmd) => meta::run(cmd),
     }
 }

@@ -38,12 +38,19 @@
             "type": "string"
           },
           "key": {
-            "description": "Secret key",
+            "description": "Secret key as a literal argument (fine for test values; real secrets should use --key-env or --key-file so they never appear in argv)",
+            "type": "string"
+          },
+          "key_env": {
+            "description": "Read the key from this environment variable",
+            "type": "string"
+          },
+          "key_file": {
+            "description": "Read the key from a file (one trailing newline stripped)",
             "type": "string"
           }
         },
         "required": [
-          "key",
           "input"
         ],
         "type": "object"
@@ -328,26 +335,6 @@
         "type": "object"
       },
       "x-argv-template": "converter number-base"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Convert a date-time (now, unix s/ms, RFC 3339, RFC 2822) into all common formats Returns: Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
-      "name": "converter_datetime",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "\"now\", unix seconds, unix milliseconds, or an RFC 3339 / ISO 8601 string (defaults to now)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter datetime"
     },
     "type": "function"
   },
@@ -645,6 +632,39 @@
         "type": "object"
       },
       "x-argv-template": "development diff"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Current time as unix seconds/ms, ISO 8601 (UTC), RFC 2822 and local time Returns: Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
+      "name": "datetime_now",
+      "parameters": {
+        "properties": {},
+        "required": [],
+        "type": "object"
+      },
+      "x-argv-template": "datetime now"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert a timestamp (unix s/ms, RFC 3339, RFC 2822) into all common formats Returns: Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
+      "name": "datetime_convert",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Timestamp or date string (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "datetime convert"
     },
     "type": "function"
   }

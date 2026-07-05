@@ -19,7 +19,7 @@ static SPEC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/specs");
 
 /// Categories that carry user-facing tools. `meta` itself is infrastructure
 /// and intentionally excluded from the catalog.
-const TOOL_CATEGORIES: [&str; 4] = ["crypto", "converter", "web", "development"];
+const TOOL_CATEGORIES: [&str; 5] = ["crypto", "converter", "web", "development", "datetime"];
 
 #[derive(Subcommand)]
 pub enum MetaCmd {
@@ -336,7 +336,7 @@ fn skill_markdown(tools: &[CatalogTool]) -> String {
     );
     md.push_str("- Need flags or an example for a tool? Run `agent-it-tools meta describe <category> <tool>`: it returns the full JSON schema with verified examples. Do this instead of guessing.\n\n");
     md.push_str("## Tools\n");
-    for cat in ["crypto", "converter", "web", "development"] {
+    for cat in TOOL_CATEGORIES {
         let Some(list) = by_cat.get(cat) else {
             continue;
         };

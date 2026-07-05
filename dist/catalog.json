@@ -83,12 +83,28 @@
           "value_type": "string"
         },
         {
-          "help": "Secret key",
+          "help": "Secret key as a literal argument (fine for test values; real secrets should use --key-env or --key-file so they never appear in argv)",
           "kind": "option",
           "long": "key",
           "name": "key",
-          "required": true,
+          "required": false,
           "short": "k",
+          "value_type": "string"
+        },
+        {
+          "help": "Read the key from this environment variable",
+          "kind": "option",
+          "long": "key-env",
+          "name": "key_env",
+          "required": false,
+          "value_type": "string"
+        },
+        {
+          "help": "Read the key from a file (one trailing newline stripped)",
+          "kind": "option",
+          "long": "key-file",
+          "name": "key_file",
+          "required": false,
           "value_type": "string"
         },
         {
@@ -123,7 +139,7 @@
       "path": "crypto hmac",
       "stdin_fallback": true,
       "summary": "HMAC signature of text with a secret key (md5, sha1, sha256, sha512)",
-      "when_to_use": "Signing or verifying webhook payloads, API request signatures."
+      "when_to_use": "Signing or verifying webhook payloads, API request signatures. For real secrets pass the key via --key-env NAME or --key-file PATH so it never appears in the command line; --key literals are for test values only."
     },
     {
       "args": [
@@ -693,39 +709,6 @@
     {
       "args": [
         {
-          "help": "\"now\", unix seconds, unix milliseconds, or an RFC 3339 / ISO 8601 string (defaults to now)",
-          "kind": "positional",
-          "name": "input",
-          "required": false,
-          "value_type": "string"
-        }
-      ],
-      "examples": [
-        {
-          "argv": [
-            "converter",
-            "datetime",
-            "1751700000"
-          ],
-          "note": "The 'local' field depends on the machine timezone, so only the UTC field is asserted",
-          "stdout_regex": "\"iso8601\": \"2025-07-05T07:20:00Z\""
-        }
-      ],
-      "it_tools": [
-        "date-time-converter"
-      ],
-      "output": {
-        "description": "Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
-        "kind": "json"
-      },
-      "path": "converter datetime",
-      "stdin_fallback": true,
-      "summary": "Convert a date-time (now, unix s/ms, RFC 3339, RFC 2822) into all common formats",
-      "when_to_use": "Timestamp conversion in either direction; omit the input for the current time. Never convert unix timestamps mentally."
-    },
-    {
-      "args": [
-        {
           "help": "Input text (reads stdin if omitted)",
           "kind": "positional",
           "name": "input",
@@ -1237,6 +1220,62 @@
       "stdin_fallback": false,
       "summary": "Unified diff between two texts, or two files with --files",
       "when_to_use": "Comparing two strings, configs or files precisely. Empty output means the inputs are identical."
+    },
+    {
+      "args": [],
+      "examples": [
+        {
+          "argv": [
+            "datetime",
+            "now"
+          ],
+          "stdout_regex": "\"unix\": \\d{10}"
+        }
+      ],
+      "it_tools": [
+        "date-time-converter"
+      ],
+      "output": {
+        "description": "Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
+        "kind": "json"
+      },
+      "path": "datetime now",
+      "stdin_fallback": false,
+      "summary": "Current time as unix seconds/ms, ISO 8601 (UTC), RFC 2822 and local time",
+      "when_to_use": "Whenever the current time matters. Never assume you know what time it is."
+    },
+    {
+      "args": [
+        {
+          "help": "Timestamp or date string (reads stdin if omitted)",
+          "kind": "positional",
+          "name": "input",
+          "required": false,
+          "value_type": "string"
+        }
+      ],
+      "examples": [
+        {
+          "argv": [
+            "datetime",
+            "convert",
+            "1751700000"
+          ],
+          "note": "The 'local' field depends on the machine timezone, so only the UTC field is asserted",
+          "stdout_regex": "\"iso8601\": \"2025-07-05T07:20:00Z\""
+        }
+      ],
+      "it_tools": [
+        "date-time-converter"
+      ],
+      "output": {
+        "description": "Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
+        "kind": "json"
+      },
+      "path": "datetime convert",
+      "stdin_fallback": true,
+      "summary": "Convert a timestamp (unix s/ms, RFC 3339, RFC 2822) into all common formats",
+      "when_to_use": "Timestamp conversion in any direction. Never convert unix timestamps mentally."
     }
   ],
   "version": "0.1.0"

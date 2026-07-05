@@ -1,8 +1,7 @@
-use crate::util::{print_json, read_input};
+use crate::util::read_input;
 use anyhow::{bail, Context, Result};
 use base64::engine::general_purpose::{STANDARD, URL_SAFE_NO_PAD};
 use base64::Engine;
-use chrono::{DateTime, Local, TimeZone, Utc};
 use clap::Subcommand;
 use heck::{
     ToKebabCase, ToLowerCamelCase, ToShoutySnakeCase, ToSnakeCase, ToTitleCase, ToTrainCase,
@@ -72,11 +71,6 @@ pub enum ConverterCmd {
         /// Input number (reads stdin if omitted)
         input: Option<String>,
     },
-    /// Convert a date-time between unix epoch, ISO 8601 and RFC 2822
-    Datetime {
-        /// "now", unix seconds, unix milliseconds, or an RFC 3339 / ISO 8601 string (defaults to now)
-        input: Option<String>,
-    },
 }
 
 fn parse_to_json(format: &str, input: &str) -> Result<serde_json::Value> {
@@ -110,16 +104,6 @@ fn to_radix(mut value: u128, radix: u32) -> String {
     }
     out.reverse();
     String::from_utf8(out).expect("radix digits are ASCII")
-}
-
-fn datetime_report(dt: DateTime<Utc>) -> serde_json::Value {
-    serde_json::json!({
-        "unix": dt.timestamp(),
-        "unix_ms": dt.timestamp_millis(),
-        "iso8601": dt.to_rfc3339_opts(chrono::SecondsFormat::Secs, true),
-        "rfc2822": dt.to_rfc2822(),
-        "local": dt.with_timezone(&Local).to_rfc3339_opts(chrono::SecondsFormat::Secs, false),
-    })
 }
 
 pub fn run(cmd: ConverterCmd) -> Result<()> {
@@ -206,32 +190,6 @@ pub fn run(cmd: ConverterCmd) -> Result<()> {
                 .with_context(|| format!("'{raw}' is not a valid base-{from} integer"))?;
             let rendered = to_radix(value, to);
             println!("{}{rendered}", if negative { "-" } else { "" });
-        }
-        ConverterCmd::Datetime { input } => {
-            let input = input.unwrap_or_else(|| "now".to_string());
-            let raw = input.trim();
-            let dt: DateTime<Utc> = if raw.eq_ignore_ascii_case("now") {
-                Utc::now()
-            } else if let Ok(num) = raw.parse::<i64>() {
-                // Heuristic: 13+ digit magnitudes are unix milliseconds.
-                let ts = if num.abs() >= 100_000_000_000 {
-                    Utc.timestamp_millis_opt(num)
-                } else {
-                    Utc.timestamp_opt(num, 0)
-                };
-                match ts.single() {
-                    Some(dt) => dt,
-                    None => bail!("'{raw}' is out of range for a unix timestamp"),
-                }
-            } else {
-                DateTime::parse_from_rfc3339(raw)
-                    .map(|dt| dt.with_timezone(&Utc))
-                    .or_else(|_| DateTime::parse_from_rfc2822(raw).map(|dt| dt.with_timezone(&Utc)))
-                    .with_context(|| {
-                        format!("'{raw}' is not 'now', a unix timestamp, RFC 3339 or RFC 2822")
-                    })?
-            };
-            print_json(&datetime_report(dt))?;
         }
     }
     Ok(())

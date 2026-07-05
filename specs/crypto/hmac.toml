@@ -1,6 +1,6 @@
 path = "crypto hmac"
 summary = "HMAC signature of text with a secret key (md5, sha1, sha256, sha512)"
-when_to_use = "Signing or verifying webhook payloads, API request signatures."
+when_to_use = "Signing or verifying webhook payloads, API request signatures. For real secrets pass the key via --key-env NAME or --key-file PATH so it never appears in the command line; --key literals are for test values only."
 it_tools = ["hmac-generator"]
 
 [output]

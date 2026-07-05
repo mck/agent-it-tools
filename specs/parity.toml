@@ -302,7 +302,7 @@ status = "planned"
 [[upstream]]
 id = "date-time-converter"
 status = "implemented"
-tool = "converter datetime"
+tool = "datetime convert, datetime now"
 
 [[upstream]]
 id = "days-calculator"

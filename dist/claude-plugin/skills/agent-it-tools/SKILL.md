@@ -31,7 +31,6 @@ Rules:
 - `converter hex-decode`: Decode a hex string to text (0x prefix and whitespace tolerated)
 - `converter case`: Convert a string between naming cases (camel, pascal, snake, constant, kebab, train, title, dot, path, lower, upper)
 - `converter number-base`: Convert an integer between numeral bases 2-36
-- `converter datetime`: Convert a date-time (now, unix s/ms, RFC 3339, RFC 2822) into all common formats
 
 ### web
 - `web url-encode`: Percent-encode text for safe use in a URL component
@@ -49,6 +48,10 @@ Rules:
 - `development uuid`: Generate UUIDs (v4 random, v7 time-ordered, nil)
 - `development regex`: Test a regular expression against text; reports all matches with positions and named groups
 - `development diff`: Unified diff between two texts, or two files with --files
+
+### datetime
+- `datetime now`: Current time as unix seconds/ms, ISO 8601 (UTC), RFC 2822 and local time
+- `datetime convert`: Convert a timestamp (unix s/ms, RFC 3339, RFC 2822) into all common formats
 
 ## Canonical examples
 

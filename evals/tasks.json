@@ -6,8 +6,8 @@
   },
   {
     "id": "base64-decode",
-    "prompt": "Decode this base64 and give me the exact plaintext: VGhlIHF1aWNrIGJyb3duIGZveCBqdW1wcyBvdmVyIDEzIGxhenkgZG9ncy4=",
-    "expect_regex": "The quick brown fox jumps over 13 lazy dogs\\."
+    "prompt": "Decode this base64 and give me the exact plaintext: VnQzbXJhaEt5MjdWbGh4TEJvYTk=",
+    "expect_regex": "Vt3mrahKy27VlhxLBoa9"
   },
   {
     "id": "hmac",
@@ -41,8 +41,8 @@
   },
   {
     "id": "hex-decode",
-    "prompt": "Decode this hex string to text: 746f6b656e7363726970742072756c6573",
-    "expect_regex": "tokenscript rules"
+    "prompt": "Decode this hex string to text: 6d37343371663263397a37733339",
+    "expect_regex": "m743qf2c9z7s39"
   },
   {
     "id": "url-port",
