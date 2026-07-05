@@ -42,3 +42,7 @@ itself, so recall cannot masquerade as computation.
   the specs, fix the spec and re-export.
 - Watch `turns`: a small model needing >3 turns for a one-tool task usually
   means it guessed flags instead of calling `meta describe`.
+- Write `expect_regex` to tolerate answer formatting: thousands separators
+  (`2,?046`), bold markers, trailing punctuation. A correct answer failing on
+  formatting is a grader bug, and transcripts can always be re-graded offline
+  from the results directory without re-running the models.

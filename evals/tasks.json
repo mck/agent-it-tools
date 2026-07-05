@@ -57,7 +57,7 @@
   {
     "id": "subnet-hosts",
     "prompt": "How many usable hosts are in the subnet 10.44.0.0/21?",
-    "expect_regex": "2046"
+    "expect_regex": "2,?046"
   },
   {
     "id": "timezone",
