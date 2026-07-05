@@ -41,7 +41,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "exmex",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "bcrypt",
@@ -63,7 +63,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "std",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "cidr-in-cidr",
@@ -74,7 +74,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "ipnet",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "crontab-generator",
@@ -96,7 +96,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "csv",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "date-duration-calculator",
@@ -107,7 +107,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "chrono",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "date-time-converter",
@@ -129,7 +129,7 @@
   "network": false,
   "file_io": true,
   "rust_crates": "sha2 + std::fs",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "html-entities",
@@ -162,7 +162,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "ipnet",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "ip-range-to-cidr",
@@ -173,7 +173,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "ipnet",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "ipv4-subnet-calculator",
@@ -184,7 +184,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "ipnet",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "ipv6-subnet-calculator",
@@ -195,7 +195,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "ipnet",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "jq-tester",
@@ -206,7 +206,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "jaq-core",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-diff",
@@ -217,7 +217,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "json-patch",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-query",
@@ -228,7 +228,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "jaq-core + jaq-json + jaq-std",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-to-csv",
@@ -239,7 +239,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "csv",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-to-toml",
@@ -305,7 +305,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "chrono-tz",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "token-generator",
@@ -371,7 +371,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "quick-xml (serde)",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "yaml-to-json-converter",
@@ -459,7 +459,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "std (octal math)",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "color-contrast-checker",
@@ -470,7 +470,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "palette",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "color-converter",
@@ -481,7 +481,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "csscolorparser / palette",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "crc-calculator",
@@ -569,7 +569,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "ecdsa-key-pair-generator",
@@ -668,7 +668,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "flate2",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "hex-converter",
@@ -690,7 +690,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "htmd (Apache-2.0; html2md is GPL)",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "iban-validator-and-parser",
@@ -712,7 +712,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "std::net",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "ip-include-exclude",
@@ -734,7 +734,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "std::net",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "ipv4-range-expander",
@@ -756,7 +756,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "std::net",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-escaper",
@@ -767,7 +767,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-flatten-nestify",
@@ -778,7 +778,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "serde_json",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-linter",
@@ -789,7 +789,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "serde_json",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-merger",
@@ -800,7 +800,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "serde_json",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-minify",
@@ -833,7 +833,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "quick-xml",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "json-viewer",
@@ -866,7 +866,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "comrak",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "mongo-objectid-converter",
@@ -899,7 +899,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "nanoid",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "otp-code-generator-and-validator",
@@ -910,7 +910,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "totp-rs",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "parquets-reader",
@@ -965,7 +965,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "idna",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "random-numbers-generator",
@@ -1009,7 +1009,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "regex",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "slugify-string",
@@ -1053,7 +1053,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "text-statistics",
@@ -1064,7 +1064,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "unicode-segmentation",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "toml-linter",
@@ -1075,7 +1075,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "toml",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "toml-to-yaml",
@@ -1108,7 +1108,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "ulid",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "user-agent-parser",
@@ -1130,7 +1130,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "quick-xml",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "xpath-tester",
@@ -1152,7 +1152,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "yaml-merger",
@@ -1735,7 +1735,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "strsim",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "mac-address-converter",
@@ -1834,7 +1834,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "mime_guess",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "ocr-image",
@@ -2054,7 +2054,7 @@
   "network": false,
   "file_io": false,
   "rust_crates": "url",
-  "parity_status": "planned"
+  "parity_status": "implemented"
  },
  {
   "id": "url-cleaner",
