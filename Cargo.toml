@@ -32,7 +32,7 @@ uuid = { version = "1.6", features = ["v4", "v5", "v7"] }
 rand = "0.8"
 heck = "0.5"
 # Time & logic
-cron = "0.12"
+cron = "0.17"
 chrono = "0.4"
 # Web
 url = "2.5"
