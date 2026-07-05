@@ -40,7 +40,7 @@
   "agent_value": 10,
   "network": false,
   "file_io": false,
-  "rust_crates": "evalexpr",
+  "rust_crates": "exmex",
   "parity_status": "planned"
  },
  {
@@ -216,7 +216,7 @@
   "agent_value": 9,
   "network": false,
   "file_io": false,
-  "rust_crates": "serde_json + custom walk",
+  "rust_crates": "json-patch",
   "parity_status": "planned"
  },
  {
@@ -227,7 +227,7 @@
   "agent_value": 9,
   "network": false,
   "file_io": false,
-  "rust_crates": "jaq-core / serde_json",
+  "rust_crates": "jaq-core + jaq-json + jaq-std",
   "parity_status": "planned"
  },
  {
@@ -689,7 +689,7 @@
   "agent_value": 8,
   "network": false,
   "file_io": false,
-  "rust_crates": "htmd",
+  "rust_crates": "htmd (Apache-2.0; html2md is GPL)",
   "parity_status": "planned"
  },
  {

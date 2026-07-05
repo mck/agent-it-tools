@@ -18,7 +18,7 @@ Full data: [upstream-agent-value.json](upstream-agent-value.json).
 | 10 | `base64-string-converter` | implemented |  | Simply encode and decode strings into their base64 representation. |
 | 10 | `hash-text` | implemented |  | Hash a text string using the function you need : MD5, SHA1, SHA256, SHA224, SHA5 |
 | 10 | `hmac-generator` | implemented |  | Computes a hash-based message authentication code (HMAC) using a secret key and  |
-| 10 | `math-evaluator` | planned | evalexpr | A calculator for evaluating mathematical expressions. You can use functions like |
+| 10 | `math-evaluator` | planned | exmex | A calculator for evaluating mathematical expressions. You can use functions like |
 | 9 | `bcrypt` | implemented |  | Hash and compare text string using bcrypt. Bcrypt is a password-hashing function |
 | 9 | `binary-calculator` | planned | std | Calculate bitwise/binary operations (AND, OR, XOR, NOT, shifts) between two numb |
 | 9 | `cidr-in-cidr` | planned | ipnet | Given a CIDR/IP Range/Wildcard IP/IP Mask, tell if a given IPv4-6/Range/CIDR/Wil |
@@ -150,7 +150,7 @@ covers several upstream ids.
 | `web url-build` | url-builder | url |
 | `web punycode` | punycode-converter | idna |
 | `web color` | color-converter, color-contrast-checker | csscolorparser, palette |
-| `development calc` | math-evaluator | evalexpr |
+| `development calc` | math-evaluator | exmex |
 | `development bitwise` | binary-calculator | std |
 | `development chmod` | chmod-calculator | std |
 | `development ulid` / `nanoid` | ulid-generator, nanoid-generator | ulid, nanoid |
