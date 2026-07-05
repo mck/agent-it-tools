@@ -15,15 +15,18 @@ developer utility suite: hashing, HMAC, encodings, data-format conversion,
 JWT/URL/user-agent parsing, cron, regex, diffs. Every answer is computed, the
 same way, every time.
 
-Measured on the smallest current Claude model (Haiku), same fifteen tasks,
-identical prompts, three runs each, and a task only passes if ALL runs pass:
+The proof: we gave the smallest current Claude model (Haiku) fifteen everyday
+developer tasks (hash this string, decode this base64, what time is this
+timestamp in Tokyo, ...) and asked each one three times. A task only counts
+as solved if the answer is correct **all three times**, because an answer
+that is only sometimes right cannot be trusted even once.
 
-| | bare model | model + ait |
+| | Haiku alone | Haiku + ait |
 |---|---|---|
-| reliability score | 9/15 | **15/15** (45/45 runs) |
-| sha256 / HMAC | 0/3 each, fabricated hex | 3/3, computed |
-| base64, slug, timezone, number base | coin-flips (1/3 to 2/3) | 3/3 |
-| cost per task | spiky | ~$0.016, flat |
+| tasks solved reliably (3 of 3 attempts correct) | 9 of 15 | **15 of 15** |
+| hashes (sha256, HMAC) | wrong every attempt, invented plausible-looking hex | correct every attempt |
+| base64, slugs, timezones, number bases | right on 1 or 2 attempts out of 3, never all 3 | correct every attempt |
+| cost per task | $0.005 to $0.48 depending on how long it flailed | ~$0.016, every time |
 
 <sub>`./evals/run.sh haiku both 3` on 2026-07-05, random non-memorizable
 fixtures, graded against precomputed ground truth; reproduce it yourself with
