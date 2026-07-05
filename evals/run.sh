@@ -49,13 +49,18 @@ run_arm() {
         local dir="$WORK/$arm" path_prefix=""
         [ "$arm" = "skill" ] && path_prefix="$BIN_DIR:"
         local out_file="$RESULTS/$arm-$id.json"
+        # --setting-sources project keeps the user's global ~/.claude config
+        # (permissions, skills, CLAUDE.md) out of the measurement.
+        local tool_flags=(--allowedTools "Bash(agent-it-tools:*),Skill")
+        [ "$arm" = "bare" ] && tool_flags=(--disallowedTools "Bash,Skill")
         (
             cd "$dir"
             PATH="${path_prefix}${PATH}" claude -p "$prompt" \
                 --model "$MODEL" \
                 --output-format json \
                 --max-turns 8 \
-                --allowedTools "Bash(agent-it-tools:*),Skill" \
+                --setting-sources project \
+                "${tool_flags[@]}" \
                 </dev/null >"$out_file" 2>"$RESULTS/$arm-$id.err" || true
         )
         local result turns ms cost verdict

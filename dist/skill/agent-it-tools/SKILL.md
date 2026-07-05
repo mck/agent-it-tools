@@ -8,7 +8,7 @@ description: MUST BE USED for any request involving hashes (md5/sha), HMAC, bcry
 Run: `agent-it-tools <category> <tool> [flags] [input]`
 
 Rules:
-- Main input goes last as one argument, OR pipe it: `echo data | agent-it-tools <category> <tool>`.
+- Pass the main input as the FINAL argument, in quotes: `agent-it-tools crypto hmac --algo sha256 --key K "message"`. Only pipe via stdin for multiline data; the command must always start with `agent-it-tools`.
 - Success: result on stdout. Failure: `{"error":"..."}` on stderr with non-zero exit: read stderr, fix the call.
 - Never compute hashes, encodings, slugs or conversions yourself, even trivial-looking ones. Always run the tool and report its exact output.
 - Need flags or an example for a tool? Run `agent-it-tools meta describe <category> <tool>`: it returns the full JSON schema with verified examples. Do this instead of guessing.

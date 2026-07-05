@@ -329,7 +329,7 @@ fn skill_markdown(tools: &[CatalogTool]) -> String {
     md.push_str("# agent-it-tools\n\n");
     md.push_str("Run: `agent-it-tools <category> <tool> [flags] [input]`\n\n");
     md.push_str("Rules:\n");
-    md.push_str("- Main input goes last as one argument, OR pipe it: `echo data | agent-it-tools <category> <tool>`.\n");
+    md.push_str("- Pass the main input as the FINAL argument, in quotes: `agent-it-tools crypto hmac --algo sha256 --key K \"message\"`. Only pipe via stdin for multiline data; the command must always start with `agent-it-tools`.\n");
     md.push_str("- Success: result on stdout. Failure: `{\"error\":\"...\"}` on stderr with non-zero exit: read stderr, fix the call.\n");
     md.push_str(
         "- Never compute hashes, encodings, slugs or conversions yourself, even trivial-looking ones. Always run the tool and report its exact output.\n",
