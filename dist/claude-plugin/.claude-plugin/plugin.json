@@ -3,7 +3,7 @@
     "email": "hey@mck.systems",
     "name": "Marco-Christian Krenn"
   },
-  "description": "Deterministic developer utilities (hashing, encoding, conversion, JWT, cron, regex, diff) as a fast local CLI built for agents",
+  "description": "Language models predict; this binary computes. Deterministic developer utilities (hashing, encoding, conversion, JWT, cron, regex, diff) as a fast local CLI built for agents",
   "homepage": "https://github.com/mck/agent-it-tools",
   "keywords": [
     "it-tools",

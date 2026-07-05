@@ -408,7 +408,7 @@ fn plugin_manifest() -> serde_json::Value {
     serde_json::json!({
         "name": "agent-it-tools",
         "version": env!("CARGO_PKG_VERSION"),
-        "description": "Deterministic developer utilities (hashing, encoding, conversion, JWT, cron, regex, diff) as a fast local CLI built for agents",
+        "description": "Language models predict; this binary computes. Deterministic developer utilities (hashing, encoding, conversion, JWT, cron, regex, diff) as a fast local CLI built for agents",
         "author": { "name": "Marco-Christian Krenn", "email": "hey@mck.systems" },
         "homepage": "https://github.com/mck/agent-it-tools",
         "keywords": ["it-tools", "cli", "utilities", "hashing", "encoding"]

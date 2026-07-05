@@ -1,8 +1,33 @@
 # agent-it-tools
 
-A single static Rust binary that ports the utility suite of the
-[it-tools](https://github.com/sharevb/it-tools) developer dashboard to the
-command line, designed for **AI agent execution layers** rather than humans.
+**Language models predict. This binary computes.**
+
+Ask a model for a sha256 digest, an HMAC signature, or a base64 decode and it
+will answer fluently, whether or not the answer is real. Sometimes it is. And
+for an agent pipeline, *sometimes* is just wrong: a fabricated digest is
+byte-for-byte indistinguishable from a correct one to every downstream step.
+Inconsistent capability is not a weaker form of capability. It is noise
+wearing the costume of signal.
+
+`agent-it-tools` is a single static Rust binary that gives agents the
+deterministic version of the [it-tools](https://github.com/sharevb/it-tools)
+developer utility suite: hashing, HMAC, encodings, data-format conversion,
+JWT/URL/user-agent parsing, cron, regex, diffs. Every answer is computed, the
+same way, every time.
+
+Measured on the smallest current Claude model (Haiku), same ten tasks,
+identical prompts:
+
+| | bare model | model + agent-it-tools |
+|---|---|---|
+| score | 8/10, unstable across runs | **10/10, stable** |
+| sha256 / HMAC | confidently fabricated hex | computed |
+| cost per task | comparable | ~$0.02 |
+
+The bare 8/10 flatters the model: outside a few memorized facts those passes
+are coin-flips that change from run to run (see [`evals/`](evals/README.md)).
+The tool arm's only failure mode is not invoking the tool, and the shipped
+skill file exists to drive exactly that to zero.
 
 ## Agent-first I/O contract
 
