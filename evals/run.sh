@@ -16,7 +16,7 @@
 # config (permissions, skills, CLAUDE.md) cannot leak into the measurement.
 #
 # Requires: claude CLI, jq, a release build, and exported artifacts:
-#   cargo build --release && ./target/release/agent-it-tools meta export --target skill
+#   cargo build --release && ./target/release/ait meta export --target skill
 
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -28,8 +28,8 @@ RUNS="${3:-1}"
 BIN_DIR="$ROOT/target/release"
 SKILL_SRC="$ROOT/dist/skill/agent-it-tools"
 
-[ -x "$BIN_DIR/agent-it-tools" ] || { echo "missing release binary - run: cargo build --release" >&2; exit 1; }
-[ -f "$SKILL_SRC/SKILL.md" ] || { echo "missing skill - run: ./target/release/agent-it-tools meta export --target skill" >&2; exit 1; }
+[ -x "$BIN_DIR/ait" ] || { echo "missing release binary - run: cargo build --release" >&2; exit 1; }
+[ -f "$SKILL_SRC/SKILL.md" ] || { echo "missing skill - run: ./target/release/ait meta export --target skill" >&2; exit 1; }
 
 WORK="$(mktemp -d /tmp/agent-it-tools-eval.XXXXXX)"
 RESULTS="$WORK/results"
@@ -53,7 +53,7 @@ run_arm() {
         total=$((total + 1))
         local dir="$WORK/$arm" path_prefix=""
         [ "$arm" = "skill" ] && path_prefix="$BIN_DIR:"
-        local tool_flags=(--allowedTools "Bash(agent-it-tools:*),Skill")
+        local tool_flags=(--allowedTools "Bash(ait:*),Skill")
         [ "$arm" = "bare" ] && tool_flags=(--disallowedTools "Bash,Skill")
         local ok=0 r out_file
         for ((r = 1; r <= RUNS; r++)); do

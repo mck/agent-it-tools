@@ -9,7 +9,7 @@ byte-for-byte indistinguishable from a correct one to every downstream step.
 Inconsistent capability is not a weaker form of capability. It is noise
 wearing the costume of signal.
 
-`agent-it-tools` is a single static Rust binary that gives agents the
+`agent-it-tools` (shipped as the `ait` binary) is a single static Rust binary that gives agents the
 deterministic version of the [it-tools](https://github.com/sharevb/it-tools)
 developer utility suite: hashing, HMAC, encodings, data-format conversion,
 JWT/URL/user-agent parsing, cron, regex, diffs. Every answer is computed, the
@@ -59,8 +59,8 @@ OpenAI function-calling manifest, `dist/catalog.json` feeds anything else.
   when omitted, it reads the full **stdin** pipe instead:
 
 ```sh
-agent-it-tools crypto hash --algo sha256 "hello"
-cat payload.json | agent-it-tools converter data --from json --to yaml
+ait crypto hash --algo sha256 "hello"
+cat payload.json | ait data convert --from json --to yaml
 ```
 
 ## Architecture: specs are the source of truth
@@ -85,10 +85,10 @@ The binary is therefore **self-describing** - an agent can discover everything
 at runtime without a bloated prompt:
 
 ```sh
-agent-it-tools meta catalog                    # full machine-readable catalog (JSON)
-agent-it-tools meta describe converter case    # one tool: schema + verified examples
-agent-it-tools meta export --target all       # compile dist/ artifacts
-agent-it-tools meta parity                    # coverage vs upstream it-tools (456 tools)
+ait meta catalog                    # full machine-readable catalog (JSON)
+ait meta describe text case      # one tool: schema + verified examples
+ait meta export --target all       # compile dist/ artifacts
+ait meta parity                    # coverage vs upstream it-tools (456 tools)
 ```
 
 Three invariants are enforced by `cargo test` (see `tests/spec_golden.rs`):
@@ -107,7 +107,7 @@ from what the binary actually does.
 2. Write `specs/<category>/<tool>.toml` with at least one example.
 3. Flip the upstream id in `specs/parity.toml` from `planned` to `implemented`.
 4. `cargo test` - the drift/golden/parity suite tells you what's missing.
-5. `agent-it-tools meta export` to regenerate `dist/`.
+5. `ait meta export` to regenerate `dist/`.
 
 ## Distribution artifacts (`dist/`, generated)
 
@@ -133,9 +133,10 @@ PATH + skill installed) - and grades deterministic expected answers. See
 
 ## Command taxonomy
 
-`agent-it-tools <category> <tool> [args/flags]` - mirrors the it-tools layout.
-62 tools across `crypto`, `converter`, `web`, `development`, `datetime`,
-`network`, `text` (run `agent-it-tools meta catalog` for the authoritative
+`ait <category> <tool> [args/flags]` - the category is the noun you operate on.
+60 tools across 17 noun categories (`json`, `data`, `encode`, `decode`, `url`,
+`jwt`, `crypto`, `generate`, `text`, `regex`, `time`, `http`, `color`,
+`markdown`, `network`, `math`, `unix`; run `ait meta catalog` for the authoritative
 list), covering 73 upstream it-tools; `specs/parity.toml` tracks the rest.
 
 ## Build

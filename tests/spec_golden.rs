@@ -27,7 +27,7 @@ fn every_tool_has_a_spec_and_vice_versa() {
 #[test]
 fn spec_examples_run_and_match() {
     let specs = meta::load_specs().unwrap();
-    let bin = env!("CARGO_BIN_EXE_agent-it-tools");
+    let bin = env!("CARGO_BIN_EXE_ait");
 
     for (path, spec) in &specs {
         assert!(

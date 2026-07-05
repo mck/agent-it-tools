@@ -1,0 +1,12 @@
+path = "encode punycode"
+summary = "Convert an internationalized domain name to ASCII punycode (IDNA)"
+when_to_use = "Preparing unicode domains for DNS, certificates or URLs."
+it_tools = ["punycode-converter"]
+
+[output]
+kind = "text"
+description = "The xn-- encoded domain"
+
+[[examples]]
+argv = ["encode", "punycode", "münchen.de"]
+stdout = "xn--mnchen-3ya.de"

@@ -1,0 +1,16 @@
+path = "encode base64"
+summary = "Encode text to Base64 (--url-safe for the URL alphabet without padding)"
+when_to_use = "Any Base64 encoding. Never encode Base64 mentally."
+it_tools = ["base64-string-converter"]
+
+[output]
+kind = "text"
+description = "Base64 string, single line"
+
+[[examples]]
+argv = ["encode", "base64", "hello world"]
+stdout = "aGVsbG8gd29ybGQ="
+
+[[examples]]
+argv = ["encode", "base64", "--url-safe", "hello world"]
+stdout = "aGVsbG8gd29ybGQ"

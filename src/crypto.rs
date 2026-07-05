@@ -2,7 +2,6 @@ use crate::util::{print_json, read_input};
 use anyhow::{bail, Context, Result};
 use clap::Subcommand;
 use md5::Md5;
-use rand::Rng;
 use sha1::Sha1;
 use sha2::{Digest, Sha224, Sha256, Sha384, Sha512};
 use std::path::PathBuf;
@@ -37,27 +36,6 @@ pub enum CryptoCmd {
         key_file: Option<PathBuf>,
         /// Input text (reads stdin if omitted)
         input: Option<String>,
-    },
-    /// Generate random token strings
-    Token {
-        /// Token length
-        #[arg(short, long, default_value_t = 64)]
-        length: usize,
-        /// Include symbols (!@#$%^&*()-_=+)
-        #[arg(long)]
-        symbols: bool,
-        /// Exclude digits
-        #[arg(long)]
-        no_numbers: bool,
-        /// Exclude uppercase letters
-        #[arg(long)]
-        no_uppercase: bool,
-        /// Exclude lowercase letters
-        #[arg(long)]
-        no_lowercase: bool,
-        /// Number of tokens to generate (one per line)
-        #[arg(short, long, default_value_t = 1)]
-        count: usize,
     },
     /// Hash a password with bcrypt
     BcryptHash {
@@ -159,42 +137,6 @@ pub fn run(cmd: CryptoCmd) -> Result<()> {
                 ),
             };
             println!("{sig}");
-        }
-        CryptoCmd::Token {
-            length,
-            symbols,
-            no_numbers,
-            no_uppercase,
-            no_lowercase,
-            count,
-        } => {
-            let mut charset = String::new();
-            if !no_lowercase {
-                charset.push_str("abcdefghijklmnopqrstuvwxyz");
-            }
-            if !no_uppercase {
-                charset.push_str("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-            }
-            if !no_numbers {
-                charset.push_str("0123456789");
-            }
-            if symbols {
-                charset.push_str("!@#$%^&*()-_=+");
-            }
-            if charset.is_empty() {
-                bail!("token charset is empty: at least one character class must be enabled");
-            }
-            if length == 0 {
-                bail!("token length must be greater than zero");
-            }
-            let chars: Vec<char> = charset.chars().collect();
-            let mut rng = rand::thread_rng();
-            for _ in 0..count {
-                let token: String = (0..length)
-                    .map(|_| chars[rng.gen_range(0..chars.len())])
-                    .collect();
-                println!("{token}");
-            }
         }
         CryptoCmd::BcryptHash { cost, input } => {
             let password = read_input(input)?;

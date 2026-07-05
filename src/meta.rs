@@ -19,14 +19,9 @@ static SPEC_DIR: Dir<'_> = include_dir!("$CARGO_MANIFEST_DIR/specs");
 
 /// Categories that carry user-facing tools. `meta` itself is infrastructure
 /// and intentionally excluded from the catalog.
-const TOOL_CATEGORIES: [&str; 7] = [
-    "crypto",
-    "converter",
-    "web",
-    "development",
-    "datetime",
-    "network",
-    "text",
+const TOOL_CATEGORIES: [&str; 17] = [
+    "json", "data", "encode", "decode", "url", "jwt", "crypto", "generate", "text", "regex",
+    "time", "http", "color", "markdown", "network", "math", "unix",
 ];
 
 #[derive(Subcommand)]
@@ -182,6 +177,9 @@ pub struct CatalogTool {
     pub examples: Vec<Example>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub it_tools: Vec<String>,
+    /// Alternative tool names accepted on the command line
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub aliases: Vec<String>,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -290,6 +288,7 @@ pub fn build_catalog() -> Result<Vec<CatalogTool>> {
                 args,
                 examples: spec.examples.clone(),
                 it_tools: spec.it_tools.clone(),
+                aliases: leaf.get_visible_aliases().map(str::to_string).collect(),
             });
         }
     }
@@ -334,16 +333,16 @@ fn skill_markdown(tools: &[CatalogTool]) -> String {
     let mut md = String::new();
     md.push_str("---\nname: agent-it-tools\n");
     md.push_str("description: MUST BE USED for any request involving hashes (md5/sha, files too), HMAC, TOTP codes, bcrypt, random tokens, UUIDs/ULIDs/nanoids, base64, hex, gzip, URL/HTML encoding, punycode, JSON/YAML/TOML/XML/CSV conversion, jq queries, JSON diff/merge/flatten/lint, math evaluation, bitwise ops, number bases, chmod, case conversion, string escaping, unix timestamps, timezones, date arithmetic, JWT decoding, URL parsing or building, user-agent parsing, slugs, Markdown/HTML conversion, MIME types, CSS colors and WCAG contrast, cron expressions, regex testing, text diffs, text statistics, string similarity, subnets/CIDR math, IP conversion, or masking sensitive data. Never answer these from memory, even when the answer seems obvious. Language models get computation and encodings subtly wrong; this local CLI computes them exactly.\n---\n\n");
-    md.push_str("# agent-it-tools\n\n");
-    md.push_str("Run: `agent-it-tools <category> <tool> [flags] [input]`\n\n");
-    md.push_str("Setup (once): if `agent-it-tools` is not on PATH, install it with `bash \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\"` (downloads the release binary for this platform), or `cargo install --git https://github.com/mck/agent-it-tools`.\n\n");
+    md.push_str("# agent-it-tools (binary: ait)\n\n");
+    md.push_str("Run: `ait <category> <tool> [flags] [input]`\n\n");
+    md.push_str("Setup (once): if `ait` is not on PATH, install it with `bash \"$CLAUDE_PLUGIN_ROOT/scripts/install.sh\"` (downloads the release binary for this platform), or `cargo install --git https://github.com/mck/agent-it-tools`.\n\n");
     md.push_str("Rules:\n");
-    md.push_str("- Pass the main input as the FINAL argument, in quotes: `agent-it-tools crypto hmac --algo sha256 --key K \"message\"`. Only pipe via stdin for multiline data; the command must always start with `agent-it-tools`.\n");
+    md.push_str("- Pass the main input as the FINAL argument, in quotes: `ait crypto hmac --algo sha256 --key K \"message\"`. Only pipe via stdin for multiline data; the command must always start with `ait`.\n");
     md.push_str("- Success: result on stdout. Failure: `{\"error\":\"...\"}` on stderr with non-zero exit: read stderr, fix the call.\n");
     md.push_str(
         "- Never compute hashes, encodings, slugs or conversions yourself, even trivial-looking ones. Always run the tool and report its exact output.\n",
     );
-    md.push_str("- Need flags or an example for a tool? Run `agent-it-tools meta describe <category> <tool>`: it returns the full JSON schema with verified examples. Do this instead of guessing.\n\n");
+    md.push_str("- Need flags or an example for a tool? Run `ait meta describe <category> <tool>`: it returns the full JSON schema with verified examples. Do this instead of guessing.\n\n");
     md.push_str("## Tools\n");
     for cat in TOOL_CATEGORIES {
         let Some(list) = by_cat.get(cat) else {
@@ -351,17 +350,21 @@ fn skill_markdown(tools: &[CatalogTool]) -> String {
         };
         md.push_str(&format!("\n### {cat}\n"));
         for t in list {
-            md.push_str(&format!("- `{}`: {}\n", t.path, t.summary));
+            let alias = if t.aliases.is_empty() {
+                String::new()
+            } else {
+                format!(" (alias: {})", t.aliases.join(", "))
+            };
+            md.push_str(&format!("- `{}`{}: {}\n", t.path, alias, t.summary));
         }
     }
     md.push_str("\n## Canonical examples\n\n```sh\n");
-    md.push_str("agent-it-tools crypto hash --algo sha256 \"hello\"\n");
-    md.push_str("cat data.json | agent-it-tools converter data --from json --to yaml\n");
-    md.push_str(
-        "agent-it-tools web jwt \"$TOKEN\"          # decode header/payload, no verification\n",
-    );
-    md.push_str("agent-it-tools development cron \"*/15 9-17 * * 1-5\" --count 3\n");
-    md.push_str("agent-it-tools meta describe converter case   # full schema for one tool\n");
+    md.push_str("ait crypto hash --algo sha256 \"hello\"\n");
+    md.push_str("cat data.json | ait data convert --from json --to yaml\n");
+    md.push_str("ait json query --filter '.items[].name' \"$JSON\"\n");
+    md.push_str("ait jwt decode \"$TOKEN\"        # header/payload, no verification\n");
+    md.push_str("ait time cron \"*/15 9-17 * * 1-5\" --count 3\n");
+    md.push_str("ait meta describe text case    # full schema for one tool\n");
     md.push_str("```\n");
     md
 }
@@ -445,9 +448,7 @@ pub fn run(cmd: MetaCmd) -> Result<()> {
             let tools = build_catalog()?;
             match tools.iter().find(|t| t.path == path) {
                 Some(t) => println!("{}", serde_json::to_string_pretty(t)?),
-                None => bail!(
-                    "unknown tool '{path}': run 'agent-it-tools meta catalog' for the full list"
-                ),
+                None => bail!("unknown tool '{path}': run 'ait meta catalog' for the full list"),
             }
         }
         MetaCmd::Export { target, out } => {

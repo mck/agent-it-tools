@@ -1,0 +1,16 @@
+path = "json escape"
+summary = "Escape text as a JSON/code string literal, or unescape with --unescape"
+when_to_use = "Embedding arbitrary text in JSON/code, or decoding escaped literals. Escaped output includes the surrounding quotes."
+it_tools = ["string-escaper", "json-escaper"]
+
+[output]
+kind = "text"
+description = "The escaped literal (quoted) or the unescaped text"
+
+[[examples]]
+argv = ["json", "escape", "say \"hi\" twice"]
+stdout = '"say \"hi\" twice"'
+
+[[examples]]
+argv = ["json", "escape", "--unescape", "\"tab\\there\""]
+stdout = "tab\there"

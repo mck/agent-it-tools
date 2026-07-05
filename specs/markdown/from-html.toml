@@ -1,0 +1,15 @@
+path = "markdown from-html"
+summary = "Convert HTML to Markdown"
+when_to_use = "Turning web content or rich-text HTML into editable Markdown."
+it_tools = ["html-to-markdown"]
+
+[output]
+kind = "text"
+description = "The Markdown document"
+
+[[examples]]
+argv = ["markdown", "from-html", "<h1>Hi</h1><ul><li>a</li></ul>"]
+stdout = """
+# Hi
+
+*   a"""

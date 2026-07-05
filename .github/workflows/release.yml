@@ -41,7 +41,7 @@ jobs:
           targets: ${{ matrix.target }}
       - uses: taiki-e/upload-rust-binary-action@v1
         with:
-          bin: agent-it-tools
+          bin: ait
           target: ${{ matrix.target }}
           tar: unix
           zip: windows

@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Install the agent-it-tools release binary for this platform.
+# Install the ait release binary (agent-it-tools) for this platform.
 #
 # Usage: bash install.sh [version]   (default: latest release)
-# Destination: ~/.local/bin/agent-it-tools
+# Destination: ~/.local/bin/ait
 #
 # Prefers `gh release download` (works for private repos with gh auth),
 # falls back to anonymous curl from the public release URL.
@@ -13,8 +13,8 @@ REPO="mck/agent-it-tools"
 VERSION="${1:-latest}"
 DEST_DIR="${AGENT_IT_TOOLS_BIN:-$HOME/.local/bin}"
 
-if command -v agent-it-tools >/dev/null 2>&1 && [ "$VERSION" = "latest" ]; then
-    echo "already installed: $(command -v agent-it-tools) ($(agent-it-tools --version))"
+if command -v ait >/dev/null 2>&1 && [ "$VERSION" = "latest" ]; then
+    echo "already installed: $(command -v ait) ($(ait --version))"
     exit 0
 fi
 
@@ -29,7 +29,7 @@ case "$(uname -m)" in
     *) echo '{"error":"unsupported architecture"}' >&2; exit 1 ;;
 esac
 target="${arch}-${os}"
-asset="agent-it-tools-${target}.tar.gz"
+asset="ait-${target}.tar.gz"
 
 tmp="$(mktemp -d)"
 trap 'rm -rf "$tmp"' EXIT
@@ -51,8 +51,8 @@ fi
 
 tar -xzf "$tmp/$asset" -C "$tmp"
 mkdir -p "$DEST_DIR"
-install -m 755 "$tmp/agent-it-tools" "$DEST_DIR/agent-it-tools"
-echo "installed: $DEST_DIR/agent-it-tools ($("$DEST_DIR/agent-it-tools" --version))"
+install -m 755 "$tmp/ait" "$DEST_DIR/ait"
+echo "installed: $DEST_DIR/ait ($("$DEST_DIR/ait" --version))"
 
 case ":$PATH:" in
     *":$DEST_DIR:"*) ;;

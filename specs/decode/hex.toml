@@ -1,0 +1,12 @@
+path = "decode hex"
+summary = "Decode a hex string to text (0x prefix and whitespace tolerated)"
+when_to_use = "Hex-to-text conversion. Errors if the bytes are not valid UTF-8 text."
+it_tools = ["hex-converter"]
+
+[output]
+kind = "text"
+description = "The decoded text"
+
+[[examples]]
+argv = ["decode", "hex", "68 65 6c 6c 6f"]
+stdout = "hello"

@@ -1,0 +1,12 @@
+path = "url decode"
+summary = "Decode a percent-encoded URL component"
+when_to_use = "Reading values out of query strings or encoded paths."
+it_tools = ["url-encoder"]
+
+[output]
+kind = "text"
+description = "The decoded text"
+
+[[examples]]
+argv = ["url", "decode", "hello%20world%26x%3D1"]
+stdout = "hello world&x=1"

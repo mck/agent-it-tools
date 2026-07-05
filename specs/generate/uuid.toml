@@ -1,0 +1,16 @@
+path = "generate uuid"
+summary = "Generate UUIDs (v4 random, v7 time-ordered, nil)"
+when_to_use = "Any UUID need. Never invent UUIDs yourself - made-up UUIDs are not random and often malformed."
+it_tools = ["uuid-generator"]
+
+[output]
+kind = "text"
+description = "One UUID per line, lowercase hyphenated"
+
+[[examples]]
+argv = ["generate", "uuid", "--version", "v4"]
+stdout_regex = "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+
+[[examples]]
+argv = ["generate", "uuid", "--version", "nil"]
+stdout = "00000000-0000-0000-0000-000000000000"

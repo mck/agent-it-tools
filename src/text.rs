@@ -1,10 +1,29 @@
 use crate::util::{print_json, read_input};
-use anyhow::Result;
+use anyhow::{bail, Context, Result};
 use clap::Subcommand;
+use heck::{
+    ToKebabCase, ToLowerCamelCase, ToShoutySnakeCase, ToSnakeCase, ToTitleCase, ToTrainCase,
+    ToUpperCamelCase,
+};
+use similar::TextDiff;
 use unicode_segmentation::UnicodeSegmentation;
 
 #[derive(Subcommand)]
 pub enum TextCmd {
+    /// Convert a string between naming cases
+    Case {
+        /// Target case: camel | pascal | snake | constant | kebab | train | title | dot | path | lower | upper
+        #[arg(short, long)]
+        to: String,
+        /// Input text (reads stdin if omitted)
+        input: Option<String>,
+    },
+    /// Turn any string into a URL-safe slug (ASCII, lowercase, hyphen-separated)
+    #[command(visible_alias = "slug")]
+    Slugify {
+        /// Input text (reads stdin if omitted)
+        input: Option<String>,
+    },
     /// Count characters, words, lines and bytes of a text (JSON)
     Stats {
         /// Input text (reads stdin if omitted)
@@ -25,10 +44,47 @@ pub enum TextCmd {
         /// Input text (reads stdin if omitted)
         input: Option<String>,
     },
+    /// Compute a unified diff between two texts or files
+    Diff {
+        /// Old text, or a file path with --files
+        old: String,
+        /// New text, or a file path with --files
+        new: String,
+        /// Treat the two arguments as file paths
+        #[arg(long)]
+        files: bool,
+        /// Lines of context around changes
+        #[arg(short, long, default_value_t = 3)]
+        context: usize,
+    },
 }
 
 pub fn run(cmd: TextCmd) -> Result<()> {
     match cmd {
+        TextCmd::Case { to, input } => {
+            let input = read_input(input)?;
+            let out = match to.to_lowercase().as_str() {
+                "camel" => input.to_lower_camel_case(),
+                "pascal" => input.to_upper_camel_case(),
+                "snake" => input.to_snake_case(),
+                "constant" | "shouty" => input.to_shouty_snake_case(),
+                "kebab" => input.to_kebab_case(),
+                "train" => input.to_train_case(),
+                "title" => input.to_title_case(),
+                "dot" => input.to_snake_case().replace('_', "."),
+                "path" => input.to_snake_case().replace('_', "/"),
+                "lower" => input.to_lowercase(),
+                "upper" => input.to_uppercase(),
+                other => bail!(
+                    "unsupported case: {other} (expected camel, pascal, snake, constant, kebab, train, title, dot, path, lower or upper)"
+                ),
+            };
+            println!("{out}");
+        }
+        TextCmd::Slugify { input } => {
+            let input = read_input(input)?;
+            println!("{}", slug::slugify(input));
+        }
         TextCmd::Stats { input } => {
             let input = read_input(input)?;
             let words = input.unicode_words().count();
@@ -79,10 +135,10 @@ pub fn run(cmd: TextCmd) -> Result<()> {
             let mut masked = input;
             let mut counts = serde_json::Map::new();
             for (label, pattern) in patterns {
-                let re = regex::Regex::new(pattern).expect("static patterns are valid");
+                let re = ::regex::Regex::new(pattern).expect("static patterns are valid");
                 let mut n = 0usize;
                 masked = re
-                    .replace_all(&masked, |_: &regex::Captures| {
+                    .replace_all(&masked, |_: &::regex::Captures| {
                         n += 1;
                         replacement.clone()
                     })
@@ -95,6 +151,32 @@ pub fn run(cmd: TextCmd) -> Result<()> {
                 "masked": masked,
                 "found": counts,
             }))?;
+        }
+        TextCmd::Diff {
+            old,
+            new,
+            files,
+            context,
+        } => {
+            let (old_text, new_text, old_label, new_label) = if files {
+                (
+                    std::fs::read_to_string(&old)
+                        .with_context(|| format!("cannot read file '{old}'"))?,
+                    std::fs::read_to_string(&new)
+                        .with_context(|| format!("cannot read file '{new}'"))?,
+                    old.clone(),
+                    new.clone(),
+                )
+            } else {
+                (old, new, "old".to_string(), "new".to_string())
+            };
+            let diff = TextDiff::from_lines(&old_text, &new_text);
+            print!(
+                "{}",
+                diff.unified_diff()
+                    .context_radius(context)
+                    .header(&old_label, &new_label)
+            );
         }
     }
     Ok(())

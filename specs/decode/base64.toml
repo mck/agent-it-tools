@@ -1,0 +1,12 @@
+path = "decode base64"
+summary = "Decode Base64 to text (standard and URL-safe alphabets both accepted)"
+when_to_use = "Any Base64 decoding. Never decode Base64 mentally - models get this wrong. Errors if the payload is not valid UTF-8 text."
+it_tools = ["base64-string-converter"]
+
+[output]
+kind = "text"
+description = "The decoded text"
+
+[[examples]]
+argv = ["decode", "base64", "aGVsbG8gd29ybGQ="]
+stdout = "hello world"

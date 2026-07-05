@@ -1,0 +1,16 @@
+path = "http mime"
+summary = "Look up the MIME type for a file name/extension, or extensions for a MIME type"
+when_to_use = "Setting Content-Type headers or mapping uploads. Input with a '/' is treated as a MIME type."
+it_tools = ["mime-types"]
+
+[output]
+kind = "json"
+description = "{input, mime} or {mime, extensions}"
+
+[[examples]]
+argv = ["http", "mime", "photo.avif"]
+stdout = """
+{
+  "input": "photo.avif",
+  "mime": "image/avif"
+}"""

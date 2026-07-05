@@ -1,0 +1,12 @@
+path = "generate nanoid"
+summary = "Generate Nano IDs (URL-safe random identifiers, default length 21)"
+when_to_use = "Compact random IDs for URLs and keys. Never invent random IDs yourself."
+it_tools = ["nanoid-generator"]
+
+[output]
+kind = "text"
+description = "One Nano ID per line (A-Za-z0-9_-)"
+
+[[examples]]
+argv = ["generate", "nanoid", "--length", "12"]
+stdout_regex = "^[A-Za-z0-9_-]{12}$"

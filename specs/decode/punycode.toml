@@ -1,0 +1,12 @@
+path = "decode punycode"
+summary = "Convert an ASCII punycode domain back to unicode"
+when_to_use = "Reading xn-- domains from certificates, DNS or logs."
+it_tools = ["punycode-converter"]
+
+[output]
+kind = "text"
+description = "The unicode domain"
+
+[[examples]]
+argv = ["decode", "punycode", "xn--mnchen-3ya.de"]
+stdout = "münchen.de"

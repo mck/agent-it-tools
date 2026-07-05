@@ -1,0 +1,20 @@
+path = "json query"
+summary = "Run a jq filter on JSON input (full jq language via the jaq engine)"
+when_to_use = "Extracting values from large JSON instead of reading the whole document. One result prints pretty; multiple results print one compact JSON per line."
+it_tools = ["json-query", "jq-tester"]
+
+[output]
+kind = "json"
+description = "The filter's output value(s)"
+
+[[examples]]
+argv = ["json", "query", "--filter", ".items[].name"]
+stdin = '{"items":[{"name":"a","n":1},{"name":"b","n":2}]}'
+stdout = """
+"a"
+"b\""""
+
+[[examples]]
+argv = ["json", "query", "--filter", "[.items[] | . * 2] | add"]
+stdin = '{"items":[1,2,3]}'
+stdout = "12"

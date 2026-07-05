@@ -1,0 +1,12 @@
+path = "url encode"
+summary = "Percent-encode text for safe use in a URL component"
+when_to_use = "Building query strings or path segments from arbitrary text."
+it_tools = ["url-encoder"]
+
+[output]
+kind = "text"
+description = "Percent-encoded string, single line"
+
+[[examples]]
+argv = ["url", "encode", "hello world&x=1"]
+stdout = "hello%20world%26x%3D1"

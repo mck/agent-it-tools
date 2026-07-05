@@ -1,0 +1,12 @@
+path = "url build"
+summary = "Build a URL from a base, path, query parameters and fragment with correct encoding"
+when_to_use = "Constructing URLs with arbitrary parameter values; never hand-concatenate query strings."
+it_tools = ["url-builder"]
+
+[output]
+kind = "text"
+description = "The assembled URL, single line"
+
+[[examples]]
+argv = ["url", "build", "--base", "https://api.example.com", "--path", "/v2/tokens", "--param", "q=design tokens", "--param", "limit=5", "--fragment", "top"]
+stdout = "https://api.example.com/v2/tokens?q=design+tokens&limit=5#top"

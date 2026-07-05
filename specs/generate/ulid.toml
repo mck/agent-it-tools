@@ -1,0 +1,12 @@
+path = "generate ulid"
+summary = "Generate ULIDs (time-ordered, lexicographically sortable identifiers)"
+when_to_use = "IDs that need to sort by creation time. Never invent ULIDs yourself."
+it_tools = ["ulid-generator"]
+
+[output]
+kind = "text"
+description = "One 26-character Crockford-Base32 ULID per line"
+
+[[examples]]
+argv = ["generate", "ulid"]
+stdout_regex = "^[0-9A-HJKMNP-TV-Z]{26}$"

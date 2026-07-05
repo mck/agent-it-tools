@@ -32,7 +32,7 @@ pub enum NetworkCmd {
         inner: String,
     },
     /// Convert an IP address between dotted, integer, hex and binary forms (JSON)
-    IpConvert {
+    Ip {
         /// IPv4/IPv6 address, or an integer (interpreted as IPv4)
         input: String,
     },
@@ -143,7 +143,7 @@ pub fn run(cmd: NetworkCmd) -> Result<()> {
                 std::process::exit(2);
             }
         }
-        NetworkCmd::IpConvert { input } => {
+        NetworkCmd::Ip { input } => {
             let raw = input.trim();
             if let Ok(v4) = Ipv4Addr::from_str(raw) {
                 let n = u32::from(v4);

@@ -1,9 +1,13 @@
 [package]
 name = "agent-it-tools"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "Agent-first CLI port of the it-tools utility suite"
 license = "MIT"
+
+[[bin]]
+name = "ait"
+path = "src/main.rs"
 
 [dependencies]
 # CLI parsing

@@ -1,0 +1,13 @@
+path = "time cron"
+summary = "Validate a crontab expression and list its next run times (UTC)"
+when_to_use = "Checking whether a cron expression is valid and when it fires. Accepts classic 5-field crontabs and 6/7-field (seconds/years) forms. Never reason about cron schedules mentally."
+it_tools = ["crontab-generator"]
+
+[output]
+kind = "json"
+description = "Object with expression, normalized (6-field form), valid, and next (array of RFC 3339 UTC timestamps)"
+
+[[examples]]
+argv = ["time", "cron", "*/15 9-17 * * 1-5", "--count", "3"]
+stdout_regex = "\"valid\": true"
+note = "Next occurrences depend on the current time, so only validity is asserted"

@@ -1,6 +1,540 @@
 [
   {
     "function": {
+      "description": "Prettify or minify a JSON document (also validates it) Returns: The reformatted JSON document",
+      "name": "json_format",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input JSON (reads stdin if omitted)",
+            "type": "string"
+          },
+          "minify": {
+            "description": "Emit minified JSON instead of pretty-printed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "json format"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Run a jq filter on JSON input (full jq language via the jaq engine) Returns: The filter's output value(s)",
+      "name": "json_query",
+      "parameters": {
+        "properties": {
+          "filter": {
+            "description": "jq filter, e.g. '.items[].name'",
+            "type": "string"
+          },
+          "input": {
+            "description": "JSON input (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "filter",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "json query"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Structural diff of two JSON documents as an RFC 6902 patch Returns: RFC 6902 patch array (op/path/value entries)",
+      "name": "json_diff",
+      "parameters": {
+        "properties": {
+          "files": {
+            "description": "Treat the two arguments as file paths",
+            "type": "boolean"
+          },
+          "new": {
+            "description": "New JSON document, or a file path with --files",
+            "type": "string"
+          },
+          "old": {
+            "description": "Old JSON document, or a file path with --files",
+            "type": "string"
+          }
+        },
+        "required": [
+          "old",
+          "new"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "json diff"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Deep-merge a JSON merge patch into a base document (RFC 7396) Returns: The merged document",
+      "name": "json_merge",
+      "parameters": {
+        "properties": {
+          "base": {
+            "description": "Base JSON document, or a file path with --files",
+            "type": "string"
+          },
+          "files": {
+            "description": "Treat the two arguments as file paths",
+            "type": "boolean"
+          },
+          "patch": {
+            "description": "Merge patch JSON, or a file path with --files",
+            "type": "string"
+          }
+        },
+        "required": [
+          "base",
+          "patch"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "json merge"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Flatten nested JSON to dot-notation keys, or rebuild nesting with --nestify Returns: Flat object with dot-notation keys (or nested JSON with --nestify)",
+      "name": "json_flatten",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "JSON input (reads stdin if omitted)",
+            "type": "string"
+          },
+          "nestify": {
+            "description": "Rebuild nested JSON from flattened keys",
+            "type": "boolean"
+          },
+          "separator": {
+            "description": "Key separator (default: .)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "json flatten"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Escape text as a JSON/code string literal, or unescape with --unescape Returns: The escaped literal (quoted) or the unescaped text",
+      "name": "json_escape",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          },
+          "unescape": {
+            "description": "Unescape a quoted string literal instead",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "json escape"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert structured data between JSON, YAML, TOML, XML and CSV Returns: The converted document in the target format",
+      "name": "data_convert",
+      "parameters": {
+        "properties": {
+          "delimiter": {
+            "description": "CSV field delimiter (or 'tab') (default: ,)",
+            "type": "string"
+          },
+          "from": {
+            "description": "Source format: json | yaml | toml | xml | csv",
+            "type": "string"
+          },
+          "input": {
+            "description": "Input document (reads stdin if omitted)",
+            "type": "string"
+          },
+          "to": {
+            "description": "Target format: json | yaml | toml | xml | csv",
+            "type": "string"
+          }
+        },
+        "required": [
+          "from",
+          "to",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "data convert"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Validate JSON, YAML, TOML or XML syntax Returns: {\"valid\": true, \"format\": ...} on success; parse error on stderr otherwise",
+      "name": "data_lint",
+      "parameters": {
+        "properties": {
+          "format": {
+            "description": "Format: json | yaml | toml | xml",
+            "type": "string"
+          },
+          "input": {
+            "description": "Input document (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "format",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "data lint"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Encode text to Base64 (--url-safe for the URL alphabet without padding) Returns: Base64 string, single line",
+      "name": "encode_base64",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          },
+          "url_safe": {
+            "description": "Use URL-safe alphabet without padding",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "encode base64"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Encode text to a lowercase hex string Returns: Hex string, single line",
+      "name": "encode_hex",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "encode hex"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Gzip-compress text and emit it as Base64 Returns: Base64 of the gzip-compressed bytes, single line",
+      "name": "encode_gzip",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "encode gzip"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert an internationalized domain name to ASCII punycode (IDNA) Returns: The xn-- encoded domain",
+      "name": "encode_punycode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Domain (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "encode punycode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Escape text for safe embedding in HTML (quotes included) Returns: HTML-escaped text",
+      "name": "encode_html",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "encode html"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode Base64 to text (standard and URL-safe alphabets both accepted) Returns: The decoded text",
+      "name": "decode_base64",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input Base64 (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "decode base64"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode a hex string to text (0x prefix and whitespace tolerated) Returns: The decoded text",
+      "name": "decode_hex",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input hex (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "decode hex"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decompress Base64-encoded gzip data back to text Returns: The decompressed text",
+      "name": "decode_gzip",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input Base64 (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "decode gzip"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert an ASCII punycode domain back to unicode Returns: The unicode domain",
+      "name": "decode_punycode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Domain (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "decode punycode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode HTML entities back to plain text Returns: The decoded text",
+      "name": "decode_html",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "decode html"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Percent-encode text for safe use in a URL component Returns: Percent-encoded string, single line",
+      "name": "url_encode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "url encode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode a percent-encoded URL component Returns: The decoded text",
+      "name": "url_decode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "url decode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Parse a URL into scheme, host, port, path, query params, fragment and credentials Returns: Object with scheme, username, password, host, port, path, query, params (decoded key/value map) and fragment",
+      "name": "url_parse",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "URL (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "url parse"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Build a URL from a base, path, query parameters and fragment with correct encoding Returns: The assembled URL, single line",
+      "name": "url_build",
+      "parameters": {
+        "properties": {
+          "base": {
+            "description": "Base URL, e.g. https://api.example.com",
+            "type": "string"
+          },
+          "fragment": {
+            "description": "Fragment (without '#')",
+            "type": "string"
+          },
+          "param": {
+            "description": "Query parameter key=value (repeatable, values get percent-encoded)",
+            "type": "string"
+          },
+          "path": {
+            "description": "Path to set, e.g. /v2/tokens",
+            "type": "string"
+          }
+        },
+        "required": [
+          "base"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "url build"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Decode a JWT's header and payload WITHOUT verifying the signature Returns: Object with header, payload, signature (raw base64url) and expired (true/false, or null when no exp claim)",
+      "name": "jwt_decode",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "JWT token (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "jwt decode"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
       "description": "Hash text or a file (--file PATH) with md5, sha1, sha224, sha256, sha384 or sha512 (hex digest) Returns: Lowercase hex digest, single line",
       "name": "crypto_hash",
       "parameters": {
@@ -60,44 +594,6 @@
         "type": "object"
       },
       "x-argv-template": "crypto hmac"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Generate cryptographically random token strings (configurable charset) Returns: One random token per line",
-      "name": "crypto_token",
-      "parameters": {
-        "properties": {
-          "count": {
-            "description": "Number of tokens to generate (one per line) (default: 1)",
-            "type": "integer"
-          },
-          "length": {
-            "description": "Token length (default: 64)",
-            "type": "integer"
-          },
-          "no_lowercase": {
-            "description": "Exclude lowercase letters",
-            "type": "boolean"
-          },
-          "no_numbers": {
-            "description": "Exclude digits",
-            "type": "boolean"
-          },
-          "no_uppercase": {
-            "description": "Exclude uppercase letters",
-            "type": "boolean"
-          },
-          "symbols": {
-            "description": "Include symbols (!@#$%^&*()-_=+)",
-            "type": "boolean"
-          }
-        },
-        "required": [],
-        "type": "object"
-      },
-      "x-argv-template": "crypto token"
     },
     "type": "function"
   },
@@ -178,146 +674,104 @@
   },
   {
     "function": {
-      "description": "Convert structured data between JSON, YAML, TOML and XML Returns: The converted document in the target format",
-      "name": "converter_data",
+      "description": "Generate UUIDs (v4 random, v7 time-ordered, nil) Returns: One UUID per line, lowercase hyphenated",
+      "name": "generate_uuid",
       "parameters": {
         "properties": {
-          "from": {
-            "description": "Source format: json | yaml | toml | xml",
-            "type": "string"
-          },
-          "input": {
-            "description": "Input document (reads stdin if omitted)",
-            "type": "string"
-          },
-          "to": {
-            "description": "Target format: json | yaml | toml | xml",
-            "type": "string"
+          "count": {
+            "description": "Number of UUIDs to generate (one per line) (default: 1)",
+            "type": "integer"
           }
         },
-        "required": [
-          "from",
-          "to",
-          "input"
-        ],
+        "required": [],
         "type": "object"
       },
-      "x-argv-template": "converter data"
+      "x-argv-template": "generate uuid"
     },
     "type": "function"
   },
   {
     "function": {
-      "description": "Prettify or minify a JSON document (also validates it) Returns: The reformatted JSON document",
-      "name": "converter_json_format",
+      "description": "Generate ULIDs (time-ordered, lexicographically sortable identifiers) Returns: One 26-character Crockford-Base32 ULID per line",
+      "name": "generate_ulid",
       "parameters": {
         "properties": {
-          "input": {
-            "description": "Input JSON (reads stdin if omitted)",
-            "type": "string"
+          "count": {
+            "description": "Number of ULIDs to generate (one per line) (default: 1)",
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "x-argv-template": "generate ulid"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Generate Nano IDs (URL-safe random identifiers, default length 21) Returns: One Nano ID per line (A-Za-z0-9_-)",
+      "name": "generate_nanoid",
+      "parameters": {
+        "properties": {
+          "count": {
+            "description": "Number of IDs to generate (one per line) (default: 1)",
+            "type": "integer"
           },
-          "minify": {
-            "description": "Emit minified JSON instead of pretty-printed",
+          "length": {
+            "description": "ID length (default: 21)",
+            "type": "integer"
+          }
+        },
+        "required": [],
+        "type": "object"
+      },
+      "x-argv-template": "generate nanoid"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Generate cryptographically random token strings (configurable charset) Returns: One random token per line",
+      "name": "generate_token",
+      "parameters": {
+        "properties": {
+          "count": {
+            "description": "Number of tokens to generate (one per line) (default: 1)",
+            "type": "integer"
+          },
+          "length": {
+            "description": "Token length (default: 64)",
+            "type": "integer"
+          },
+          "no_lowercase": {
+            "description": "Exclude lowercase letters",
+            "type": "boolean"
+          },
+          "no_numbers": {
+            "description": "Exclude digits",
+            "type": "boolean"
+          },
+          "no_uppercase": {
+            "description": "Exclude uppercase letters",
+            "type": "boolean"
+          },
+          "symbols": {
+            "description": "Include symbols (!@#$%^&*()-_=+)",
             "type": "boolean"
           }
         },
-        "required": [
-          "input"
-        ],
+        "required": [],
         "type": "object"
       },
-      "x-argv-template": "converter json-format"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Encode text to Base64 (--url-safe for the URL alphabet without padding) Returns: Base64 string, single line",
-      "name": "converter_base64_encode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          },
-          "url_safe": {
-            "description": "Use URL-safe alphabet without padding",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter base64-encode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Decode Base64 to text (standard and URL-safe alphabets both accepted) Returns: The decoded text",
-      "name": "converter_base64_decode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input Base64 (reads stdin if omitted); standard and URL-safe alphabets accepted",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter base64-decode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Encode text to a lowercase hex string Returns: Hex string, single line",
-      "name": "converter_hex_encode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter hex-encode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Decode a hex string to text (0x prefix and whitespace tolerated) Returns: The decoded text",
-      "name": "converter_hex_decode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input hex (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter hex-decode"
+      "x-argv-template": "generate token"
     },
     "type": "function"
   },
   {
     "function": {
       "description": "Convert a string between naming cases (camel, pascal, snake, constant, kebab, train, title, dot, path, lower, upper) Returns: The re-cased string, single line",
-      "name": "converter_case",
+      "name": "text_case",
       "parameters": {
         "properties": {
           "input": {
@@ -335,153 +789,119 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "converter case"
+      "x-argv-template": "text case"
     },
     "type": "function"
   },
   {
     "function": {
-      "description": "Convert an integer between numeral bases 2-36 Returns: The number in the target base (lowercase digits), single line",
-      "name": "converter_number_base",
+      "description": "Turn any string into a URL-safe slug (ASCII, lowercase, hyphen-separated) Returns: The slug, single line",
+      "name": "text_slugify",
       "parameters": {
         "properties": {
-          "from": {
-            "description": "Source base (default: 10)",
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "text slugify"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Count bytes, characters (graphemes), words and lines of a text Returns: {bytes, characters, characters_without_whitespace, words, lines, longest_line_characters}",
+      "name": "text_stats",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "text stats"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Similarity metrics between two strings: Levenshtein, normalized Levenshtein, Jaro-Winkler Returns: {levenshtein, normalized_levenshtein, jaro_winkler, equal}",
+      "name": "text_distance",
+      "parameters": {
+        "properties": {
+          "a": {
+            "description": "First string",
+            "type": "string"
+          },
+          "b": {
+            "description": "Second string",
+            "type": "string"
+          }
+        },
+        "required": [
+          "a",
+          "b"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "text distance"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Mask sensitive data in text: emails, IPv4s, JWTs, bearer tokens, AWS keys, card numbers, long hex secrets Returns: {masked: the sanitized text, found: counts per pattern type}",
+      "name": "text_mask",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Input text (reads stdin if omitted)",
+            "type": "string"
+          },
+          "replacement": {
+            "description": "Replacement label style, e.g. [MASKED] (default: [MASKED])",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "text mask"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Unified diff between two texts, or two files with --files Returns: Unified diff (--- old / +++ new hunks); empty when inputs are equal",
+      "name": "text_diff",
+      "parameters": {
+        "properties": {
+          "context": {
+            "description": "Lines of context around changes (default: 3)",
             "type": "integer"
           },
-          "input": {
-            "description": "Input number (reads stdin if omitted)",
-            "type": "string"
-          },
-          "to": {
-            "description": "Target base",
-            "type": "string"
-          }
-        },
-        "required": [
-          "to",
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter number-base"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Convert CSV (header row required) to a JSON array of objects; numbers and booleans are typed Returns: JSON array of objects, one per CSV row",
-      "name": "converter_csv_to_json",
-      "parameters": {
-        "properties": {
-          "delimiter": {
-            "description": "Field delimiter (default: ,)",
-            "type": "string"
-          },
-          "input": {
-            "description": "CSV input (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter csv-to-json"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Convert a JSON array of objects to CSV (header = union of keys, alphabetical) Returns: CSV document with header row",
-      "name": "converter_json_to_csv",
-      "parameters": {
-        "properties": {
-          "delimiter": {
-            "description": "Field delimiter (default: ,)",
-            "type": "string"
-          },
-          "input": {
-            "description": "JSON input (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter json-to-csv"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Validate JSON, YAML, TOML or XML syntax Returns: {\"valid\": true, \"format\": ...} on success; parse error on stderr otherwise",
-      "name": "converter_lint",
-      "parameters": {
-        "properties": {
-          "format": {
-            "description": "Format: json | yaml | toml | xml",
-            "type": "string"
-          },
-          "input": {
-            "description": "Input document (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "format",
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter lint"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Run a jq filter on JSON input (full jq language via the jaq engine) Returns: The filter's output value(s)",
-      "name": "converter_json_query",
-      "parameters": {
-        "properties": {
-          "filter": {
-            "description": "jq filter, e.g. '.items[].name'",
-            "type": "string"
-          },
-          "input": {
-            "description": "JSON input (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "filter",
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter json-query"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Structural diff of two JSON documents as an RFC 6902 patch Returns: RFC 6902 patch array (op/path/value entries)",
-      "name": "converter_json_diff",
-      "parameters": {
-        "properties": {
           "files": {
             "description": "Treat the two arguments as file paths",
             "type": "boolean"
           },
           "new": {
-            "description": "New JSON document, or a file path with --files",
+            "description": "New text, or a file path with --files",
             "type": "string"
           },
           "old": {
-            "description": "Old JSON document, or a file path with --files",
+            "description": "Old text, or a file path with --files",
             "type": "string"
           }
         },
@@ -491,515 +911,14 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "converter json-diff"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Deep-merge a JSON merge patch into a base document (RFC 7396) Returns: The merged document",
-      "name": "converter_json_merge",
-      "parameters": {
-        "properties": {
-          "base": {
-            "description": "Base JSON document, or a file path with --files",
-            "type": "string"
-          },
-          "files": {
-            "description": "Treat the two arguments as file paths",
-            "type": "boolean"
-          },
-          "patch": {
-            "description": "Merge patch JSON, or a file path with --files",
-            "type": "string"
-          }
-        },
-        "required": [
-          "base",
-          "patch"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter json-merge"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Flatten nested JSON to dot-notation keys, or rebuild nesting with --nestify Returns: Flat object with dot-notation keys (or nested JSON with --nestify)",
-      "name": "converter_json_flatten",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "JSON input (reads stdin if omitted)",
-            "type": "string"
-          },
-          "nestify": {
-            "description": "Rebuild nested JSON from flattened keys",
-            "type": "boolean"
-          },
-          "separator": {
-            "description": "Key separator (default: .)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter json-flatten"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Gzip-compress text and emit it as Base64 Returns: Base64 of the gzip-compressed bytes, single line",
-      "name": "converter_gzip_encode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter gzip-encode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Decompress Base64-encoded gzip data back to text Returns: The decompressed text",
-      "name": "converter_gzip_decode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input Base64 (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "converter gzip-decode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Percent-encode text for safe use in a URL component Returns: Percent-encoded string, single line",
-      "name": "web_url_encode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web url-encode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Decode a percent-encoded URL component Returns: The decoded text",
-      "name": "web_url_decode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web url-decode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Parse a URL into scheme, host, port, path, query params, fragment and credentials Returns: Object with scheme, username, password, host, port, path, query, params (decoded key/value map) and fragment",
-      "name": "web_url_parse",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "URL (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web url-parse"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Decode a JWT's header and payload WITHOUT verifying the signature Returns: Object with header, payload, signature (raw base64url) and expired (true/false, or null when no exp claim)",
-      "name": "web_jwt",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "JWT token (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web jwt"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Parse a user-agent string into browser, version, OS and device category Returns: Object with name, category (pc/smartphone/crawler/...), browser_type, version, os, os_version, vendor",
-      "name": "web_user_agent",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "User-agent string (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web user-agent"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Escape text for safe embedding in HTML (quotes included) Returns: HTML-escaped text",
-      "name": "web_html_escape",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web html-escape"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Decode HTML entities back to plain text Returns: The decoded text",
-      "name": "web_html_unescape",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web html-unescape"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Build an HTTP Basic Auth Authorization header value from username and password Returns: The header value: 'Basic <base64(user:pass)>'",
-      "name": "web_basic_auth",
-      "parameters": {
-        "properties": {
-          "password": {
-            "description": "Password",
-            "type": "string"
-          },
-          "username": {
-            "description": "Username",
-            "type": "string"
-          }
-        },
-        "required": [
-          "username",
-          "password"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web basic-auth"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Turn any string into a URL-safe slug (ASCII, lowercase, hyphen-separated) Returns: The slug, single line",
-      "name": "web_slugify",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web slugify"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Render Markdown (GitHub-flavored: tables, strikethrough, task lists, autolinks) to HTML Returns: The rendered HTML fragment",
-      "name": "web_markdown_to_html",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Markdown input (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web markdown-to-html"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Convert HTML to Markdown Returns: The Markdown document",
-      "name": "web_html_to_markdown",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "HTML input (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web html-to-markdown"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Look up the MIME type for a file name/extension, or extensions for a MIME type Returns: {input, mime} or {mime, extensions}",
-      "name": "web_mime",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "A file name/extension (e.g. photo.avif) or a MIME type (e.g. image/png)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web mime"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Build a URL from a base, path, query parameters and fragment with correct encoding Returns: The assembled URL, single line",
-      "name": "web_url_build",
-      "parameters": {
-        "properties": {
-          "base": {
-            "description": "Base URL, e.g. https://api.example.com",
-            "type": "string"
-          },
-          "fragment": {
-            "description": "Fragment (without '#')",
-            "type": "string"
-          },
-          "param": {
-            "description": "Query parameter key=value (repeatable, values get percent-encoded)",
-            "type": "string"
-          },
-          "path": {
-            "description": "Path to set, e.g. /v2/tokens",
-            "type": "string"
-          }
-        },
-        "required": [
-          "base"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web url-build"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Convert an internationalized domain name to ASCII punycode (IDNA) Returns: The xn-- encoded domain",
-      "name": "web_punycode_encode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Domain (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web punycode-encode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Convert an ASCII punycode domain back to unicode Returns: The unicode domain",
-      "name": "web_punycode_decode",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Domain (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web punycode-decode"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Parse any CSS color (hex, rgb(), hsl(), named) and show hex, rgb, hsl and WCAG luminance Returns: {hex, rgb, hsl, luminance (WCAG relative luminance 0-1)}",
-      "name": "web_color",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Any CSS color: hex, rgb(), hsl(), named... (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web color"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "WCAG 2.x contrast ratio between two CSS colors, with AA/AAA verdicts Returns: {ratio, aa_normal_text, aa_large_text, aaa_normal_text, aaa_large_text}",
-      "name": "web_contrast",
-      "parameters": {
-        "properties": {
-          "background": {
-            "description": "Background color",
-            "type": "string"
-          },
-          "foreground": {
-            "description": "Foreground color",
-            "type": "string"
-          }
-        },
-        "required": [
-          "foreground",
-          "background"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "web contrast"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Validate a crontab expression and list its next run times (UTC) Returns: Object with expression, normalized (6-field form), valid, and next (array of RFC 3339 UTC timestamps)",
-      "name": "development_cron",
-      "parameters": {
-        "properties": {
-          "count": {
-            "description": "Number of upcoming occurrences to list (default: 5)",
-            "type": "integer"
-          },
-          "expression": {
-            "description": "Cron expression, 5-field classic or 6/7-field with seconds/years",
-            "type": "string"
-          }
-        },
-        "required": [
-          "expression"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "development cron"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Generate UUIDs (v4 random, v7 time-ordered, nil) Returns: One UUID per line, lowercase hyphenated",
-      "name": "development_uuid",
-      "parameters": {
-        "properties": {
-          "count": {
-            "description": "Number of UUIDs to generate (one per line) (default: 1)",
-            "type": "integer"
-          }
-        },
-        "required": [],
-        "type": "object"
-      },
-      "x-argv-template": "development uuid"
+      "x-argv-template": "text diff"
     },
     "type": "function"
   },
   {
     "function": {
       "description": "Test a regular expression against text; reports all matches with positions and named groups Returns: Object with pattern, is_match, match_count and matches (each with match, start, end byte offsets, and groups keyed by name or index)",
-      "name": "development_regex",
+      "name": "regex_test",
       "parameters": {
         "properties": {
           "dot_all": {
@@ -1029,193 +948,27 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "development regex"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Evaluate a mathematical expression exactly (functions like sin, cos, sqrt, ln supported) Returns: The numeric result, single line (integers print without decimals)",
-      "name": "development_calc",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Expression, e.g. \"sin(0.5)^2 + 17 * (3 - 1.5)\" (reads stdin if omitted)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "development calc"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Bitwise operations (and, or, xor, not, shl, shr) on integers with 0x/0b/0o prefixes Returns: Result as {decimal, hex, binary, octal}",
-      "name": "development_bitwise",
-      "parameters": {
-        "properties": {
-          "a": {
-            "description": "First operand",
-            "type": "string"
-          },
-          "b": {
-            "description": "Second operand (shift amount for shl/shr; omitted for not)",
-            "type": "string"
-          },
-          "op": {
-            "description": "Operation: and | or | xor | not | shl | shr",
-            "type": "string"
-          }
-        },
-        "required": [
-          "op",
-          "a"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "development bitwise"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Convert chmod permissions between octal (755, 4755) and symbolic (rwxr-xr-x) notation Returns: {octal, symbolic, command}",
-      "name": "development_chmod",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Octal (e.g. 755) or symbolic (e.g. rwxr-xr-x)",
-            "type": "string"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "development chmod"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Generate ULIDs (time-ordered, lexicographically sortable identifiers) Returns: One 26-character Crockford-Base32 ULID per line",
-      "name": "development_ulid",
-      "parameters": {
-        "properties": {
-          "count": {
-            "description": "Number of ULIDs to generate (one per line) (default: 1)",
-            "type": "integer"
-          }
-        },
-        "required": [],
-        "type": "object"
-      },
-      "x-argv-template": "development ulid"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Generate Nano IDs (URL-safe random identifiers, default length 21) Returns: One Nano ID per line (A-Za-z0-9_-)",
-      "name": "development_nanoid",
-      "parameters": {
-        "properties": {
-          "count": {
-            "description": "Number of IDs to generate (one per line) (default: 1)",
-            "type": "integer"
-          },
-          "length": {
-            "description": "ID length (default: 21)",
-            "type": "integer"
-          }
-        },
-        "required": [],
-        "type": "object"
-      },
-      "x-argv-template": "development nanoid"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Escape text as a JSON/code string literal, or unescape with --unescape Returns: The escaped literal (quoted) or the unescaped text",
-      "name": "development_string_escape",
-      "parameters": {
-        "properties": {
-          "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          },
-          "unescape": {
-            "description": "Unescape a quoted string literal instead",
-            "type": "boolean"
-          }
-        },
-        "required": [
-          "input"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "development string-escape"
-    },
-    "type": "function"
-  },
-  {
-    "function": {
-      "description": "Unified diff between two texts, or two files with --files Returns: Unified diff (--- old / +++ new hunks); empty when inputs are equal",
-      "name": "development_diff",
-      "parameters": {
-        "properties": {
-          "context": {
-            "description": "Lines of context around changes (default: 3)",
-            "type": "integer"
-          },
-          "files": {
-            "description": "Treat the two arguments as file paths",
-            "type": "boolean"
-          },
-          "new": {
-            "description": "New text, or a file path with --files",
-            "type": "string"
-          },
-          "old": {
-            "description": "Old text, or a file path with --files",
-            "type": "string"
-          }
-        },
-        "required": [
-          "old",
-          "new"
-        ],
-        "type": "object"
-      },
-      "x-argv-template": "development diff"
+      "x-argv-template": "regex test"
     },
     "type": "function"
   },
   {
     "function": {
       "description": "Current time as unix seconds/ms, ISO 8601 (UTC), RFC 2822 and local time Returns: Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
-      "name": "datetime_now",
+      "name": "time_now",
       "parameters": {
         "properties": {},
         "required": [],
         "type": "object"
       },
-      "x-argv-template": "datetime now"
+      "x-argv-template": "time now"
     },
     "type": "function"
   },
   {
     "function": {
       "description": "Convert a timestamp (unix s/ms, RFC 3339, RFC 2822) into all common formats Returns: Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields",
-      "name": "datetime_convert",
+      "name": "time_convert",
       "parameters": {
         "properties": {
           "input": {
@@ -1228,14 +981,14 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "datetime convert"
+      "x-argv-template": "time convert"
     },
     "type": "function"
   },
   {
     "function": {
       "description": "Add or subtract a duration (e.g. '2h 30m', '1w 2d') from a timestamp Returns: {base, operation, duration_seconds, result: {unix, iso8601, ...}}",
-      "name": "datetime_duration",
+      "name": "time_duration",
       "parameters": {
         "properties": {
           "duration": {
@@ -1256,14 +1009,14 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "datetime duration"
+      "x-argv-template": "time duration"
     },
     "type": "function"
   },
   {
     "function": {
       "description": "Convert a timestamp into a target IANA timezone (DST-aware) Returns: {utc, timezone, local, offset, abbreviation}",
-      "name": "datetime_timezone",
+      "name": "time_timezone",
       "parameters": {
         "properties": {
           "input": {
@@ -1281,7 +1034,181 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "datetime timezone"
+      "x-argv-template": "time timezone"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Validate a crontab expression and list its next run times (UTC) Returns: Object with expression, normalized (6-field form), valid, and next (array of RFC 3339 UTC timestamps)",
+      "name": "time_cron",
+      "parameters": {
+        "properties": {
+          "count": {
+            "description": "Number of upcoming occurrences to list (default: 5)",
+            "type": "integer"
+          },
+          "expression": {
+            "description": "Cron expression, 5-field classic or 6/7-field with seconds/years",
+            "type": "string"
+          }
+        },
+        "required": [
+          "expression"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "time cron"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Build an HTTP Basic Auth Authorization header value from username and password Returns: The header value: 'Basic <base64(user:pass)>'",
+      "name": "http_basic_auth",
+      "parameters": {
+        "properties": {
+          "password": {
+            "description": "Password",
+            "type": "string"
+          },
+          "username": {
+            "description": "Username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "username",
+          "password"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "http basic-auth"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Parse a user-agent string into browser, version, OS and device category Returns: Object with name, category (pc/smartphone/crawler/...), browser_type, version, os, os_version, vendor",
+      "name": "http_user_agent",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "User-agent string (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "http user-agent"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Look up the MIME type for a file name/extension, or extensions for a MIME type Returns: {input, mime} or {mime, extensions}",
+      "name": "http_mime",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "A file name/extension (e.g. photo.avif) or a MIME type (e.g. image/png)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "http mime"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Parse any CSS color (hex, rgb(), hsl(), named) and show hex, rgb, hsl and WCAG luminance Returns: {hex, rgb, hsl, luminance (WCAG relative luminance 0-1)}",
+      "name": "color_parse",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Any CSS color: hex, rgb(), hsl(), named... (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "color parse"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "WCAG 2.x contrast ratio between two CSS colors, with AA/AAA verdicts Returns: {ratio, aa_normal_text, aa_large_text, aaa_normal_text, aaa_large_text}",
+      "name": "color_contrast",
+      "parameters": {
+        "properties": {
+          "background": {
+            "description": "Background color",
+            "type": "string"
+          },
+          "foreground": {
+            "description": "Foreground color",
+            "type": "string"
+          }
+        },
+        "required": [
+          "foreground",
+          "background"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "color contrast"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Render Markdown (GitHub-flavored: tables, strikethrough, task lists, autolinks) to HTML Returns: The rendered HTML fragment",
+      "name": "markdown_to_html",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "Markdown input (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "markdown to-html"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert HTML to Markdown Returns: The Markdown document",
+      "name": "markdown_from_html",
+      "parameters": {
+        "properties": {
+          "input": {
+            "description": "HTML input (reads stdin if omitted)",
+            "type": "string"
+          }
+        },
+        "required": [
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "markdown from-html"
     },
     "type": "function"
   },
@@ -1378,7 +1305,7 @@
   {
     "function": {
       "description": "Convert an IP address between dotted, integer, hex and binary representations Returns: IPv4: {dotted, decimal, hex, binary, ipv6_mapped}; IPv6: {compressed, expanded, decimal, hex}",
-      "name": "network_ip_convert",
+      "name": "network_ip",
       "parameters": {
         "properties": {
           "input": {
@@ -1391,18 +1318,18 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "network ip-convert"
+      "x-argv-template": "network ip"
     },
     "type": "function"
   },
   {
     "function": {
-      "description": "Count bytes, characters (graphemes), words and lines of a text Returns: {bytes, characters, characters_without_whitespace, words, lines, longest_line_characters}",
-      "name": "text_stats",
+      "description": "Evaluate a mathematical expression exactly (functions like sin, cos, sqrt, ln supported) Returns: The numeric result, single line (integers print without decimals)",
+      "name": "math_calc",
       "parameters": {
         "properties": {
           "input": {
-            "description": "Input text (reads stdin if omitted)",
+            "description": "Expression, e.g. \"sin(0.5)^2 + 17 * (3 - 1.5)\" (reads stdin if omitted)",
             "type": "string"
           }
         },
@@ -1411,47 +1338,76 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "text stats"
+      "x-argv-template": "math calc"
     },
     "type": "function"
   },
   {
     "function": {
-      "description": "Similarity metrics between two strings: Levenshtein, normalized Levenshtein, Jaro-Winkler Returns: {levenshtein, normalized_levenshtein, jaro_winkler, equal}",
-      "name": "text_distance",
+      "description": "Bitwise operations (and, or, xor, not, shl, shr) on integers with 0x/0b/0o prefixes Returns: Result as {decimal, hex, binary, octal}",
+      "name": "math_bitwise",
       "parameters": {
         "properties": {
           "a": {
-            "description": "First string",
+            "description": "First operand",
             "type": "string"
           },
           "b": {
-            "description": "Second string",
+            "description": "Second operand (shift amount for shl/shr; omitted for not)",
+            "type": "string"
+          },
+          "op": {
+            "description": "Operation: and | or | xor | not | shl | shr",
             "type": "string"
           }
         },
         "required": [
-          "a",
-          "b"
+          "op",
+          "a"
         ],
         "type": "object"
       },
-      "x-argv-template": "text distance"
+      "x-argv-template": "math bitwise"
     },
     "type": "function"
   },
   {
     "function": {
-      "description": "Mask sensitive data in text: emails, IPv4s, JWTs, bearer tokens, AWS keys, card numbers, long hex secrets Returns: {masked: the sanitized text, found: counts per pattern type}",
-      "name": "text_mask",
+      "description": "Convert an integer between numeral bases 2-36 Returns: The number in the target base (lowercase digits), single line",
+      "name": "math_number_base",
+      "parameters": {
+        "properties": {
+          "from": {
+            "description": "Source base (default: 10)",
+            "type": "integer"
+          },
+          "input": {
+            "description": "Input number (reads stdin if omitted)",
+            "type": "string"
+          },
+          "to": {
+            "description": "Target base",
+            "type": "string"
+          }
+        },
+        "required": [
+          "to",
+          "input"
+        ],
+        "type": "object"
+      },
+      "x-argv-template": "math number-base"
+    },
+    "type": "function"
+  },
+  {
+    "function": {
+      "description": "Convert chmod permissions between octal (755, 4755) and symbolic (rwxr-xr-x) notation Returns: {octal, symbolic, command}",
+      "name": "unix_chmod",
       "parameters": {
         "properties": {
           "input": {
-            "description": "Input text (reads stdin if omitted)",
-            "type": "string"
-          },
-          "replacement": {
-            "description": "Replacement label style, e.g. [MASKED] (default: [MASKED])",
+            "description": "Octal (e.g. 755) or symbolic (e.g. rwxr-xr-x)",
             "type": "string"
           }
         },
@@ -1460,7 +1416,7 @@
         ],
         "type": "object"
       },
-      "x-argv-template": "text mask"
+      "x-argv-template": "unix chmod"
     },
     "type": "function"
   }

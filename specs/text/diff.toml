@@ -1,0 +1,19 @@
+path = "text diff"
+summary = "Unified diff between two texts, or two files with --files"
+when_to_use = "Comparing two strings, configs or files precisely. Empty output means the inputs are identical."
+it_tools = ["text-diff"]
+
+[output]
+kind = "text"
+description = "Unified diff (--- old / +++ new hunks); empty when inputs are equal"
+
+[[examples]]
+argv = ["text", "diff", "line1\nline2\nline3\n", "line1\nlineTWO\nline3\n"]
+stdout = """
+--- old
++++ new
+@@ -1,3 +1,3 @@
+ line1
+-line2
++lineTWO
+ line3"""

@@ -1,0 +1,16 @@
+path = "generate token"
+summary = "Generate cryptographically random token strings (configurable charset)"
+when_to_use = "API keys, secrets, nonces. Never invent 'random' strings yourself."
+it_tools = ["token-generator"]
+
+[output]
+kind = "text"
+description = "One random token per line"
+
+[[examples]]
+argv = ["generate", "token", "--length", "24"]
+stdout_regex = "^[A-Za-z0-9]{24}$"
+
+[[examples]]
+argv = ["generate", "token", "--length", "12", "--no-uppercase", "--no-numbers", "--count", "2"]
+stdout_regex = "^[a-z]{12}\\n[a-z]{12}$"

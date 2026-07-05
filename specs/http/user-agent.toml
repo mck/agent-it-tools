@@ -1,0 +1,21 @@
+path = "http user-agent"
+summary = "Parse a user-agent string into browser, version, OS and device category"
+when_to_use = "Classifying user-agent strings from logs or requests."
+it_tools = ["user-agent-parser"]
+
+[output]
+kind = "json"
+description = "Object with name, category (pc/smartphone/crawler/...), browser_type, version, os, os_version, vendor"
+
+[[examples]]
+argv = ["http", "user-agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"]
+stdout = """
+{
+  "browser_type": "browser",
+  "category": "pc",
+  "name": "Chrome",
+  "os": "Mac OSX",
+  "os_version": "10.15.7",
+  "vendor": "Google",
+  "version": "120.0.0.0"
+}"""

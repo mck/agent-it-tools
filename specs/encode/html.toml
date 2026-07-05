@@ -1,0 +1,12 @@
+path = "encode html"
+summary = "Escape text for safe embedding in HTML (quotes included)"
+when_to_use = "Putting arbitrary text into HTML content or attribute values."
+it_tools = ["html-entities"]
+
+[output]
+kind = "text"
+description = "HTML-escaped text"
+
+[[examples]]
+argv = ["encode", "html", "<a href=\"x\">&</a>"]
+stdout = "&lt;a href=&quot;x&quot;&gt;&amp;&lt;/a&gt;"

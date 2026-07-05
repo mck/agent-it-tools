@@ -1,0 +1,12 @@
+path = "time now"
+summary = "Current time as unix seconds/ms, ISO 8601 (UTC), RFC 2822 and local time"
+when_to_use = "Whenever the current time matters. Never assume you know what time it is."
+it_tools = ["date-time-converter"]
+
+[output]
+kind = "json"
+description = "Object with unix, unix_ms, iso8601 (UTC), rfc2822 and local fields"
+
+[[examples]]
+argv = ["time", "now"]
+stdout_regex = "\"unix\": \\d{10}"

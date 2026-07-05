@@ -1,0 +1,12 @@
+path = "encode hex"
+summary = "Encode text to a lowercase hex string"
+when_to_use = "Text-to-hex conversion, byte inspection."
+it_tools = ["hex-converter"]
+
+[output]
+kind = "text"
+description = "Hex string, single line"
+
+[[examples]]
+argv = ["encode", "hex", "hi"]
+stdout = "6869"

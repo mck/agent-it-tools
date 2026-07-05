@@ -1,0 +1,60 @@
+path = "data convert"
+summary = "Convert structured data between JSON, YAML, TOML, XML and CSV"
+when_to_use = "Any JSON<->YAML<->TOML<->XML<->CSV translation (CSV = array of objects; --delimiter for non-comma files). TOML cannot represent null values or non-table roots - that returns an error. XML maps attributes to '@name' keys and text to '#text'."
+it_tools = ["json-to-yaml-converter", "json-to-toml", "yaml-to-json-converter", "yaml-to-toml", "toml-to-json", "toml-to-yaml", "xml-to-json", "json-to-xml", "csv-to-json", "json-to-csv"]
+
+[output]
+kind = "text"
+description = "The converted document in the target format"
+
+[[examples]]
+argv = ["data", "convert", "--from", "json", "--to", "yaml"]
+stdin = '{"a":1,"b":{"c":[1,2,3]}}'
+stdout = """
+a: 1
+b:
+  c:
+  - 1
+  - 2
+  - 3"""
+
+[[examples]]
+argv = ["data", "convert", "--from", "yaml", "--to", "toml", "name: test\nnums: [1, 2]"]
+stdout = """
+name = "test"
+nums = [
+    1,
+    2,
+]"""
+
+[[examples]]
+argv = ["data", "convert", "--from", "xml", "--to", "json", "<user id=\"7\"><name>Ada</name></user>"]
+stdout = """
+{
+  "user": {
+    "@id": "7",
+    "name": "Ada"
+  }
+}"""
+
+[[examples]]
+argv = ["data", "convert", "--from", "csv", "--to", "json"]
+stdin = "name,age\nAda,36\nBob,41"
+stdout = """
+[
+  {
+    "age": 36,
+    "name": "Ada"
+  },
+  {
+    "age": 41,
+    "name": "Bob"
+  }
+]"""
+
+[[examples]]
+argv = ["data", "convert", "--from", "json", "--to", "csv", "[{\"name\":\"Ada\",\"age\":36},{\"name\":\"Bob\",\"age\":41}]"]
+stdout = """
+age,name
+36,Ada
+41,Bob"""

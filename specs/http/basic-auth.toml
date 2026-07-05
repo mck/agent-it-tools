@@ -1,0 +1,12 @@
+path = "http basic-auth"
+summary = "Build an HTTP Basic Auth Authorization header value from username and password"
+when_to_use = "Constructing 'Authorization: Basic ...' headers for curl or API calls."
+it_tools = ["basic-auth-generator"]
+
+[output]
+kind = "text"
+description = "The header value: 'Basic <base64(user:pass)>'"
+
+[[examples]]
+argv = ["http", "basic-auth", "admin", "s3cret"]
+stdout = "Basic YWRtaW46czNjcmV0"

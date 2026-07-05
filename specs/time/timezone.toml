@@ -1,0 +1,19 @@
+path = "time timezone"
+summary = "Convert a timestamp into a target IANA timezone (DST-aware)"
+when_to_use = "Timezone conversion. Never reason about DST offsets mentally."
+it_tools = ["timezone-converter"]
+
+[output]
+kind = "json"
+description = "{utc, timezone, local, offset, abbreviation}"
+
+[[examples]]
+argv = ["time", "timezone", "--to", "Europe/Vienna", "1751700000"]
+stdout = """
+{
+  "abbreviation": "CEST",
+  "local": "2025-07-05T09:20:00+02:00",
+  "offset": "+02:00",
+  "timezone": "Europe/Vienna",
+  "utc": "2025-07-05T07:20:00Z"
+}"""
