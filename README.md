@@ -24,6 +24,9 @@ identical prompts:
 | sha256 / HMAC | confidently fabricated hex | computed |
 | cost per task | comparable | ~$0.02 |
 
+<sub>Single run of `./evals/run.sh haiku both` on 2026-07-05, graded against
+precomputed ground truth; reproduce it yourself with the eval harness.</sub>
+
 The bare 8/10 flatters the model: outside a few memorized facts those passes
 are coin-flips that change from run to run (see [`evals/`](evals/README.md)).
 The tool arm's only failure mode is not invoking the tool, and the shipped
