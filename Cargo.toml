@@ -33,7 +33,7 @@ sha1 = "0.11"
 sha2 = "0.11"
 md-5 = "0.11"
 hmac = "0.13"
-bcrypt = "0.15"
+bcrypt = "0.19"
 # String utils
 slug = "0.1"
 uuid = { version = "1.6", features = ["v4", "v5", "v7"] }
